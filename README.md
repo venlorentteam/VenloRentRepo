@@ -20,7 +20,7 @@ Search and discovery functionality for users (location, price, property type as 
 Payment between users is strictly via P2P
 
 ## User Status
-1. Regular users (newly created accounts, hasn't KYCed yet and therefore cannot list properties, but can ordeer and pay for properties) -- up for debate by the team.
+1. Regular users (newly created accounts, hasn't KYCed yet and therefore cannot list properties, but can order and pay for properties) -- up for debate by the team.
 2. Verified Users (Users who have performed any sort of KYC and qualified to list properties)
 3. Premium users (Users who subscribe for premium services, to get more tailored searches, reach more people, recommended to more accounts, have a checkmark for authenticity)
 
