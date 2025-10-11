@@ -1,0 +1,57 @@
+/***********White List************/
+*{
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+}
+:root{
+  /* Color Variables */
+  --primary-color: #00350e; /*Use with primary-color-light to get the button gradients*/
+  --primary-color-light: #009f13; /* Combine with the one above for button gradient*/
+  --primary-color-lightest: #74FF99; /* Input background */
+
+  /* button gradients for dark mode */
+  --button-color-light: #009F13; 
+  --button-color-dark: #014D15;
+
+  /* Background colors for color schemes */
+  --bg-color-light: #f3f9f5;
+  --bg-color-dark: #1d2e28;
+
+  /* Green text color*/
+  --text-color-light: #00A514; /* For Light Mode*/
+  --text-color-dark: #00350E; /* For Light Mode*/
+
+  --text-color-light2: #00A514; /* For Dark Mode*/
+  --text-color-dark2: #74FF99; /* For Dark Mode*/
+
+  /* Other color  props*/
+  --primary-opacity: #a8f9cf; /* For shadows on buttons or containers*/
+  --black-color: #191e1d;
+  --white-color: #fff;
+  --warning-color: #ffe135;
+  --success-color: #03c04a;
+  --danger-colo: #e3242b;
+
+  /********* Font Variables in ems **********/
+  --font-size-smallest: 0.6em;
+  --font-size-small: 0.8em;
+  --font-size-medium: 1em;
+  --font-size-big: 1.5em;
+  --font-size-bigger: 2em;
+  --font-size-biggest: 3em;
+}
+
+/* ++++++++++++++  ++++++++++++++*/
+
+@media (prefers-color-scheme: dark) {
+  
+}
+
+@media (max-width: 1200px){
+  /**rules for tablets**/ 
+}
+
+@media (max-width: 500px){
+  /**rules for mobile**/ 
+}
