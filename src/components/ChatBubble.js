@@ -2,8 +2,11 @@ import React from 'react'
 
 export const ChatBubble = () => {
   return (
-    <div>
-      
+
+    <div>ChatBubble
+
+      {/* CHAT between users. appears on messages */}
+
     </div>
   )
 }
