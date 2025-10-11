@@ -2,6 +2,8 @@ import React from 'react'
 
 export const OderCountDown = () => {
   return (
-    <div>OderCountDown</div>
+    <div>OderCountDown
+      {/* countdown on order preview page */}
+    </div>
   )
 }
