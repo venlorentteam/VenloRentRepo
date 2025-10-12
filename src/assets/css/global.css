@@ -42,10 +42,46 @@
   --font-size-biggest: 3em;
 }
 
+/*********** Font ***********/
+/**Fonts**/
+@font-face {
+  font-family: poppins;
+  src: url('./assets/font/poppins-v20-latin-regular.woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: poppins;
+  src: url('./assets/font/poppins-v20-latin-500.woff2');
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: poppins;
+  src: url('./assets/font/poppins-v20-latin-700.woff2');
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: poppins;
+  src: url('./assets/font/poppins-v20-latin-700italic.woff2');
+  font-weight: bold;
+  font-style: italic;
+}
+/*************** End of Fonts ****************/
+body{
+  background: var(--bg-color-light);
+  font-family: ;
+}
+section{
+
+}
 /* ++++++++++++++  ++++++++++++++*/
 
 @media (prefers-color-scheme: dark) {
-  
+  body{
+    background: var(--bg-color-dark);
+  }
 }
 
 @media (max-width: 1200px){

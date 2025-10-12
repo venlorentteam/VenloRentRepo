@@ -1,0 +1,14 @@
+@import url('./index.css');
+
+
+@media (prefers-color-scheme: dark) {
+  
+}
+
+@media (max-width: 1200px){
+  /**rules for tablets**/ 
+}
+
+@media (max-width: 500px){
+  /**rules for mobile**/ 
+}

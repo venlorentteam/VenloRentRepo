@@ -1,6 +1,4 @@
 import react, { Routes, Route } from 'react-router-dom'
-//General CSS
-import './index.css';
 //Import all elements
 import { Orders } from './pages/Orders'
 import { AllOrders } from './pages/AllOrders'
