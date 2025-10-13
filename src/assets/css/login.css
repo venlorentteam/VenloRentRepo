@@ -21,11 +21,12 @@
     height: 100vh;
 }
 .login-cont .left-side{
-    max-width: 400px;
+    width: 100%;
 }
 .login-cont .left-side .left-img{
     max-width: 400px;
-    text-align: left /*Assuming texts will be on the login left-side space*/
+    text-align: left; /*Assuming texts will be on the login left-side space*/
+    margin: 0px auto;
 }
 .login-cont .left-side h2{
     color: var(--text-color-light);
