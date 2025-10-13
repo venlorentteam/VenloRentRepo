@@ -1,6 +1,8 @@
 import react, { Routes, Route } from 'react-router-dom'
 //Import all elements
 import { Orders } from './pages/Orders'
+import { Account } from './pages/Account'
+import { ActiveOrders } from './pages/ActiveOrders'
 import { AllOrders } from './pages/AllOrders'
 import { Bookmarks } from './pages/Bookmarks'
 import { ConfirmOrder } from './pages/ConfirmOrder'
@@ -17,6 +19,7 @@ import { Messages } from './pages/Messages'
 import { NoMatch } from './pages/NoMatch' //For invalid FE routes (404)
 import { Notifications } from './pages/Notifications'
 import { PasswordRecovery } from './pages/PasswordRecovery'
+import { PasswordReset } from './pages/PasswordReset'
 import { Profile } from './pages/Profile'
 import { Register } from './pages/Register'
 import { Search } from './pages/Search'
@@ -25,6 +28,7 @@ function App() {
   return (
     <>
       <Routes>
+        <Route path="/" element={<Login />} />
         <Route path="/account" element={<Account />} />
         <Route path="/orders" element={<Orders />} >
           <Route index element={<ActiveOrders />} />
@@ -44,7 +48,7 @@ function App() {
         <Route path="/following" element={<Following />} />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
-        <Route path="/messages" element={<Messagess />} />
+        <Route path="/messages" element={<Messages />} />
         <Route path="*" element={<NoMatch />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/recover-password" element={<PasswordRecovery />} />
@@ -53,6 +57,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/search" element={<Search />} />
         <Route path="/user" element={<User />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </>
   );

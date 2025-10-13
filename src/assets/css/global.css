@@ -9,6 +9,7 @@
   --primary-color: #00350e; /*Use with primary-color-light to get the button gradients*/
   --primary-color-light: #009f13; /* Combine with the one above for button gradient*/
   --primary-color-lightest: #74FF99; /* Input background */
+  --input-bg-focus: #dcf1e2;
 
   /* button gradients for dark mode */
   --button-color-light: #009F13; 
@@ -46,35 +47,56 @@
 /**Fonts**/
 @font-face {
   font-family: poppins;
-  src: url('./assets/font/poppins-v20-latin-regular.woff2');
+  src: url('../font/poppins-v20-latin-regular.woff2');
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
   font-family: poppins;
-  src: url('./assets/font/poppins-v20-latin-500.woff2');
+  src: url('../font/poppins-v20-latin-500.woff2');
   font-weight: normal;
   font-style: italic;
 }
 @font-face {
   font-family: poppins;
-  src: url('./assets/font/poppins-v20-latin-700.woff2');
+  src: url('../font/poppins-v20-latin-700.woff2');
   font-weight: bold;
   font-style: normal;
 }
 @font-face {
   font-family: poppins;
-  src: url('./assets/font/poppins-v20-latin-700italic.woff2');
+  src: url('../font/poppins-v20-latin-700italic.woff2');
   font-weight: bold;
   font-style: italic;
 }
 /*************** End of Fonts ****************/
 body{
   background: var(--bg-color-light);
-  font-family: ;
+  font-family: poppins, sans-serif;
+  width: 100%;
 }
 section{
-
+  width: 100%;
+  padding: 20px 50px;
+  margin: 10px auto;
+}
+button{
+  border: none;
+  padding: 12px;
+  font-weight: bold;
+  margin: 0px auto;
+  cursor: pointer;
+  border: none;
+  transition: 1s;
+}
+.submit-button{
+  width: 100%;
+  margin: 10px auto;
+  margin-top: 20px;
+  font-size: 1em;
+  border-radius: 10px;
+  text-align: center;
+  background: linear-gradient(90deg, var(--primary-color) 0%, var(--primary-color-light) 100%);
 }
 /* ++++++++++++++  ++++++++++++++*/
 
@@ -82,12 +104,21 @@ section{
   body{
     background: var(--bg-color-dark);
   }
+  .submit-button{
+    background: linear-gradient(90deg, var(--button-color-dark) 0%, var(--button-color-light) 100%);
+  }
 }
 
 @media (max-width: 1200px){
   /**rules for tablets**/ 
+  section{
+    padding: 20px 40px;
+  }
 }
 
 @media (max-width: 500px){
   /**rules for mobile**/ 
+  section{
+    padding: 30px;
+  }
 }
