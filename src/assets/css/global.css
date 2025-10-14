@@ -17,7 +17,7 @@
 
   /* Background colors for color schemes */
   --bg-color-light: #f3f9f5;
-  --bg-color-dark: #1d2e28;
+  --bg-color-dark: #18201d;
 
   /* Green text color*/
   --text-color-light: #00A514; /* For Light Mode*/
@@ -25,6 +25,8 @@
 
   --text-color-light2: #00A514; /* For Dark Mode*/
   --text-color-dark2: #74FF99; /* For Dark Mode*/
+  --footer-link-color: #5c605d; /* For Links at the Prelim pages */
+  
 
   /* Other color  props*/
   --primary-opacity: #a8f9cf; /* For shadows on buttons or containers*/
@@ -32,7 +34,7 @@
   --white-color: #fff;
   --warning-color: #ffe135;
   --success-color: #03c04a;
-  --danger-colo: #e3242b;
+  --danger-color: #e3242b;
 
   /********* Font Variables in ems **********/
   --font-size-smallest: 0.6em;
@@ -89,10 +91,10 @@ button{
   transition: 1s;
 }
 .submit-button{
+  color: var(--white-color);
   width: 100%;
   padding: 12px;
-  margin: 10px auto;
-  margin-top: 20px;
+  margin: 20px auto;
   font-size: 1em;
   border-radius: 10px;
   text-align: center;
