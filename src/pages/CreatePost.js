@@ -1,11 +1,11 @@
 import React from 'react'
 
-export const CreatePost = () => {
+function CreatePost() {
   return (
     <div>
-        {/* For creating text only posts, 
-            useful when users want to make a public post requesting what kind of product they want 
-        */}
+      
     </div>
   )
 }
+
+export default CreatePost

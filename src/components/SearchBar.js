@@ -1,10 +1,11 @@
 import React from 'react'
 
-export const SearchBar = () => {
+function SearchBar() {
   return (
-    <div>SearchBar
-
-      {/* search bar that appears on top of listings page and search results page */}
+    <div>
+        {/* search bar that appears on top of listings page and search results page */}
     </div>
   )
 }
+
+export default SearchBar

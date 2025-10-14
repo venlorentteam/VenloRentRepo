@@ -1,9 +1,11 @@
 import React from 'react'
 
-export const Loader = () => {
+function Loader() {
   return (
-    <div>Loader
-      {/* LOADING SPINNER for when pages are loading */}
+    <div>
+        {/* LOADING SPINNER for when pages are loading */}
     </div>
   )
 }
+
+export default Loader

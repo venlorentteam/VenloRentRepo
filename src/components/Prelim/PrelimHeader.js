@@ -1,10 +1,11 @@
 import React from 'react'
 
-export const PrelimHeader = () => {
+function PrelimHeader() {
   return (
     <div>
-      {/* Should contain logo and page title for preliminary pages */}
-
+      {/* /* Should contain logo and page title for preliminary pages */}
     </div>
   )
 }
+
+export default PrelimHeader

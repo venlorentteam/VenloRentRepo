@@ -1,10 +1,11 @@
 import React from 'react'
 
-export default function OrderList() {
+function OrderList() {
   return (
     <div>
-        OrderList
-        {/* list of orders made by user. seen on ACTIVE ORDER PAGE */}
+         {/* list of orders made by user. seen on ACTIVE ORDER PAGE */}
     </div>
   )
 }
+
+export default OrderList

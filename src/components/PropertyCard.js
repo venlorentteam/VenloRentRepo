@@ -1,11 +1,11 @@
 import React from 'react'
 
-export const PropertyCard = () => {
+function PropertyCard() {
   return (
-    <div>PropertyCard
-
-
-      {/* CARD that shows a property. appears on listings page and search results */}
+    <div>
+       {/* CARD that shows a property. appears on listings page and search results */}
     </div>
   )
 }
+
+export default PropertyCard

@@ -1,11 +1,12 @@
 import React from 'react'
 
-export default function Modal() {
+function Modal() {
   return (
     <div>
-      Modal
-        {/* modal pop ups for various actions */}
+       {/* modal pop ups for various actions */}
 
     </div>
   )
 }
+
+export default Modal

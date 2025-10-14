@@ -1,11 +1,11 @@
 import React from 'react'
 
-export default function Comments() {
+function Comments() {
   return (
     <div>
-      Comments
-
         {/* comments section for posts. seen on feed */}
     </div>
   )
 }
+
+export default Comments

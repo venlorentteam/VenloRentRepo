@@ -1,9 +1,11 @@
 import React from 'react'
 
-export const Profile = () => {
+function Profile() {
   return (
     <div>
-        {/* User profile for account owner's view */}
+       {/* User profile for account owner's view */}
     </div>
   )
 }
+
+export default Profile

@@ -1,10 +1,11 @@
 import React from 'react'
 
-export default function 
-() {
+function TabbedNav() {
   return (
     <div>
       
     </div>
   )
 }
+
+export default TabbedNav

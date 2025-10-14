@@ -5,8 +5,7 @@ import leftImg from '../assets/img/login-left1.png'
 import axios from 'axios'
 import { SubmitButton } from '../components/SubmitButton'
 import { MdOutlineMailOutline, MdLockOutline } from 'react-icons/md'
-
-export const Login = () => {
+function Login () {
     const [errors, setErrors] = useState({})
     const [formData, setFormData] = useState({
     email: "",
@@ -78,3 +77,5 @@ const iconLeft = {
     </>
   )
 }
+
+export default Login

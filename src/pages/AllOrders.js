@@ -1,9 +1,11 @@
 import React from 'react'
 
-export const AllOrders = () => {
+function AllOrders() {
   return (
     <div>
-        
+      
     </div>
   )
 }
+
+export default AllOrders

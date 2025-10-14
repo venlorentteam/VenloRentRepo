@@ -1,9 +1,11 @@
 import React from 'react'
 
-export const OderCountDown = () => {
+function OderCountDown() {
   return (
-    <div>OderCountDown
-      {/* countdown on order preview page */}
+    <div>
+         {/* countdown on order preview page */}
     </div>
   )
 }
+
+export default OderCountDown

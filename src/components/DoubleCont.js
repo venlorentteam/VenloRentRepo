@@ -1,10 +1,12 @@
 import React from 'react'
 
-export const DoubleCont = () => {
+function DoubleCont() {
   return (
-    <div>DoubleCont
-      {/* for items that are side by side */}
+    <div>
+        {/* for items that are side by side */}
 
     </div>
   )
 }
+
+export default DoubleCont

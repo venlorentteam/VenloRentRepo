@@ -1,11 +1,11 @@
 import React from 'react'
 
-function Dashboard() {
+function Faq() {
   return (
     <div>
-      
+      faq
     </div>
   )
 }
 
-export default Dashboard
+export default Faq

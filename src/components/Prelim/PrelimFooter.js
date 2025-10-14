@@ -1,10 +1,11 @@
 import React from 'react'
 
-export const PrelimFooter = () => {
+function PrelimFooter() {
   return (
     <div>
       {/* Should contain footer links for preliminary pages */}
-
     </div>
   )
 }
+
+export default PrelimFooter

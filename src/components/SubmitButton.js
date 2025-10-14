@@ -1,7 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
-export const SubmitButton = ({text, bgColor}) => {
+function SubmitButton ({text, bgColor}) {
   return (
     <>
       {/* button to submit forms for prelim pages*/}
@@ -11,3 +11,5 @@ export const SubmitButton = ({text, bgColor}) => {
     </>
   )
 }
+
+export default SubmitButton
