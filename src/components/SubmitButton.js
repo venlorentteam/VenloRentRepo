@@ -1,10 +1,13 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
-export const SubmitButton = () => {
+export const SubmitButton = ({text, bgColor}) => {
   return (
-    <div className="">
+    <>
       {/* button to submit forms for prelim pages*/}
-
-    </div>
+      <button type="submit" className="submit-button" style={bgColor && {background: bgColor}}>
+        {text}
+      </button>
+    </>
   )
 }

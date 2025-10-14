@@ -6,12 +6,14 @@
     width: 80px;
     height: 80px;
     margin: 10px auto;
+    display: block;
 }
 .login-logo-text{
     /** Assuming the logo is to be text **/
     width: 180px;
     height: 50px;
     margin: 10px auto;
+    display: block;
 }
 .login-cont{
     display: flex;
@@ -19,52 +21,55 @@
     align-items: center;
     width: 100%;
     height: 100vh;
+    gap: 30px
 }
 .login-cont .left-side{
     width: 100%;
+    max-width: 500px;
+    flex: 0 0 auto;
+    text-align: center; /*Assuming texts will be on the login left-side space*/
+    margin: 0px auto;
 }
 .login-cont .left-side .left-img{
-    max-width: 400px;
-    text-align: left; /*Assuming texts will be on the login left-side space*/
+    width: 100%;
+    height: 100%;
     margin: 0px auto;
+   
 }
 .login-cont .left-side h2{
     color: var(--text-color-light);
-    font-size: var(--font-size-big);
-    font-weight: normal;
+    font-size: var(--font-size-medium);
+    font-weight: bold;
 }
 .login-cont .left-side p{
     color: var(--text-color-light);
-    font-size: var(--font-size-medium);
-    font-weight: normal;
-}
-.page-title{/*Title of each page*/
-    text-align: center;
-    font-weight: normal;
-    color: var(--primary-color);
-}
-.regular-texts{/*for regular texts within the prelim pages*/
-    color: var(--primary-color);
     font-size: var(--font-size-small);
+    font-weight: normal;
 }
 .login-cont .login{
-    width: 350px;
-    display: block;
+    max-width: 400px;
+    width: 100%;
+    flex: 0 0 auto;
     margin: 0px auto;
     padding: 30px;
 }
+.input-cont{
+    position: relative;
+    width: 100%;
+}
 .login-cont .login input{
     color: var(--primary-color);
-    font-size: var(--font-size-medium);
+    font-size: var(--font-size-small);
+    font-weight: normal;
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     padding-left: 30px;
     padding-right: 30px;
     border: none;
     border-radius: 10px;
     background: var(--primary-color-lightest);
     outline: none;
-    margin: 10px auto; 
+    margin: 5px auto; 
     transition: 1s;
 }
 .login-cont .login input:focus{
@@ -76,32 +81,52 @@
     color: var(--primary-color);
     font-size: var(--font-size-medium);
 }
+.page-title{/*Title of each page*/
+    text-align: center;
+    font-weight: normal;
+    color: var(--primary-color);
+}
+.regular-texts{/*for regular texts within the prelim pages*/
+    color: var(--primary-color);
+    font-size: var(--font-size-small);
+}
 /*** For Register Page ***/
 .checkbox-container{
     display: flex;
     justify-content: flex-start;
     align-items: center;
 }
-input .icon-left{
-    /** Left positioned descriptive icon for the input **/
-    font-size: var(--font-size-medium);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, 50%);
-}
+
 a{/*for prelim links*/
     color: var(--primary-color);
-    font-size: var(--font-size-small);
+
     text-decoration: none;
     cursor: pointer;
+}
+.error{/*For printing input errors*/
+    font-size: var(--font-size-smallest);
+    color: var(--danger-color);
+    text-align: left;
+    font-style: italic;
+}
+.footer-links{
+    width: 100%;
+    color: var(--footer-link-color);
+    font-size: var(--font-size-smallest);
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    bottom: 20px;
+    gap: 40px;
+    left: 0px;
 }
 @media (prefers-color-scheme: dark) {
     .login-cont .left-side h2{
         color: var(--text-color-light2);
         font-size: var(--font-size-big);
     }
-    .forgot-pass{
+    .regular-texts{
         color: var(--white-color);
     }
     .page-title{
@@ -124,4 +149,8 @@ a{/*for prelim links*/
     .login-cont .login{
         width: 100%;
     }
+    .regular-texts{
+        font-size: var(--font-size-smallest);
+    }
+
 }
