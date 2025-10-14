@@ -1,9 +1,11 @@
 import React from 'react'
 
-export default function ForYou() {
+function ForYou() {
   return (
     <div>
-      FOR YOU
+     FOR YOU 
     </div>
   )
 }
+
+export default ForYou

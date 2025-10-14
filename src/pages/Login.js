@@ -3,7 +3,7 @@ import '../assets/css/login.css'
 import leftImg from '../assets/img/login-left1.png'
 import axios from 'axios'
 
-export const Login = () => {
+function Login () {
     const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -37,3 +37,5 @@ const handleSubmit = async (e) => {
     </div>
   )
 }
+
+export default Login

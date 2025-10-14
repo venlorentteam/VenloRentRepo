@@ -1,9 +1,11 @@
 import React from 'react'
 
-export const SearchDisplayCard = () => {
+function SearchDisplayCard() {
   return (
     <div>
-        {/* To display searched item */}
+       {/* To display searched item */}
     </div>
   )
 }
+
+export default SearchDisplayCard

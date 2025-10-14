@@ -1,10 +1,11 @@
 import React from 'react'
 
-export const SubmitButton = () => {
+function SubmitButton() {
   return (
-    <div className="">
-      {/* button to submit forms for prelim pages*/}
-
+    <div>
+       {/* button to submit forms for prelim pages*/}
     </div>
   )
 }
+
+export default SubmitButton

@@ -1,0 +1,58 @@
+.click-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  font-size: var(--font-size-medium);
+  border-radius: 10px;
+  font-weight: bold;
+  color: var(--white-color);
+  background: linear-gradient(
+    90deg,
+    var(--primary-color) 0%,
+    var(--primary-color-light) 100%
+  );
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.click-button:hover {
+  opacity: 0.9;
+  transform: scale(1.03);
+}
+
+.click-button:active {
+  transform: scale(0.97);
+}
+
+.click-button.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* dark mode support */
+@media (prefers-color-scheme: dark) {
+  .click-button {
+    background: linear-gradient(
+      90deg,
+      var(--button-color-dark) 0%,
+      var(--button-color-light) 100%
+    );
+  }
+}
+
+.button-icon {
+  display: inline-flex;
+  align-items: center;
+  font-size: 1.2em;
+}
+
+/* responsiveness */
+@media (max-width: 600px) {
+  .click-button {
+    font-size: var(--font-size-small);
+    padding: 10px 18px;
+  }
+}

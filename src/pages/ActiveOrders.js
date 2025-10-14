@@ -1,9 +1,11 @@
 import React from 'react'
 
-export const ActiveOrders = () => {
+function ActiveOrders() {
   return (
     <div>
-        
+      
     </div>
   )
 }
+
+export default ActiveOrders

@@ -1,9 +1,11 @@
 import React from 'react'
 
-export const IconNav = () => {
+function IconNav() {
   return (
     <div>
-        {/* Mobile Navigation  */}
+       {/* Mobile Navigation  */}
     </div>
   )
 }
+
+export default IconNav

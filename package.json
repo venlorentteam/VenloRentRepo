@@ -20,7 +20,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "generate-index": "node generateIndex.js"
   },
   "eslintConfig": {
     "extends": [
@@ -39,5 +40,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "vite-plugin-components": "^0.13.3",
+    "vite-plugin-pages": "^0.33.1"
   }
 }

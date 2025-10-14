@@ -1,9 +1,11 @@
 import React from 'react'
 
-export const Bookmarks = () => {
+function Bookmarks() {
   return (
     <div>
-        {/* Saved or bookmarked posts */}
+      
     </div>
   )
 }
+
+export default Bookmarks

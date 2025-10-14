@@ -1,9 +1,11 @@
 import React from 'react'
 
-export const PasswordReset = () => {
+function PasswordReset() {
   return (
     <div>
-        {/* Password Reset Page */}
+       {/* Password Reset Page */}
     </div>
   )
 }
+
+export default PasswordReset

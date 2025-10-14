@@ -1,10 +1,11 @@
 import React from 'react'
 
-export const Following = () => {
+function Following() {
   return (
     <div>
-         {/* Accounts the user is following */}
-
+       {/* Accounts the user is following */}
     </div>
   )
 }
+
+export default Following

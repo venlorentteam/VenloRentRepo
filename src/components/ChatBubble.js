@@ -1,10 +1,11 @@
 import React from 'react'
 
-export const ChatBubble = () => {
+function ChatBubble() {
   return (
-
-    <div>ChatBubble
-      {/* CHAT between users. appears on messages */}
+    <div>
+        {/* CHAT between users. appears on messages */}
     </div>
   )
 }
+
+export default ChatBubble

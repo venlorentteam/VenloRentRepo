@@ -1,9 +1,11 @@
 import React from 'react'
 
-export const AccountInfoCard = () => {
+function AccountInfoCard() {
   return (
-    <div>AccountInfoCard
-      {/* Infomation about user. Seen on profile 1 and profile II*/}
+    <div>
+      {/* Infomation about user. Seen on profile 1 and profile II*/} 
     </div>
   )
 }
+
+export default AccountInfoCard

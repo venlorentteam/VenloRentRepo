@@ -1,7 +1,11 @@
 import React from 'react'
 
-export const ConfirmOrder = () => {
+function ConfirmOrder() {
   return (
-    <div>ConfirmOrder</div>
+    <div>
+      ConfirmOrder
+    </div>
   )
 }
+
+export default ConfirmOrder

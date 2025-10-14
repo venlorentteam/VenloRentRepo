@@ -1,10 +1,11 @@
 import React from 'react'
 
-export const MessageList = () => {
+function MessageList() {
   return (
-    <div>MessageList
-      {/* LIST of messages to a user. It appears on messages page */}
-
+    <div>
+         {/* LIST of messages to a user. It appears on messages page */}
     </div>
   )
 }
+
+export default MessageList
