@@ -1,0 +1,48 @@
+.list-stats {
+  background-color: var(--box-bg-color-light);
+  border-radius: 15px;
+  padding: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 20px;
+  width: 90%;
+  margin: 1rem auto; 
+  margin-top: 20px;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Each stat item */
+.stat-item {
+  text-align: left;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.stat-item h3 {
+  font-size: 1.8rem;
+  color: #014d1a;
+  margin-bottom: 5px;
+}
+
+.stat-item p {
+  font-size: 1rem;
+  color: #014d1a;
+  opacity: 0.8;
+}
+
+/* Hover effect: slight upward movement & scale */
+.stat-item:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Mobile Responsive */
+@media (max-width: 600px) {
+  .list-stats {
+    grid-template-columns: repeat(2, 2fr);
+    gap: 10px;
+  }
+
+  .stat-item h3 {
+    font-size: 1.5rem;
+  }
+}

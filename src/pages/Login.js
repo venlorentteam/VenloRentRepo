@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import '../assets/css/login.css'
 import leftImg from '../assets/img/login-left1.png'
 import axios from 'axios'
-import { SubmitButton } from '../components/SubmitButton'
+import { SubmitButton } from '../exports'
 import { MdOutlineMailOutline, MdLockOutline } from 'react-icons/md'
 function Login () {
     const [errors, setErrors] = useState({})
@@ -56,7 +56,7 @@ const iconLeft = {
             <p>Skip the stress, find the best...</p>
         </div>
         <div className="login">
-            <img className="login-logo-img" src="" />
+            <img className="login-logo-img" src="https://i.pravatar.cc/100" />
             <h2 className="page-title">Welcome Back </h2>
             <form onSubmit={handleSubmit}>
                 <span className="input-cont"><input type="text" name="email" placeholder="Email" value={formData.email} onChange={handleChange} /><MdOutlineMailOutline style={iconLeft} /></span>
