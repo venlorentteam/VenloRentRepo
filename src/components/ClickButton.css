@@ -32,6 +32,35 @@
   cursor: not-allowed;
 }
 
+/* --- new variant styles --- */
+
+/* Outline variant (e.g. Follow, Message, Upgrade) */
+.click-button.outline {
+  background: transparent;
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+}
+
+.click-button.outline:hover {
+  background: var(--primary-color);
+  color: var(--white-color);
+}
+
+/* Secondary solid variant (e.g. Edit Profile in account card) */
+.click-button.secondary {
+  background: linear-gradient(
+    90deg,
+    var(--button-color-dark) 0%,
+    var(--button-color-light) 100%
+  );
+  color: var(bg-color-light);
+  padding: 1rem 3rem;
+ box-shadow: 0 2px 8px var(--shadowBlack-color);
+
+}
+
+
+
 /* dark mode support */
 @media (prefers-color-scheme: dark) {
   .click-button {
@@ -54,5 +83,8 @@
   .click-button {
     font-size: var(--font-size-small);
     padding: 10px 18px;
+  }
+  .click-button.secondary{
+    padding: 0.8rem 2rem;
   }
 }

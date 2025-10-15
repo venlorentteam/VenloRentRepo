@@ -26,4 +26,4 @@ baseDirs.forEach((dir) => {
 });
 
 fs.writeFileSync(outputFile, content);
-console.log("✅ exports.js updated successfully!");
+console.log("exports.js updated successfully!");
