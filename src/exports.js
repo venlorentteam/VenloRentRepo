@@ -18,6 +18,7 @@ export { default as PropertyCard } from "./components/PropertyCard";
 export { default as SearchBar } from "./components/SearchBar";
 export { default as SearchDisplayCard } from "./components/SearchDisplayCard";
 export { default as Section } from "./components/Section";
+export { default as SideNav } from "./components/SideNav";
 export { default as SubmitButton } from "./components/SubmitButton";
 export { default as TabbedNav } from "./components/TabbedNav";
 

@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import '../assets/css/login.css'
+import './login.css'
 import leftImg from '../assets/img/login-left1.png'
 import axios from 'axios'
-import { SubmitButton } from '../components/SubmitButton'
+import { SubmitButton } from '../exports'
 import { MdOutlineMailOutline, MdLockOutline } from 'react-icons/md'
 function Login () {
     const [errors, setErrors] = useState({})

@@ -1,0 +1,90 @@
+.logo-img{
+    /** Assuming the logo is to be a square or circle image **/
+    width: 50px;
+    height: 50px;
+    margin: 10px;
+}
+.logo-text{
+    /** Assuming the logo is to be text **/
+    width: 180px;
+    height: 50px;
+    margin: 10px auto;
+    display: block;
+}
+.side-nav{
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    bottom: 0px;
+    width: 23%;
+    border-right: 1px solid var(--primary-opacity);
+    background: transparent;
+    color: var(--primary-color);
+    padding: 30px;
+    text-align: left;
+}
+.side-nav a{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    font-size: var(--font-size-medium);
+    margin: 5px auto;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-weight: normal;
+    color: var(--primary-color);
+    width: 100%;
+    line-height: 1;
+    transition: .3s;
+}
+.side-nav a.active{
+    font-weight: bold;
+}
+.side-nav a:hover{
+    background: var(--input-bg-focus)
+}
+.side-nav a .icon{
+    font-size: var(--font-size-big);
+    align-self: center;
+}
+.side-nav a .link{
+    align-self: center;
+}
+/* Styling for user display picture */
+.side-nav a .profile-img{
+    align-self: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+@media(prefers-color-scheme: dark){
+    .side-nav a{
+        color: var(--white-color);
+    }
+    .side-nav a:hover{
+        background: var(--side-nav-hover)
+    }
+}
+
+@media(max-width: 1050px){
+    .bottom-nav{
+        width: 100%;
+        position: fixed;
+        bottom: 0px;
+    }
+}
+
+@media(max-width: 1000px){
+    .side-nav{
+        width: 20%;
+    }
+    .side-nav a .text{
+        display: none;
+    }
+}
+@media(max-width: 500px){
+    .side-nav{
+        display: none;
+    }
+}

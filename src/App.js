@@ -9,8 +9,9 @@ function App() {
  
   return (
     <>
-    <Pages.ClickButton text="Hello" onClick={() => alert('Clicked!')} />
+    {/*<Pages.ClickButton text="Hello" onClick={() => alert('Clicked!')} /> */}
     <Routes>
+      <Route path="/" element={<Pages.Login />} />
       <Route path="/login" element={<Pages.Login />} />
       <Route path="/register" element={<Pages.Register />} />
       <Route path="/dashboard" element={<Pages.Dashboard />} />
