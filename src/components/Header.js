@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { MdKeyboardBackspace } from "react-icons/md"
 import { FiMenu } from "react-icons/fi"
 import './Header.css'
-function Header({backIcon = false, pageTitle, icons, button, menuIcon = false}){
+function Header({backIcon = false, pageTitle, icons = [], button, menuIcon = false}){
   const navigate = useNavigate()
   const back = () => {
     navigate(-1)

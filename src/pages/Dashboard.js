@@ -1,6 +1,6 @@
 import React from 'react'
 import { SideNav, Header, IconNav, ClickButton } from '../exports'
-import { RiMessageLine,} from 'react-icons/ri'
+import { RiMessageLine } from 'react-icons/ri'
 import { FaRegBell } from 'react-icons/fa'
 import '../assets/css/global.css'
 
@@ -17,8 +17,8 @@ function Dashboard() {
             {link: "/notifications", element: < FaRegBell />}
           ]
         } 
-        button={<ClickButton 
-        text="Hello" onClick={() => alert('Clicked!')} />} 
+        // button={<ClickButton 
+        // text="Hello" onClick={() => alert('Clicked!')} />} 
       />
       <IconNav />
     </>
