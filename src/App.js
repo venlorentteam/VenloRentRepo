@@ -34,7 +34,7 @@ function App() {
       <Route path="/followers" element={<Pages.Followers />} />
       <Route path="/following" element={<Pages.Following />} />
       <Route path="/logout" element={<Pages.Logout />} />
-      <Route path="/messages" element={<Pages.Messages />} />
+      <Route path="/chatscreen" element={<Pages.ChatScreen />} />
       <Route path="/notifications" element={<Pages.Notifications />} />
       <Route path="/password-recovery" element={<Pages.PasswordRecovery />} />
       <Route path="/password-reset" element={<Pages.PasswordReset />} />

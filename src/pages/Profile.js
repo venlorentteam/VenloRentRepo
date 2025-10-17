@@ -10,6 +10,7 @@ const Profile = () => {
 
   return (
     <div>
+        <Components.SearchBar placeholder="Search messages.."/>
            <Components.AccountInfoCard/>
            <Components.ListStats stats= {statsData}/>
     </div>

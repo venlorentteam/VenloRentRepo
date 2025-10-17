@@ -70,6 +70,9 @@
       var(--button-color-light) 100%
     );
   }
+  .click-button.outline {
+  color: var(--bg-color-light);
+}
 }
 
 .button-icon {

@@ -12,6 +12,7 @@
   --primary-color-lightest: #74FF99; /* Input background */
   --input-bg-focus: #dcf1e2;
   --side-nav-hover: #202926;
+  --bg-box-dark-mode: #1f1f1f;
  /* button gradients for dark mode */
   --button-color-light: #009F13; 
   --button-color-dark: #014D15;
