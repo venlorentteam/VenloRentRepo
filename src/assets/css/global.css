@@ -21,10 +21,13 @@
   --bg-color-dark: #18201d;
   --box-bg-color-light: #b9f9d8;
 
+  /* Navigation backgrounds */
+  --background-nav-light: #ecf3ee9e;
+  --background-nav-black: #151c1988;
+  
   /* Green text color*/
   --text-color-light: #00A514; /* For Light Mode*/
   --text-color-dark: #00350e; /* For Light Mode*/
-
   --text-color-light2: #00A514; /* For Dark Mode*/
   --text-color-dark2: #74FF99; /* For Dark Mode*/
   --footer-link-color: #5c605d; /* For Links at the Prelim pages */
@@ -114,7 +117,7 @@ button{
   }
   .submit-button{
     background: linear-gradient(90deg, var(--button-color-dark) 0%, var(--button-color-light) 100%);
-    box-shadow: none;
+    box-shadow: 0px 5px 5px var(--shadowBlack-color);
   }
 }
 

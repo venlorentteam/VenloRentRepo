@@ -104,7 +104,7 @@ a{/*for prelim links*/
         color: var(--text-color-dark2);
     }
     .login-cont .login input{
-        box-shadow: none;
+        box-shadow: 0px 5px 5px var(--shadowBlack-color);
     }
 }
 
