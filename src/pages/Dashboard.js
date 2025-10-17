@@ -1,6 +1,5 @@
 import React from 'react'
 import { SideNav, Header, IconNav, ClickButton } from '../exports'
-import { IoArrowBack } from "react-icons/io5"
 import { RiMessageLine,} from 'react-icons/ri'
 import { FaRegBell } from 'react-icons/fa'
 import '../assets/css/global.css'
@@ -11,8 +10,7 @@ function Dashboard() {
     <>
       <SideNav />
       <Header 
-        // backIcon={<IoArrowBack />} 
-        pageTitle="Dashboard" 
+        pageTitle= {<h2>Dashboard</h2>}
         icons={
           [
             {link: "/messages", element: < RiMessageLine />},
@@ -20,7 +18,8 @@ function Dashboard() {
           ]
         } 
         button={<ClickButton 
-        text="Hello" onClick={() => alert('Clicked!')} />} />
+        text="Hello" onClick={() => alert('Clicked!')} />} 
+      />
       <IconNav />
     </>
   )

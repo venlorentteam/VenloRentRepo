@@ -21,13 +21,14 @@
     font-size: var(--font-size-average);
 }
 .header .icon{
-    font-size: var(--font-size-average);
+    font-size: var(--font-size-big);
+    cursor: pointer;
 }
 .header .left{
     align-self: center;
     margin-right: auto;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     flex-flow: row nowrap;
     gap: 10px
@@ -35,7 +36,7 @@
 .header .right{
     align-self: center;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     flex-flow: row nowrap;
     min-width: max-content;
@@ -70,6 +71,6 @@
         display: block;
     }
     .header .icon{
-        font-size: var(--font-size-medium);
+        font-size: var(--font-size-big);
     }
 }
