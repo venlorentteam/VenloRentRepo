@@ -1,5 +1,4 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
 
 function SubmitButton ({text, bgColor}) {
   return (

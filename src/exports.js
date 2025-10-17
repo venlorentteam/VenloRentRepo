@@ -18,6 +18,7 @@ export { default as PropertyCard } from "./components/PropertyCard";
 export { default as SearchBar } from "./components/SearchBar";
 export { default as SearchDisplayCard } from "./components/SearchDisplayCard";
 export { default as Section } from "./components/Section";
+export { default as SideNav } from "./components/SideNav";
 export { default as SubmitButton } from "./components/SubmitButton";
 export { default as TabbedNav } from "./components/TabbedNav";
 
@@ -50,4 +51,8 @@ export { default as Profile } from "./pages/Profile";
 export { default as Register } from "./pages/Register";
 export { default as Search } from "./pages/Search";
 export { default as User } from "./pages/User";
+
+// ==== PRELIM ====
+export { default as PrelimFooter } from "./components/Prelim/PrelimFooter";
+export { default as PrelimHeader } from "./components/Prelim/PrelimHeader";
 

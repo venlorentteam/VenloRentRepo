@@ -6,12 +6,10 @@
   margin: 1rem auto;
   
 }
-
 .account-info-card {
   width: 100%;
   background: var(--box-bg-color-light);
   border-radius: 12px;
-  
   padding: 24px 48px;
   border: 1px solid #eaeaea;
   transition: all 0.3s ease-in-out;

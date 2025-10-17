@@ -1,0 +1,14 @@
+.footer-links{
+    width: 100%;
+    font-size: var(--font-size-smallest);
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    bottom: 20px;
+    gap: 40px;
+    left: 0px;
+}
+.footer-links a{
+    color: var(--footer-link-color);
+}

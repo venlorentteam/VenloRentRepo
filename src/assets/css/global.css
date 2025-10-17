@@ -4,45 +4,47 @@
   margin: 0px;
   box-sizing: border-box;
 }
+
 :root{
   /* Color Variables */
   --primary-color: #00350e; /*Use with primary-color-light to get the button gradients*/
   --primary-color-light: #009f13; /* Combine with the one above for button gradient*/
   --primary-color-lightest: #74FF99; /* Input background */
   --input-bg-focus: #dcf1e2;
-
-
-  /* button gradients for dark mode */
+  --side-nav-hover: #202926;
+ /* button gradients for dark mode */
   --button-color-light: #009F13; 
   --button-color-dark: #014D15;
 
-  /* Background colors for color schemes */
+  /* Background colors for pages */
   --bg-color-light: #f3f9f5;
   --bg-color-dark: #18201d;
   --box-bg-color-light: #b9f9d8;
 
   /* Green text color*/
   --text-color-light: #00A514; /* For Light Mode*/
-  --text-color-dark: #00350E; /* For Light Mode*/
+  --text-color-dark: #00350e; /* For Light Mode*/
 
   --text-color-light2: #00A514; /* For Dark Mode*/
   --text-color-dark2: #74FF99; /* For Dark Mode*/
   --footer-link-color: #5c605d; /* For Links at the Prelim pages */
-  
 
   /* Other color  props*/
+  --black-color: #191e1d;
   --primary-opacity: #a8f9cf; /* For shadows on buttons or containers*/
-  /* --black-color: #191e1d;  too harsh for shadows */ 
-   --shadowBlack-color: rgba(0, 0, 0, 0.05);
+  --black-color: #151818;  /* too harsh for shadows */ 
+  --shadowBlack-color: rgba(0, 0, 0, 0.05);
   --white-color: #fff;
   --warning-color: #ffe135;
   --success-color: #03c04a;
   --danger-color: #e3242b;
-
+  --primary-opacity-2: #b1c9bd; /* For shadows on inputs, buttons or containers*/
+  
   /********* Font Variables in ems **********/
   --font-size-smallest: 0.6em;
   --font-size-small: 0.8em;
   --font-size-medium: 1em;
+  --font-size-average: 1.2em;
   --font-size-big: 1.5em;
   --font-size-bigger: 2em;
   --font-size-biggest: 3em;
@@ -51,33 +53,33 @@
 /*********** Font ***********/
 /**Fonts**/
 @font-face {
-  font-family: poppins;
-  src: url('../font/poppins-v20-latin-regular.woff2');
+  font-family: inter;
+  src: url('../font/inter-v20-latin-regular.woff2');
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
-  font-family: poppins;
-  src: url('../font/poppins-v20-latin-500.woff2');
+  font-family: inter;
+  src: url('../font/inter-v20-latin-italic.woff2');
   font-weight: normal;
   font-style: italic;
 }
 @font-face {
-  font-family: poppins;
-  src: url('../font/poppins-v20-latin-700.woff2');
+  font-family: inter;
+  src: url('../font/inter-v20-latin-600.woff2');
   font-weight: bold;
   font-style: normal;
 }
 @font-face {
-  font-family: poppins;
-  src: url('../font/poppins-v20-latin-700italic.woff2');
+  font-family: inter;
+  src: url('../font/inter-v20-latin-600italic.woff2');
   font-weight: bold;
   font-style: italic;
 }
 /*************** End of Fonts ****************/
 body{
   background: var(--bg-color-light);
-  font-family: poppins, sans-serif;
+  font-family: inter, sans-serif;
   width: 100%;
 }
 section{
@@ -102,6 +104,7 @@ button{
   border-radius: 10px;
   text-align: center;
   background: linear-gradient(90deg, var(--primary-color) 0%, var(--primary-color-light) 100%);
+  box-shadow: 0px 5px 5px var(--primary-opacity);
 }
 /* ++++++++++++++  ++++++++++++++*/
 
@@ -111,6 +114,7 @@ button{
   }
   .submit-button{
     background: linear-gradient(90deg, var(--button-color-dark) 0%, var(--button-color-light) 100%);
+    box-shadow: none;
   }
 }
 

@@ -1,20 +1,7 @@
-@import url('./global.css');
+@import url('../assets/css/global.css');
 
 /*********** Logo Header **********/
-.login-logo-img{
-    /** Assuming the logo is to be a square or circle image **/
-    width: 80px;
-    height: 80px;
-    margin: 10px auto;
-    display: block;
-}
-.login-logo-text{
-    /** Assuming the logo is to be text **/
-    width: 180px;
-    height: 50px;
-    margin: 10px auto;
-    display: block;
-}
+
 .login-cont{
     display: flex;
     justify-content: center;
@@ -70,6 +57,7 @@
     background: var(--primary-color-lightest);
     outline: none;
     margin: 5px auto; 
+    box-shadow: 0px 5px 5px var(--primary-opacity);
     transition: 1s;
 }
 .login-cont .login input:focus{
@@ -80,11 +68,6 @@
 .login-cont .login input::placeholder{
     color: var(--primary-color);
     font-size: var(--font-size-medium);
-}
-.page-title{/*Title of each page*/
-    text-align: center;
-    font-weight: normal;
-    color: var(--primary-color);
 }
 .regular-texts{/*for regular texts within the prelim pages*/
     color: var(--primary-color);
@@ -99,7 +82,7 @@
 
 a{/*for prelim links*/
     color: var(--primary-color);
-
+    font-weight: bold;
     text-decoration: none;
     cursor: pointer;
 }
@@ -109,18 +92,6 @@ a{/*for prelim links*/
     text-align: left;
     font-style: italic;
 }
-.footer-links{
-    width: 100%;
-    color: var(--footer-link-color);
-    font-size: var(--font-size-smallest);
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    position: absolute;
-    bottom: 20px;
-    gap: 40px;
-    left: 0px;
-}
 @media (prefers-color-scheme: dark) {
     .login-cont .left-side h2{
         color: var(--text-color-light2);
@@ -129,18 +100,18 @@ a{/*for prelim links*/
     .regular-texts{
         color: var(--white-color);
     }
-    .page-title{
-        color: var(--white-color);
-    }
     a{/*for prelim links*/
         color: var(--text-color-dark2);
+    }
+    .login-cont .login input{
+        box-shadow: none;
     }
 }
 
 @media (max-width: 900px){
   /**rules for small screen tablets**/ 
     .login-cont .left-side{
-        display: none
+        display: none;
     }
 }
 
