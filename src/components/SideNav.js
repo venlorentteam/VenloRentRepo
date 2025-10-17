@@ -97,7 +97,7 @@ function SideNav(){
           )}
         </NavLink>
         <NavLink to="/account">
-              <img src="" className="profile-img" />
+              <img src="" className="profile-img" alt="Profile" />
               <span className="text">Account</span>
         </NavLink>
       </div>

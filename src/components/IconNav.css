@@ -1,0 +1,43 @@
+
+.icon-nav{
+    display: none
+}
+@media (max-width: 500px){
+    .icon-nav{
+        position: fixed;
+        bottom: 0px;
+        width: 100%;
+        padding: 10px 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-flow: row nowrap;
+        backdrop-filter: blur(5px); 
+        background: var(--primary-opacity);
+        gap: 20px;
+        text-align: center;
+        line-height: 1;
+        z-index: 2;
+    }
+    .icon-nav a{
+        color: var(--primary-color);
+        padding: 10px;
+        align-self: center;
+        width: 100%;
+        font-size: var(--font-size-average);        
+    }
+    .icon-nav a .icon{
+        font-size: var(--font-size-big);
+    }
+}
+@media (prefers-color-scheme: dark){
+    .icon-nav{
+        background: var(--black-color);
+    }
+    .icon-nav a{
+        color: var(--white-color);
+    }
+    .icon-nav a.active{
+        color: var(--white-color);
+    }
+}

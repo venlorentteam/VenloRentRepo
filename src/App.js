@@ -6,10 +6,16 @@ import * as Pages from './exports';
 
 // Now you can use Pages.Account, Pages.Login, etc.
 function App() {
- 
+ const statsData = [
+    { label: "Completed Orders", value: 66 },
+    { label: "Good Rating", value: "80%" },
+    { label: "All Completed Orders", value: 475 },
+    { label: "Completion Rate", value: "90%" },
+  ];
   return (
     <>
     {/*<Pages.ClickButton text="Hello" onClick={() => alert('Clicked!')} /> */}
+
     <Routes>
       <Route path="/" element={<Pages.Login />} />
       <Route path="/login" element={<Pages.Login />} />

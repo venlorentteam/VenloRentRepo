@@ -1,0 +1,25 @@
+.login-logo-img{
+    /** Assuming the logo is to be a square or circle image **/
+    width: 80px;
+    height: 80px;
+    margin: 10px auto;
+    display: block;
+}
+.login-logo-text{
+    /** Assuming the logo is to be text **/
+    width: 180px;
+    height: 50px;
+    margin: 10px auto;
+    display: block;
+}
+.page-title{/*Title of each page*/
+    text-align: center;
+    font-weight: normal;
+    color: var(--primary-color);
+}
+
+@media (prefers-color-scheme: dark) {
+    .page-title{
+        color: var(--white-color);
+    }
+}

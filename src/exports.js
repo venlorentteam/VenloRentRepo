@@ -52,3 +52,7 @@ export { default as Register } from "./pages/Register";
 export { default as Search } from "./pages/Search";
 export { default as User } from "./pages/User";
 
+// ==== PRELIM ====
+export { default as PrelimFooter } from "./components/Prelim/PrelimFooter";
+export { default as PrelimHeader } from "./components/Prelim/PrelimHeader";
+

@@ -1,7 +1,7 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import './Header.css'
-function Header({backIcon, pageTitle, icon1, icon2, button, menu}){
+function Header({backIcon, pageTitle, icons, button, menuIcon}){
   const navigate = useNavigate()
   const back = () => {
     navigate(-1)
@@ -10,13 +10,20 @@ function Header({backIcon, pageTitle, icon1, icon2, button, menu}){
     <div className="header">
       <div className="left">
         {(backIcon) && <span className="icon" onClick={back}>{backIcon}</span>}
-        {(pageTitle) && <h2>{pageTitle}</h2>}
+        {(pageTitle) && pageTitle} {/*Can take in any element: headers with <h2>, JSX etc*/}
       </div>
       <div className="right">
-        {(icon1) && <span className="icon">{icon1}</span>}
-        {(icon2) && <span className="icon">{icon2}</span>}
-        {(button) && {button}}
-        {(menu) && <span className="icon">{menu}</span>}
+        {icons.map((item, index) => (
+          <span key={index} className="icon icon-right">
+            {item.link ? (
+              <Link to={item.link}>{item.element}</Link>
+            ) : (
+              item.element
+            )}
+          </span>
+        ))}
+        {(button) && button} {/*Built for buttons but can literally take anything*/}
+        {(menuIcon) && <span className="icon icon-right">{menuIcon}</span>}
       </div>
     </div>
   )
