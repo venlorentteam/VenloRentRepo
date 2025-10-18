@@ -10,6 +10,7 @@ export { default as Header } from "./components/Header";
 export { default as IconNav } from "./components/IconNav";
 export { default as ListStats } from "./components/ListStats";
 export { default as Loader } from "./components/Loader";
+export { default as MessageInputBar } from "./components/MessageInputBar";
 export { default as MessageList } from "./components/MessageList";
 export { default as Modal } from "./components/Modal";
 export { default as OderCountDown } from "./components/OderCountDown";
