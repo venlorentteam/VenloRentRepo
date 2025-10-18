@@ -1,5 +1,5 @@
 import React from "react";
-import {ChatBubble} from "../exports";
+import {ChatBubble, MessageInputBar} from "../exports";
 import "./ChatScreen.css";
 
 const ChatScreen = () => {
@@ -15,13 +15,17 @@ const ChatScreen = () => {
   ];
 
   return (
+    <>
     <div className="chat-screen">
       <div className="chat-container">
         {messages.map((msg) => (
           <ChatBubble text = {msg.message} time = "12.49pm" variant = {msg.isUser} />
         ))}
       </div>
+       <MessageInputBar placeholder="Message..." variant="message" />
     </div>
+   
+    </>
   );
 };
 
