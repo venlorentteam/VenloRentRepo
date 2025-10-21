@@ -110,7 +110,7 @@ button{
   background: linear-gradient(90deg, var(--primary-color) 0%, var(--primary-color-light) 100%);
   box-shadow: 0px 5px 5px var(--primary-opacity);
 }
-/* ++++++++++++++  ++++++++++++++*/
+/* ++++++++++++++ ++++++++++++++*/
 
 @media (prefers-color-scheme: dark) {
   body{

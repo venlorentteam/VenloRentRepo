@@ -7,8 +7,8 @@ import "./ChatBubble.css";
  * - time: string (e.g. "10:24 AM")
  * - variant: "me" | "other" (determines alignment & color)
  */
-const ChatBubble = ({ text = "", time = "", variant = "other" }) => {
-  const isMe = variant === "me";
+const ChatBubble = ({ text, time, variant = "other" }) => {
+const isMe = variant === "me";
 
   return (
     <div className={`chat-row ${isMe ? "chat-row--me" : "chat-row--other"}`}>

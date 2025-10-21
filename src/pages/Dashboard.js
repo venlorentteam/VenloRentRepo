@@ -1,5 +1,5 @@
 import React from 'react'
-import { SideNav, Header, IconNav, ClickButton, Modal } from '../exports'
+import { SideNav, Header, IconNav, ClickButton, PageSetup } from '../exports'
 import { RiMessageLine } from 'react-icons/ri'
 import { FaRegBell } from 'react-icons/fa'
 import '../assets/css/global.css'
@@ -10,23 +10,26 @@ const modalContents = [
   {modalText: "Don't make a mistake"}
 ]
   return (
-    <>
-      <SideNav />
-      <Header 
+    <PageSetup>
+      <SideNav />{/*Desktop left-side navigation*/}
+      <Header //Top page header
         pageTitle= {<h2>Dashboard</h2>}
         icons={
           [
             {link: "/messages", element: < RiMessageLine />},
             {link: "/notifications", element: < FaRegBell />}
           ]
-        } 
-        // button={<ClickButton 
-        // text="Hello" onClick={() => alert('Clicked!')} />} 
+        }
+        button={<ClickButton text="Hello" onClick={() => alert('Clicked!')} />} 
       />
-      
-      <Modal data={modalContents}/> 
-      <IconNav />
-    </>
+      <div className="content">
+        {/*To contain property and post cards*/}
+      </div>
+      <div className="sidebar">
+        {/*Optional for follows and all*/}
+      </div>
+      <IconNav />{/*Mobile bottom navigation*/}
+    </PageSetup>
   )
 }
 

@@ -62,6 +62,9 @@
     .side-nav a{
         color: var(--white-color);
     }
+    .side-nav a .icon{
+        color: var(--white-color)
+    }
     .side-nav a:hover{
         background: var(--side-nav-hover)
     }

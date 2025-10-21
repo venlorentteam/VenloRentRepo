@@ -15,6 +15,7 @@ export { default as MessageList } from "./components/MessageList";
 export { default as Modal } from "./components/Modal";
 export { default as OderCountDown } from "./components/OderCountDown";
 export { default as OrderList } from "./components/OrderList";
+export { default as PageSetup } from "./components/PageSetup";
 export { default as PropertyCard } from "./components/PropertyCard";
 export { default as SearchBar } from "./components/SearchBar";
 export { default as SearchDisplayCard } from "./components/SearchDisplayCard";

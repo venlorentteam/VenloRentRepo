@@ -5,12 +5,17 @@ import leftImg from '../assets/img/login-left1.png'
 import axios from 'axios'
 import { PrelimFooter, PrelimHeader, SubmitButton } from '../exports'
 import { MdOutlineMailOutline, MdLockOutline } from 'react-icons/md'
+import { FaRegEyeSlash, FaRegEye} from 'react-icons/fa'
 function Login () {
+    const [showPass, setShowPass] = useState(false)
     const [errors, setErrors] = useState({})
     const [formData, setFormData] = useState({
     email: "",
     password: "",
 })
+const showPassword = () => {
+    setShowPass(prev => !prev)
+}
 const handleChange = (e) => {
     setFormData({
         ...formData, [e.target.name] : e.target.value
@@ -47,6 +52,15 @@ const iconLeft = {
     left: "8px",
     color: "var(--primary-color)"
 }
+const iconRight = {
+    /** Left positioned descriptive icon for the input **/
+    fontSize: "var(--font-size-medium)",
+    position: "absolute",
+    top: "2.5px",
+    right: "8px",
+    color: "var(--primary-color)",
+    cursor: "pointer"
+}
   return (
     <>
     <div className="login-cont">
@@ -56,11 +70,11 @@ const iconLeft = {
             <p>Skip the stress, find the best...</p>
         </div>
         <div className="login">
-           <PrelimHeader />
+           <PrelimHeader pageTitle="Welcome back"/>
             <form onSubmit={handleSubmit}>
                 <span className="input-cont"><input type="text" name="email" placeholder="Email" value={formData.email} onChange={handleChange} /><MdOutlineMailOutline style={iconLeft} /></span>
                 {errors.email && <span className='error'>{errors.email}</span>}
-                <span className="input-cont"><input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} /><MdLockOutline style={iconLeft} /></span>
+                <span className="input-cont"><input type={showPass ? "text" : "password"} name="password" placeholder="Password" value={formData.password} onChange={handleChange} /><MdLockOutline style={iconLeft} /><span style={iconRight} onClick={showPassword}>{showPass ? <FaRegEye /> : <FaRegEyeSlash />}</span></span>
                 {errors.password && <span className='error'>{errors.password}</span>}
                 <p className='regular-texts' style={{textAlign: 'right'}}><Link to="/recover-password">Forgot Password?</Link></p>
                 <SubmitButton text="Log In" />
