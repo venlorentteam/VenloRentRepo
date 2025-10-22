@@ -1,0 +1,114 @@
+.message-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--light-green-color);
+  border-radius: 18px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.message-list-item:hover {
+  transform: scale(1.01);
+  background-color: var(--light-green-color-hover);
+}
+
+.message-avatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 12px;
+  border: 2px solid var(--primary-color-light);
+}
+
+.message-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Name & Unread dot wrapper */
+.message-name-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.message-name {
+  font-weight: 500;
+  color: var(--text-color-dark);
+  font-size: var(--font-size-medium);
+}
+
+.unread-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--primary-color-light);
+  border-radius: 50%;
+}
+
+.message-snippet {
+  color: var(--msg-snippet-color);
+  font-size: var(--font-size-small);
+}
+
+.message-time {
+  font-size: var(--font-size-smallest);
+  opacity: 0.8;
+}
+
+.message-options {
+  font-size: var(--font-size-small);
+  color: var(--msg-snippet-color);
+  margin-left: 10px;
+  flex-shrink: 0;
+}
+
+.message-list-item:hover .message-options {
+  color: var(--primary-color);
+}
+
+/* Unread messages */
+/* .message-list-item.unread {
+  background-color: var(--highlight-light);
+} */
+
+.message-list-item.unread .message-name {
+  font-weight: 700;
+  color: var(--text-color-dark);
+}
+
+.message-list-item.unread .message-snippet {
+  color: rgb(0, 75, 0);
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .message-list-item {
+    background-color: var(--dark-bg-light);
+  }
+
+  .message-list-item:hover {
+    background-color: var(--dark-bg-hover);
+  }
+
+  .message-name {
+    color: var(--text-color-light);
+  }
+
+  .message-snippet {
+    color: var(--text-muted-color-light);
+  }
+
+  .message-list-item.unread {
+    background-color: var(--dark-highlight);
+  }
+
+  .message-list-item.unread .message-name {
+    color: var(--primary-color);
+  }
+}

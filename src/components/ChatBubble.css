@@ -44,7 +44,13 @@
   font-weight: 600;
   font-size: var(--font-size-medium);
 }
-
+/* Avatar styling */
+.chat-bubble__avatar-image {
+   width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  object-fit: cover;;
+}
 /* Message text styling */
 .chat-bubble__text {
   margin: 0 0 6px 0;
