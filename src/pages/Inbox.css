@@ -1,0 +1,88 @@
+.inbox-container {
+  display: flex;
+  height: 100vh;
+  background-color: var(--app-bg);
+  transition: all 0.3s ease;
+}
+
+/* Left sidebar (message list) */
+.inbox-sidebar {
+  width: 35%;
+  max-width: 400px;
+  border-right: 1px solid var(--border-color-light);
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+/* Right panel (chat or placeholder) */
+.inbox-chat-panel {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--light-green-color);
+  transition: all 0.3s ease;
+}
+
+/* Empty chat placeholder */
+.empty-chat {
+  text-align: center;
+  color: var(--text-color-dark);
+}
+
+.empty-chat h2 {
+  font-size: var(--font-size-large);
+  margin-bottom: 0.5rem;
+}
+
+.empty-chat p {
+  font-size: var(--font-size-small);
+  color: var(--msg-snippet-color);
+  margin-bottom: 1rem;
+}
+
+.send-msg-btn {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.send-msg-btn:hover {
+  background-color: var(--primary-color-dark);
+}
+
+/* Mobile View */
+@media (max-width: 768px) {
+  .inbox-container {
+    flex-direction: column;
+  }
+
+  .inbox-sidebar {
+    width: 100%;
+    border: none;
+  }
+
+  .inbox-chat-panel {
+    display: none;
+  }
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .inbox-container {
+    background-color: var(--dark-bg);
+  }
+
+  .inbox-chat-panel {
+    background-color: var(--dark-bg-light);
+  }
+
+  .empty-chat {
+    color: var(--text-color-light);
+  }
+}
