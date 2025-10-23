@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import './login.css'
+import './Login.css'
 import leftImg from '../assets/img/login-left1.png'
 import axios from 'axios'
 import { PrelimFooter, PrelimHeader, SubmitButton } from '../exports'
@@ -82,7 +82,7 @@ const iconRight = {
             </form>
         </div>
     </div>
-   <PrelimFooter />
+    <PrelimFooter />
     </>
   )
 }

@@ -73,6 +73,7 @@
     justify-content: center;
     flex-direction: row;
     align-items: center;
+    text-align: center;
     gap: 10px;
     line-height: 1;
     padding: 0px;
@@ -89,6 +90,7 @@ input[type="checkbox"]{
 .regular-texts{/*for regular texts within the prelim pages*/
     color: var(--primary-color);
     font-size: var(--font-size-small);
+    line-height: 120%;
 }
 a{/*for prelim links*/
     color: var(--primary-color);

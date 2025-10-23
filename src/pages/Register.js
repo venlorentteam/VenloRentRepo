@@ -1,76 +1,81 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import './Register.css'
-import leftImg from '../assets/img/login-left1.png'
 import axios from 'axios'
+import { FaRegEyeSlash, FaRegEye} from 'react-icons/fa'
 import { PrelimFooter, PrelimHeader, SubmitButton } from '../exports'
 import { MdOutlineMailOutline, MdLockOutline } from 'react-icons/md'
 import { RiAccountPinBoxLine } from 'react-icons/ri'
-import { FaRegEyeSlash, FaRegEye} from 'react-icons/fa'
-import { PiIdentificationBadge, PiIdentificationCard } from 'react-icons/pi'
-function Register () {
+import { PiIdentificationBadge } from 'react-icons/pi'
+
+function Register() {
   const [showPass, setShowPass] = useState(false)
   const [errors, setErrors] = useState({})
   const [formData, setFormData] = useState({
-  email: "",
-  password: "",
-  fullname: "",
-  username: "",
-})
-const showPassword = () => {
-  setShowPass(prev => !prev)
-}
-const handleChange = (e) => {
-   const { name, value } = e.target;
-  // Update form data
-  setFormData({
-    ...formData,
-    [name]: value,
-  });
+    email: "",
+    password: "",
+    fullname: "",
+    username: "",
+  })
+  
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+     // validate the changed field
+    let error = ""
+    switch (name) {
+      case "email":
+        if (!value.trim()) error = "Email is required"
+        else if (!/^\S+@\S+\.\S+$/.test(value)) error = "Invalid email address"
+        break
+      case "password":
+        if (!value.trim()) error = "Password is required"
+        else if (value.length < 6) error = "Password must be at least 6 characters"
+        break
+      case "fullname":
+        if (!value.trim()) error = "Full name is required"
+        break
+      case "username":
+        if (!value.trim()) error = "Username is required"
+        break
+      default:
+        break
+    }
 
-  let formErrors
-  // validate only the currently edited field
-  switch (name) {
-    case "email":
-      if (!value.trim()) formErrors = "Email is required";
-      else if (!/^\S+@\S+\.\S+$/.test(value)) formErrors = "Please enter a valid email address";
-      break;
-    case "password":
-      if (!value.trim()) formErrors = "Password is required";
-      else if (value.length < 6) formErrors = "Password should be at least 6 characters long";
-      break;
-    case "fullname":
-      if (!value.trim()) formErrors = "Full Name is required";
-      break;
-    case "username":
-      if (!value.trim()) formErrors = "Username is required";
-      break;
-    default:
-      break;
+    // update errors state for that field
+    setErrors((prev) => ({
+      ...prev,
+      [name]: error,
+    }))
+
+  }
+  //Password visibility toggle
+  const showPassword = () => {
+    setShowPass(prev => !prev)
   }
 
-  // Update only that field's error
-  setErrors((prev) => ({
-    ...prev,
-    [name]: formErrors
-  }));
-}
+   //check if form has  any or empty required field
+  const hasErrors =
+    Object.values(errors).some((err) => err) ||
+    Object.values(formData).some((val) => val === "" || val === false)
 
-const handleSubmit = async (e) => {
+  //Handle form submission
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    if(Object.keys(errors).length === 0){
-        try{
-            const res = await axios.post("http://localhost:4000/api/login", formData)
-            if(res.data.success){
-                //generate token and navgate() to dashboard
-            }
-            console.log(res.data)
+
+    if (Object.keys(errors).length === 0) {
+      try {
+        const res = await axios.post("http://localhost:4000/api/login", formData)
+        if (res.data.success) {
+          // generate token and navigate() to dashboard
         }
-        catch(err){
-            console.log(err.response?.data?.message || "Error submitting request")
-        }
+        console.log(res.data)
+      } catch (err) {
+        console.log(err.response?.data?.message || "Error submitting request")
+      }
     }
-}
+  }
+
 const iconLeft = {
   /** Left positioned descriptive icon for the input **/
   fontSize: "var(--font-size-medium)",
@@ -80,7 +85,7 @@ const iconLeft = {
   color: "var(--primary-color)"
 }
 const iconRight = {
-  /** Left positioned descriptive icon for the input **/
+  /** Right positioned descriptive icon for the input **/
   fontSize: "var(--font-size-medium)",
   position: "absolute",
   top: "2.5px",
@@ -110,10 +115,10 @@ const iconRight = {
             <span className="input-cont"><input type="text" name="username" placeholder="Username" value={formData.username} onChange={handleChange} /><PiIdentificationBadge style={iconLeft} /></span>
             {errors.username && <span className='error'>{errors.username}</span>}
             <span className="check-cont">
-              <input type="checkbox" name="agree" />
-              <p className="regular-texts">I have read and agreed to NewProduct's <Link to="/terms">User Agreement</Link> and <Link to="/privacy-policy">Privacy Policy</Link>.</p>
+              {/* <input type="checkbox" name="agree" /> */}
+              <p className="regular-texts">By signing up, you agree to NewProduct's <Link to="/terms">User Agreement</Link> and <Link to="/privacy-policy">Privacy Policy</Link>.</p>
             </span>
-            <SubmitButton text="Sign up" />
+            <SubmitButton text="Sign up" disabled={hasErrors} />
             <p className='regular-texts' style={{textAlign: 'center'}}>Have an account? <Link to="/login">Log in</Link></p>
           </form>
         </div>

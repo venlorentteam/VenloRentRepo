@@ -13,13 +13,25 @@
     display: block;
 }
 .page-title{/*Title of each page*/
+    margin: 10px auto;
     text-align: center;
     font-weight: normal;
     color: var(--primary-color);
+
+}
+.page-sub-title{/*Subtitle of each page*/
+    text-align: center;
+    margin: 15px auto;
+    font-weight: normal;
+    color: var(--primary-color);
+    font-size: var(--font-size-small)
 }
 
 @media (prefers-color-scheme: dark){
     .page-title{
+        color: var(--white-color);
+    }
+    .page-sub-title{
         color: var(--white-color);
     }
 }
