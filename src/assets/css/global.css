@@ -31,6 +31,7 @@
   --text-color-dark: #00350e; /* For Light Mode*/
   --text-color-light2: #00A514; /* For Dark Mode*/
   --text-color-dark2: #74FF99; /* For Dark Mode*/
+  --msg-snippet-color: #71967B;
   --footer-link-color: #5c605d; /* For Links at the Prelim pages */
 
   /* Other color  props*/

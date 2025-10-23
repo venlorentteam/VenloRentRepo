@@ -13,6 +13,8 @@
    margin: 0 auto;
    transition: all 0.3s ease-in-out;
    border: 1px solid var(--primary-color-light);
+  /* Positions it at the bottom of the viewport */
+
 }
 
 .message-input {
@@ -64,6 +66,8 @@
 @media (max-width: 600px) {
   .message-input-bar {
     padding: 8px 14px;
+     position: fixed;
+   bottom: 0; 
   }
 
   .icon {
