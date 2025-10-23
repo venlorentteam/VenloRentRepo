@@ -1,0 +1,121 @@
+.search-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--light-green-color);
+  border-radius: 16px;
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.search-card:hover {
+  transform: scale(1.01);
+  background-color: var(--light-green-color-hover);
+}
+
+/* Left Section */
+.search-card-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.user-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.username {
+  color: var(--text-color-dark);
+  font-size: var(--font-size-small);
+  font-weight: 500;
+}
+
+.ad-tag {
+  color: var(--msg-snippet-color);
+  font-size: var(--font-size-smallest);
+}
+
+.price {
+  color: var(--primary-color);
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 4px 0;
+}
+
+.label {
+  color: var(--msg-snippet-color);
+  font-size: var(--font-size-small);
+}
+
+.value {
+  color: var(--text-color-dark);
+  font-weight: 500;
+}
+
+.house-type {
+  color: var(--msg-snippet-color);
+  font-size: var(--font-size-small);
+  margin-top: 4px;
+}
+
+/* Right Section */
+.search-card-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.image-placeholder,
+.house-image {
+  width: 70px;
+  height: 70px;
+  border-radius: 10px;
+  background-color: var(--light-green-color-hover);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.placeholder-icon {
+  font-size: 1.5rem;
+  color: var(--primary-color);
+}
+
+.house-image {
+  object-fit: cover;
+}
+
+.arrow-icon {
+  color: var(--msg-snippet-color);
+  font-size: var(--font-size-small);
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .search-card {
+    background-color: var(--dark-bg-light);
+  }
+
+  .search-card:hover {
+    background-color: var(--dark-bg-hover);
+  }
+
+  .username,
+  .value,
+  .price {
+    color: var(--text-color-light);
+  }
+
+  .label,
+  .ad-tag {
+    color: var(--text-muted-color-light);
+  }
+
+  .placeholder-icon {
+    color: var(--primary-color-light);
+  }
+}
