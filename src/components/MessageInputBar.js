@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import "./MessageInputBar.css";
 import {
   FaMicrophone,
-  FaRegImage,
+  FaImage,
   FaCamera,
   FaRegCommentDots,
   FaPaperPlane,
 } from "react-icons/fa";
-
+import {HiOutlineMicrophone} from 'react-icons/hi'
+import {IoImageOutline, IoCameraOutline} from 'react-icons/io5'
 const MessageInputBar = ({
   placeholder = "Message...",
   variant = "message", // or "comment"
@@ -69,17 +70,17 @@ const MessageInputBar = ({
           />
         ) : variant === "message" ? (
           <>
-            <FaMicrophone
+            <HiOutlineMicrophone
               className="icon"
               title="Record voice note"
               onClick={handleVoiceNote}
             />
-            <FaRegImage
+            <IoImageOutline
               className="icon"
               title="Upload image"
               onClick={handleUploadImage}
             />
-            <FaCamera
+            <IoCameraOutline
               className="icon"
               title="Take photo"
               onClick={handleOpenCamera}

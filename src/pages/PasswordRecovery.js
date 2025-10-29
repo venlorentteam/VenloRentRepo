@@ -61,7 +61,7 @@ const iconLeft = {
         <div className="login">
            <PrelimHeader pageTitle="Recover your password" pageSubTitle="Please enter email associated with your account"/>
             <form onSubmit={handleSubmit}>
-              <span className="input-cont"><input type="text" name="email" placeholder="Email" value={formData.email} onChange={handleChange} /><MdOutlineMailOutline style={iconLeft} /></span>
+              <span className="input-cont"><input className="login-input" type="text" name="email" placeholder="Email" value={formData.email} onChange={handleChange} /><MdOutlineMailOutline style={iconLeft} /></span>
               {errors.email && <span className='error'>{errors.email}</span>}
               <SubmitButton text="Continue" />
             </form>

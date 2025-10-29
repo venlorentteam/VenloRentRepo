@@ -44,7 +44,7 @@
     position: relative;
     width: 100%;
 }
-.login-cont .login input{
+.login-cont .login .login-input{
     color: var(--primary-color);
     font-size: var(--font-size-small);
     font-weight: normal;
@@ -60,12 +60,12 @@
     box-shadow: 0px 5px 5px var(--primary-opacity);
     transition: 1s;
 }
-.login-cont .login input:focus{
+.login-cont .login .login-input:focus{
     border: none;
     background: var(--input-bg-focus);
     outline: none;
 }
-.login-cont .login input::placeholder{
+.login-cont .login .login-input::placeholder{
     color: var(--primary-color);
     font-size: var(--font-size-medium);
 }
@@ -96,7 +96,7 @@ a{/*for prelim links*/
     a{/*for prelim links*/
         color: var(--text-color-dark2);
     }
-    .login-cont .login input{
+    .login-cont .login .login-input{
         box-shadow: 0px 5px 5px var(--shadowBlack-color);
     }
 }

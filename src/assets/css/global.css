@@ -18,7 +18,7 @@
   --button-color-dark: #014D15;
 
   /* Background colors for pages */
-  --bg-color-light: #f3f9f5;
+  --bg-color-light: #f4f7f5;
   --bg-color-dark: #18201d;
   --box-bg-color-light: #b9f9d8;
 
@@ -35,6 +35,7 @@
   --footer-link-color: #5c605d; /* For Links at the Prelim pages */
 
   /* Other color  props*/
+  --grey-color: #797777;
   --black-color: #191e1d;
   --primary-opacity: #a8f9cf; /* For shadows on buttons or containers*/
   --black-color: #151818;  /* too harsh for shadows */ 

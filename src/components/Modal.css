@@ -1,30 +1,28 @@
 .modal{
-    width: 450px;
+    width: 400px;
     /* min-height: 250px; */
     height: auto;
-    padding: 30px;
-    position: absolute;
+    padding: 20px;
+    position: fixed;
     background: var(--white-color);
     border: 1px solid var(--primary-color-lightest);
-    box-shadow: 0px 5px 5px var(--primary-opacity);
+    box-shadow: 0px 5px 5px var(--shadowBlack-color);
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    border-radius: 10px;
+    transition: 1s 2s;
+    border-radius: 20px;
     z-index: 21;
 }
-.modal.inactive-modal{
-    display: none;
-}
 .overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    background: var(--background-nav-black);
-    filter: blur(50%);
+    filter: blur(70%);
+    background: rgba(22, 23, 22, 0.763);
     z-index: 20;
-}
-.modal.inactive-overlay{
-    display: none;
 }
 .modal .cancel{
     font-size: var(--font-size-average);
@@ -38,13 +36,6 @@
     font-size: var(--font-size-average);
     text-align: center;
     color: var(--primary-color);
-    margin: 10px auto;
-}
-.modal p{
-    font-size: var(--font-size-small);
-    text-align: left;
-    color: var(--primary-color);
-    line-height: 180%;
     margin: 10px auto;
 }
 @media (prefers-color-scheme: dark){

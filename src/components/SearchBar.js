@@ -8,7 +8,7 @@ const SearchBar = ({ placeholder = "Search...", onSearch }) => {
   const handleChange = (e) => {
     const value = e.target.value;
     setQuery(value);
-    if (onSearch) onSearch(value);
+    if(onSearch) onSearch(value);
   };
 
   return (

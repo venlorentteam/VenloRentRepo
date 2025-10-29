@@ -3,7 +3,7 @@ import React from 'react'
 function AllOrders() {
   return (
     <div>
-      
+
     </div>
   )
 }

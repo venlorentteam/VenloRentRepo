@@ -2,25 +2,18 @@ import React, { useState } from 'react'
 import './Modal.css'
 import { FaXmark } from "react-icons/fa6"
 
-function Modal({data = [], cancel=true}){
-  const [modal, setModal] = useState()
-
-  const toggleModal = ()=>{
-    setModal(modal => !modal)
-  }
+function Modal({children, isOpen, onClose, cancel=true}){
+  if(!isOpen) return null
+  // const [modal, setModal] = useState()
+  // const toggleModal = ()=>{
+  //   setModal(modal => !modal)
+  // }
   return (
     <>
-      <div className={`overlay ${modal ? 'inactive-overlay' : ''}`}></div>
-      <div className={`modal ${modal ? 'inactive-modal' : ''}`}>
-        {cancel && <span className="cancel" onClick={toggleModal}><FaXmark /></span>}
-        {data.map((item, i)=>(
-          <div key={i}>
-            {/* modal pop ups for various actions */}
-            {item.modalTitle && <h2>{item.modalTitle}</h2>}
-            {item.modalText && <p>{item.modalText}</p>}
-            {item.modalExtra && item.modalExtra}
-          </div>
-        ))}
+      <div className="overlay" onClick={onClose}></div>
+      <div className="modal" onClick={(e) => e.stopPropagation()}>{/*Prevent closing modal on click of the modal itself*/}
+        {cancel && <span className="cancel" onClick={onClose}><FaXmark /></span>}
+        {children}
       </div>
     </>
   )

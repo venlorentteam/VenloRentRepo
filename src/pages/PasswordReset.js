@@ -68,10 +68,10 @@ const iconRight = {
         <div className="login">
            <PrelimHeader pageTitle="Reset Password"/>
             <form onSubmit={handleSubmit}>
-                <span className="input-cont"><input type={showPass1 ? "text" : "password"} name="pass1" placeholder="New password" value={formData.pass1} onChange={handleChange} /><MdLockOutline style={iconLeft} /><span style={iconRight} onClick={() => setShowPass1(prev => !prev)}>{showPass1 ? <FaRegEye /> : <FaRegEyeSlash />}</span></span>
+                <span className="input-cont"><input className="login-input" type={showPass1 ? "text" : "password"} name="pass1" placeholder="New password" value={formData.pass1} onChange={handleChange} /><MdLockOutline style={iconLeft} /><span style={iconRight} onClick={() => setShowPass1(prev => !prev)}>{showPass1 ? <FaRegEye /> : <FaRegEyeSlash />}</span></span>
                 {errors.pass1 && <span className='error'>{errors.pass1}</span>}
 
-                <span className="input-cont"><input type={showPass2 ? "text" : "password"} name="pass2" placeholder="Confirm new password" value={formData.pass2} onChange={handleChange} /><MdLockOutline style={iconLeft} /><span style={iconRight} onClick={() => setShowPass2(prev => !prev)}>{showPass2 ? <FaRegEye /> : <FaRegEyeSlash />}</span></span>
+                <span className="input-cont"><input className="login-input" type={showPass2 ? "text" : "password"} name="pass2" placeholder="Confirm new password" value={formData.pass2} onChange={handleChange} /><MdLockOutline style={iconLeft} /><span style={iconRight} onClick={() => setShowPass2(prev => !prev)}>{showPass2 ? <FaRegEye /> : <FaRegEyeSlash />}</span></span>
                 {errors.pass2 && <span className='error'>{errors.pass2}</span>}
                 {errors.pass && <p className='error'>{errors.pass}</p>}
                 <SubmitButton text="Reset Password" />

@@ -1,0 +1,171 @@
+.property-card{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 500px;
+    display: block;
+    margin: 35px auto;
+    border-bottom: 1px solid var(--primary-opacity)
+}
+.property-card .top{
+    display: flex;
+    padding: 5px auto;
+    margin: 5px auto;
+}
+.property-card .top .left{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
+}
+.property-card .top .left .avatar{
+    width: 40px;
+    height: 40px;
+    border: 2px solid var(--primary-color);
+    border-radius: 50%;
+    align-self: center;
+}
+.property-card .top .left .handle{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    color: var(--primary-color);
+    text-align: left;
+}
+.property-card .top .left .handle h4{
+    font-size: var(--font-size-medium);
+    font-weight: bold;
+}
+.property-card .top .left .handle p{
+    font-size: var(--font-size-smallest);
+    font-weight: bold;
+}
+.property-card i{
+    font-size: var(--font-size-small);
+    color: var(--primary-color);
+}
+.property-card .body img{
+    width: 100%;
+    max-width: 500px;
+    height: auto; 
+}
+.property-card .bottom{/*Contains amount, location and order button*/
+    display: flex;
+    color: var(--primary-color);
+    padding: 10px;
+    flex-flow: row nowrap;
+    width: 100%;
+}
+.order-button{
+    background: var(--button-color-light);
+    color: var(--white-color);
+    border: none;
+    border-radius: 10px;
+    padding: 5px 20px;
+    font-weight: bold;
+    cursor: pointer;
+    white-space: nowrap;  
+    align-self: center;
+    margin-left: 55%;
+}
+.property-card .bottom .left{
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+.property-card .bottom .left .location-icon{
+    font-size: 0.8em;
+    line-height: 1;
+}
+.property-card .bottom .left .location{
+   font-size: 0.5em;
+}
+.property-card .activity{/*Contains views, shares and comments*/
+    display: flex;
+    /* background: var(--primary-color); */
+    color: var(--primary-color);
+}
+.property-card .activity-icon{
+    font-size: var(--font-size-average);
+    color: var(--primary-color);
+    cursor: pointer;
+    line-height: 1;
+}
+.property-card .activity .left{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
+}
+.property-card .activity .left .item{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 5px;
+    color: var(--primary-color);
+    line-height: 1;
+    font-weight: bold;
+    cursor: pointer
+}
+.property-card h2{
+    font-size: var(--font-size-average)
+}
+.property-card p{
+    text-align: left;
+    font-size: var(--font-size-small);
+    color: var(--primary-color);
+    line-height: 150%;
+    margin: 5px auto;
+}
+.modal-link p{
+    font-size: var(--font-size-small);
+    color: var(--primary-color);
+    text-align: center;
+    margin: 10px auto;
+    font-weight: normal;
+}
+.modal-link:last-child{
+    border-bottom: none;
+}
+@media (prefers-color-scheme: dark){
+    .property-card .activity .left .item{
+        color: var(--white-color);
+    }
+    .property-card .top .left .avatar{
+        border: 2px solid var(--primary-color-lightest);
+    }
+    .property-card .top .left .handle h4{
+        color: var(--white-color)
+    }
+    .property-card .top .left .handle p{
+        color: var(--white-color)
+    }
+    .property-card .activity-icon{
+        color: var(--white-color);
+    }
+    .property-card .activity {
+        color: var(--white-color);
+    }
+    .property-card p{
+        color: var(--white-color);
+    }
+    .property-card h2{
+        color: var(--white-color)
+    }
+    .modal-link{
+        color: var(--background-nsv-light);
+        border-bottom: 1px solid var(--primary-color);
+    }
+}
+@media (max-width: 600px){
+    .property-card{
+        max-width: 100%;
+    }
+    .order-button{
+        margin-left: 50%;
+    }
+}

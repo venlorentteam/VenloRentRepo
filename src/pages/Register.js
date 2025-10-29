@@ -106,13 +106,13 @@ const iconRight = {
         <div className="register">
           <PrelimHeader pageTitle="Create an account" />
           <form onSubmit={handleSubmit}>
-            <span className="input-cont"><input type="text" name="email" placeholder="Email" value={formData.email} onChange={handleChange} /><MdOutlineMailOutline style={iconLeft} /></span>
+            <span className="input-cont"><input className="reg-input" type="text" name="email" placeholder="Email" value={formData.email} onChange={handleChange} /><MdOutlineMailOutline style={iconLeft} /></span>
             {errors.email && <span className='error'>{errors.email}</span>}
-            <span className="input-cont"><input type={showPass ? "text" : "password"} name="password" placeholder="Password" value={formData.password} onChange={handleChange} /><MdLockOutline style={iconLeft} /><span style={iconRight} onClick={showPassword}>{showPass ? <FaRegEye /> : <FaRegEyeSlash />}</span></span>
+            <span className="input-cont"><input className="reg-input" type={showPass ? "text" : "password"} name="password" placeholder="Password" value={formData.password} onChange={handleChange} /><MdLockOutline style={iconLeft} /><span style={iconRight} onClick={showPassword}>{showPass ? <FaRegEye /> : <FaRegEyeSlash />}</span></span>
             {errors.password && <span className='error'>{errors.password}</span>}
-            <span className="input-cont"><input type="text" name="fullname" placeholder="Full Name" value={formData.fullname} onChange={handleChange} /><RiAccountPinBoxLine style={iconLeft} /></span>
+            <span className="input-cont"><input className="reg-input" type="text" name="fullname" placeholder="Full Name" value={formData.fullname} onChange={handleChange} /><RiAccountPinBoxLine style={iconLeft} /></span>
             {errors.fullname && <span className='error'>{errors.fullname}</span>}
-            <span className="input-cont"><input type="text" name="username" placeholder="Username" value={formData.username} onChange={handleChange} /><PiIdentificationBadge style={iconLeft} /></span>
+            <span className="input-cont"><input className="reg-input" type="text" name="username" placeholder="Username" value={formData.username} onChange={handleChange} /><PiIdentificationBadge style={iconLeft} /></span>
             {errors.username && <span className='error'>{errors.username}</span>}
             <span className="check-cont">
               {/* <input type="checkbox" name="agree" /> */}

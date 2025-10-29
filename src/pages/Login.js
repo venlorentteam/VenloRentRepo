@@ -72,9 +72,9 @@ const iconRight = {
         <div className="login">
            <PrelimHeader pageTitle="Welcome back"/>
             <form onSubmit={handleSubmit}>
-                <span className="input-cont"><input type="text" name="email" placeholder="Email" value={formData.email} onChange={handleChange} /><MdOutlineMailOutline style={iconLeft} /></span>
+                <span className="input-cont"><input className="login-input" type="text" name="email" placeholder="Email" value={formData.email} onChange={handleChange} /><MdOutlineMailOutline style={iconLeft} /></span>
                 {errors.email && <span className='error'>{errors.email}</span>}
-                <span className="input-cont"><input type={showPass ? "text" : "password"} name="password" placeholder="Password" value={formData.password} onChange={handleChange} /><MdLockOutline style={iconLeft} /><span style={iconRight} onClick={showPassword}>{showPass ? <FaRegEye /> : <FaRegEyeSlash />}</span></span>
+                <span className="input-cont"><input className="login-input" type={showPass ? "text" : "password"} name="password" placeholder="Password" value={formData.password} onChange={handleChange} /><MdLockOutline style={iconLeft} /><span style={iconRight} onClick={showPassword}>{showPass ? <FaRegEye /> : <FaRegEyeSlash />}</span></span>
                 {errors.password && <span className='error'>{errors.password}</span>}
                 <p className='regular-texts' style={{textAlign: 'right'}}><Link to="/recover-password">Forgot Password?</Link></p>
                 <SubmitButton text="Log In" />
