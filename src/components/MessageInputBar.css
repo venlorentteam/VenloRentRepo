@@ -14,55 +14,49 @@
   transition: all 0.3s ease-in-out;
   border: 1px solid var(--primary-color-light);
   /* Positions it at the bottom of the viewport */
-
 }
-
 .message-input{
   flex: 1;
   border: none;
   background: transparent;
   font-size: var(--font-size-small);
-  color: var(--primary-color) ;
-  font-weight: 600;
+  box-shadow: none;
+  color: var(--primary-color);
   outline: none;
-  padding: 10px;
+  padding: 5px;
 }
-
+.message-input:focus{
+  border: none;
+}
 .message-input::placeholder{
   color: var(--text-muted-color);
   opacity: 0.7;
 }
-
 .message-icons{
   display: flex;
   align-items: center;
   gap: 12px;
 }
-
 .icon {
   font-size: 1.4rem;
   color: var(--button-color-dark);
   cursor: pointer;
   transition: transform 0.2s ease, color 0.2s ease;
 }
-
 .icon:hover {
   transform: scale(1.15);
   color: var(--primary-color);
 }
-
 /* Send icon animation */
 .send-icon {
   color: var(--button-color-dark);
   transform: scale(1.1);
   transition: all 0.3s ease;
 }
-
 .send-icon:hover {
   transform: scale(1.25);
   color: var(--primary-color-dark);
 }
-
 /* Responsive tweaks */
 @media (max-width: 600px) {
   .message-input-bar {

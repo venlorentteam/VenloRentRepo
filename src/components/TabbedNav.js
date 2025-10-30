@@ -1,10 +1,19 @@
 import React from 'react'
-
-function TabbedNav() {
+import './TabbedNav.css'
+import { NavLink, Outlet } from 'react-router-dom'
+function TabbedNav({tabs=[], basePath}){
+  //for any two tabbed menu
+  //tabs - [{ label: "Create a Post", path: "create" }]
+  //Preceed all path links
   return (
-    <div>
-      
+    <>
+    <div className="tabbed-nav">
+      {tabs.map((tab)=>(
+        <NavLink to={`${basePath}${tab.path}`}>{tab.label}</NavLink>
+      ))}
     </div>
+    <Outlet />
+    </>
   )
 }
 

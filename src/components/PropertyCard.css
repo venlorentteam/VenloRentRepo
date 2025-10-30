@@ -1,9 +1,10 @@
+
 .property-card{
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    max-width: 500px;
+    width: 500px;
     display: block;
     margin: 35px auto;
     border-bottom: 1px solid var(--primary-opacity)

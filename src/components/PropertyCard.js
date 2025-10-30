@@ -8,7 +8,7 @@ import "swiper/css/pagination";
 
 import './PropertyCard.css'
 import { FaRegEye, FaRegComment } from 'react-icons/fa'
-import { useNavigate, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { BsThreeDots } from 'react-icons/bs'
 import { GrLocation } from 'react-icons/gr'
 import { MdBookmarkBorder, MdIosShare } from 'react-icons/md'

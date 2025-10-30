@@ -1,0 +1,23 @@
+.tabbed-nav{
+    width: 100%;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+.tabbed-nav a{  
+    flex: 1;
+    color: var(--primary-color);
+    font-size: var(--font-size-average);
+    border-bottom: 1px solid var(--grey-color)
+    
+}
+.tabbed-nav a.active{
+    border-bottom: 2px solid var(--primary-color-light)
+}
+
+@media(prefers-color-scheme: dark){
+    .tabbed-nav a{
+        color: var(--white-color);
+    }
+}

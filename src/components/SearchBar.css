@@ -1,5 +1,5 @@
 
-.search-bar {
+.search-bar{
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -12,14 +12,19 @@
   box-sizing: border-box;
   transition: all 0.3s ease-in-out;
 }
-.search-input {
+.search-input{
   flex: 1;
   border: none;
   outline: none;
   background: transparent;
   font-size: var(--font-size-small);
-  color: #014D15 ;
-  font-weight: 600;
+  color: #014D15;
+  padding: 5px;
+  box-shadow: none;
+}
+.search-input:focus{
+  border: none;
+  outline: none;
 }
 .search-icon {
   background: transparent;

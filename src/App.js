@@ -21,10 +21,12 @@ function App() {
       <Route path="/login" element={<Pages.Login />} />
       <Route path="/register" element={<Pages.Register />} />
       <Route path="/dashboard" element={<Pages.Dashboard />} />
-      <Route path="/orders" element={<Pages.Orders />} />
       <Route path="/account" element={<Pages.Account />} />
-      <Route path="/active-orders" element={<Pages.ActiveOrders />} />
-      <Route path="/all-orders" element={<Pages.AllOrders />} />
+      <Route path="orders" element={<Pages.Orders />}>
+        <Route path="active-orders" element={<Pages.ActiveOrders />} />
+        <Route path="all-orders" element={<Pages.AllOrders />} />
+      </Route>
+      <Route path="all-orders" element={<Pages.AllOrders />} />
       <Route path="/bookmarks" element={<Pages.Bookmarks />} />
       <Route path="/confirm-order" element={<Pages.ConfirmOrder />} />
       <Route path="/create" element={<Pages.Create />} />
