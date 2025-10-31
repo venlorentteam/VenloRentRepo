@@ -19,7 +19,7 @@
 }
 .header h2{
     color: var(--primary-color);
-    font-size: var(--font-size-average);
+    font-size: var(--font-size-big);
 }
 .header .icon{
     font-size: var(--font-size-big);

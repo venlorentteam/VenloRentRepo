@@ -4,14 +4,13 @@
   align-items: center;
   background-color: var(--light-green-color);
   border-radius: 16px;
-  padding: 16px 20px;
+  padding: 16px 0px;
   margin-bottom: 12px;
   transition: all 0.3s ease;
   cursor: pointer;
 }
 
 .search-card:hover {
-  transform: scale(1.01);
   background-color: var(--light-green-color-hover);
 }
 

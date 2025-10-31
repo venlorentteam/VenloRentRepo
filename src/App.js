@@ -23,6 +23,7 @@ function App() {
       <Route path="/dashboard" element={<Pages.Dashboard />} />
       <Route path="/account" element={<Pages.Account />} />
       <Route path="orders" element={<Pages.Orders />}>
+        <Route index element={<Pages.AllOrders />} />
         <Route path="active-orders" element={<Pages.ActiveOrders />} />
         <Route path="all-orders" element={<Pages.AllOrders />} />
       </Route>

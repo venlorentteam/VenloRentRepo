@@ -5,8 +5,8 @@ import { RiMessageLine } from 'react-icons/ri'
 import { FaRegBell } from 'react-icons/fa'
 function Orders() {
   const tabbed = [
-    {path: "/all-orders", label: "All orders"},
-    {path: "/active-orders", label: "Active orders"}
+    {path: "/all-orders", label: "All"},
+    {path: "/active-orders", label: "Active"}
   ]
   return (
     <PageSetup> {/* Will display two types of others (Active and All) in tabbed nav */}

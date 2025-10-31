@@ -20,7 +20,7 @@
   flex: 1;
   /* width: calc(100%-40%); */
   margin-top: 50px;
-  padding: 0px;
+  padding: 5px 20px;
   align-self: stretch;
 }
 .sidebar{/*Right side bar*/
@@ -40,7 +40,6 @@
         margin-left: 0px;
     }
     .content{
-        width: 100%;
-        padding: 20px;
+      width: 100%;
     }
 }
