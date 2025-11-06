@@ -21,20 +21,24 @@ function App() {
       <Route path="/login" element={<Pages.Login />} />
       <Route path="/register" element={<Pages.Register />} />
       <Route path="/dashboard" element={<Pages.Dashboard />} />
-      <Route path="/orders" element={<Pages.Orders />} />
       <Route path="/account" element={<Pages.Account />} />
-      <Route path="/active-orders" element={<Pages.ActiveOrders />} />
-      <Route path="/all-orders" element={<Pages.AllOrders />} />
+      <Route path="/orders" element={<Pages.Orders />}>
+        <Route index element={<Pages.AllOrders />} />
+        <Route path="active-orders" element={<Pages.ActiveOrders />} />
+        <Route path="all-orders" element={<Pages.AllOrders />} />
+      </Route>
       <Route path="/bookmarks" element={<Pages.Bookmarks />} />
       <Route path="/confirm-order" element={<Pages.ConfirmOrder />} />
-      <Route path="/create" element={<Pages.Create />} />
-      <Route path="/create-list" element={<Pages.CreateList />} />
-      <Route path="/create-post" element={<Pages.CreatePost />} />
+      <Route path="/create" element={<Pages.Create />} >
+        <Route index element={<Pages.CreateRequest />} />
+        <Route path="create-list" element={<Pages.CreateList />} />
+        <Route path="post-a-request" element={<Pages.CreateRequest />} />
+      </Route>
       <Route path="/email-auth" element={<Pages.EmailAuth />} />
       <Route path="/followers" element={<Pages.Followers />} />
       <Route path="/following" element={<Pages.Following />} />
       <Route path="/logout" element={<Pages.Logout />} />
-       <Route path="/chatscreen" element={<Pages.ChatScreen />} />
+      <Route path="/chatscreen" element={<Pages.ChatScreen />} />
       <Route path="/inbox" element={<Pages.Inbox />} />
       <Route path="/notifications" element={<Pages.Notifications />} />
       <Route path="/password-recovery" element={<Pages.PasswordRecovery />} />
@@ -44,7 +48,7 @@ function App() {
       <Route path="/user" element={<Pages.User />} />
       <Route path="*" element={<Pages.NoMatch />} />
     </Routes>
-      </>
+    </>
   );
 }
 

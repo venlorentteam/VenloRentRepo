@@ -1,4 +1,4 @@
-.message-list-item {
+.message-list-item{
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -9,13 +9,11 @@
   cursor: pointer;
   transition: all 0.3s ease;
 }
-
-.message-list-item:hover {
+.message-list-item:hover{
   transform: scale(1.01);
   background-color: var(--light-green-color-hover);
 }
-
-.message-avatar {
+.message-avatar{
   width: 45px;
   height: 45px;
   border-radius: 50%;
@@ -23,52 +21,44 @@
   margin-right: 12px;
   border: 2px solid var(--primary-color-light);
 }
-
-.message-info {
+.message-info{
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
-
 /* Name & Unread dot wrapper */
-.message-name-wrapper {
+.message-name-wrapper{
   display: flex;
   align-items: center;
   gap: 6px;
 }
-
-.message-name {
+.message-name{
   font-weight: 500;
   color: var(--text-color-dark);
   font-size: var(--font-size-medium);
 }
-
-.unread-dot {
+.unread-dot{
   width: 8px;
   height: 8px;
   background-color: var(--primary-color-light);
   border-radius: 50%;
 }
-
-.message-snippet {
+.message-snippet{
   color: var(--msg-snippet-color);
   font-size: var(--font-size-small);
 }
-
-.message-time {
+.message-time{
   font-size: var(--font-size-smallest);
   opacity: 0.8;
 }
-
-.message-options {
+.message-options{
   font-size: var(--font-size-small);
   color: var(--msg-snippet-color);
   margin-left: 10px;
   flex-shrink: 0;
 }
-
-.message-list-item:hover .message-options {
+.message-list-item:hover .message-options{
   color: var(--primary-color);
 }
 

@@ -1,11 +1,11 @@
 .list-stats {
-  background-color: var(--box-bg-color-light);
+  background-color: var(--box-bg-color-light-2);
   border-radius: 15px;
   padding: 24px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 20px;
-  width: 90%;
+  width: 100%;
   margin: 1rem auto; 
   margin-top: 20px;
   transition: all 0.3s ease-in-out;

@@ -43,4 +43,7 @@
     .icon-nav a.active{
         color: var(--white-color);
     }
+    .icon-nav a .icon{
+        color: var(--white-color);
+    }
 }

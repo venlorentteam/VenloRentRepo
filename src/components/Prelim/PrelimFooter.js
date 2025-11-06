@@ -8,6 +8,7 @@ function PrelimFooter() {
       <Link to="/about">About</Link>
       <Link to="/help">Help Center</Link>
       <Link to="/terms">Terms of Service</Link>
+      <Link to="/privacy-policy">Privacy Policy</Link>
     </div>
   )
 }

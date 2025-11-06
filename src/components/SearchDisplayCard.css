@@ -2,73 +2,63 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--light-green-color);
-  border-radius: 16px;
-  padding: 16px 20px;
-  margin-bottom: 12px;
+  background: var(--box-bg-color-light-2);
+  box-shadow: 0px 1px 3px var(--primary-opacity-2);
+  border-radius: 10px;
+  padding: 20px;
+  margin: 10px auto;
   transition: all 0.3s ease;
   cursor: pointer;
 }
-
-.search-card:hover {
-  transform: scale(1.01);
-  background-color: var(--light-green-color-hover);
+.search-card:hover{
+  background-color: var(--box-bg-color-light-2-hover);
 }
-
 /* Left Section */
-.search-card-left {
+.search-card-left{
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
-
-.user-row {
+.user-row{
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-
-.username {
+.username{
   color: var(--text-color-dark);
   font-size: var(--font-size-small);
   font-weight: 500;
 }
-
-.ad-tag {
+.ad-tag{
   color: var(--msg-snippet-color);
   font-size: var(--font-size-smallest);
 }
-
-.price {
+.price{
   color: var(--primary-color);
-  font-size: 1.4rem;
-  font-weight: 700;
+  font-size: var(--font-size-average);
+  font-weight: bold;
   margin: 4px 0;
 }
-
-.label {
+.label{
   color: var(--msg-snippet-color);
   font-size: var(--font-size-small);
 }
-
 .value {
   color: var(--text-color-dark);
-  font-weight: 500;
+  font-weight: bold;
+  font-size: var(--font-size-small)
 }
-
 .house-type {
   color: var(--msg-snippet-color);
   font-size: var(--font-size-small);
   margin-top: 4px;
 }
-
 /* Right Section */
 .search-card-right {
   display: flex;
   align-items: center;
   gap: 10px;
 }
-
 .image-placeholder,
 .house-image {
   width: 70px;
@@ -79,42 +69,36 @@
   justify-content: center;
   align-items: center;
 }
-
 .placeholder-icon {
   font-size: 1.5rem;
   color: var(--primary-color);
 }
-
 .house-image {
   object-fit: cover;
 }
-
 .arrow-icon {
   color: var(--msg-snippet-color);
   font-size: var(--font-size-small);
 }
-
 /* Dark mode */
 @media (prefers-color-scheme: dark) {
   .search-card {
-    background-color: var(--dark-bg-light);
+    background: var(--background-nav-black);
+    box-shadow: 0px 1px 3px var(--shadowBlack-color);
+    color: var(--white-color)
   }
-
   .search-card:hover {
-    background-color: var(--dark-bg-hover);
+    background-color: var(--black-color);
   }
-
   .username,
   .value,
   .price {
-    color: var(--text-color-light);
+    color: var(--white-color);
   }
-
   .label,
-  .ad-tag {
-    color: var(--text-muted-color-light);
+  .ad-tag, .house-type {
+    color: var(--primary-opacity);
   }
-
   .placeholder-icon {
     color: var(--primary-color-light);
   }

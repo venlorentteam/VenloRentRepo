@@ -13,7 +13,7 @@ function SideNav(){
   return (
     <div className="side-nav">
       {/*Logo placement below*/}
-      <img className="logo-img" src="" />
+      <img className="logo-img" src="" alt="" />
       {/*For desktop view navigation*/}
       <NavLink to="/dashboard">
         {({ isActive }) => (
@@ -45,7 +45,7 @@ function SideNav(){
           </>
         )}
       </NavLink>
-        <NavLink to="/messages">
+        <NavLink to="/inbox">
         {({ isActive }) => (
           <>
             <span className="icon">
@@ -75,7 +75,7 @@ function SideNav(){
           </>
         )}
       </NavLink>
-      <NavLink to="/post">
+      <NavLink to="/create">
         {({ isActive }) => (
           <>
             <span className="icon">

@@ -1,8 +1,7 @@
 @import url('../assets/css/global.css');
 
-/*********** Logo Header **********/
-
-.login-cont{
+/*********** Registration Header **********/
+.register-cont{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -10,33 +9,30 @@
     height: 100vh;
     gap: 30px
 }
-.login-cont .left-side{
+.register-cont .left-side{
     width: 100%;
     max-width: 500px;
     flex: 0 0 auto;
-    text-align: center; /*Assuming texts will be on the login left-side space*/
+    text-align: center; /*Assuming texts will be on the register left-side space*/
     margin: 0px auto;
 }
-.login-cont .left-side .left-img{
+.register-cont .left-side .left-img{
     width: 100%;
     height: 100%;
     margin: 0px auto;
-   
 }
-.login-cont .left-side h2{
+.register-cont .left-side h2{
     color: var(--text-color-light);
     font-size: var(--font-size-medium);
     font-weight: bold;
 }
-.login-cont .left-side p{
+.register-cont .left-side p{
     color: var(--text-color-light);
     font-size: var(--font-size-small);
     font-weight: normal;
 }
-.login-cont .login{
+.register-cont .register{
     max-width: 400px;
-    width: 100%;
-    flex: 0 0 auto;
     margin: 0px auto;
     padding: 30px;
 }
@@ -44,7 +40,7 @@
     position: relative;
     width: 100%;
 }
-.login-cont .login .login-input{
+.register-cont .register .reg-input{
     color: var(--primary-color);
     font-size: var(--font-size-small);
     font-weight: normal;
@@ -60,18 +56,33 @@
     box-shadow: 0px 5px 5px var(--primary-opacity);
     transition: 1s;
 }
-.login-cont .login .login-input:focus{
+.register-cont .register .reg-input:focus{
     border: none;
     background: var(--input-bg-focus);
+    box-shadow: 0px 5px 5px var(--shadowBlack-color);
     outline: none;
 }
-.login-cont .login .login-input::placeholder{
+.register-cont .register .reg-input::placeholder{
     color: var(--primary-color);
     font-size: var(--font-size-medium);
+}
+.check-cont{
+    width: 100%;
+    margin: 5px auto;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+    line-height: 1;
+    padding: 0px;
+    box-shadow: none;
 }
 .regular-texts{/*for regular texts within the prelim pages*/
     color: var(--primary-color);
     font-size: var(--font-size-small);
+    line-height: 120%;
 }
 a{/*for prelim links*/
     color: var(--primary-color);
@@ -86,7 +97,7 @@ a{/*for prelim links*/
     font-style: italic;
 }
 @media (prefers-color-scheme: dark) {
-    .login-cont .left-side h2{
+    .register-cont .left-side h2{
         color: var(--text-color-light2);
         font-size: var(--font-size-big);
     }
@@ -96,21 +107,21 @@ a{/*for prelim links*/
     a{/*for prelim links*/
         color: var(--text-color-dark2);
     }
-    .login-cont .login .login-input{
+    .register-cont .register .reg-input{
         box-shadow: 0px 5px 5px var(--shadowBlack-color);
     }
 }
 
 @media (max-width: 900px){
   /**rules for small screen tablets**/ 
-    .login-cont .left-side{
+    .register-cont .left-side{
         display: none;
     }
 }
 
 @media (max-width: 500px){
   /**rules for mobile**/ 
-    .login-cont .login{
+    .register-cont .register{
         width: 100%;
     }
     .regular-texts{
