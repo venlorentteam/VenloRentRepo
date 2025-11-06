@@ -2,11 +2,16 @@
     width: 100%;
     padding: 20px;
     border-radius: 10px;
-    background: #eff9f4;
+    background: var(--box-bg-color-light-2);
     color: var(--primary-color);
-    box-shadow: 0px 2px 3px var(--primary-opacity-2);
+    box-shadow: 0px 1px 3px var(--primary-opacity-2);
     align-items: center;
-    margin: 10px auto
+    margin: 10px auto;
+    cursor: pointer;
+    transition: all 0.3 ease;
+}
+.order-container:hover{
+    background: var(--box-bg-color-light-2-hover)
 }
 .order-container .item{
     display: flex;
@@ -57,9 +62,14 @@ hr{
         color: var(--primary-opacity-2);
     }
     .order-container{
-        color: var(--primary-color-light)
+        color: var(--white-color);
+        background: var(--background-nav-black);
+        box-shadow: 0px 1px 3px var(--shadowBlack-color);
+    }
+    .order-container:hover{
+        background: var(--black-color)
     }
     hr{
-        background: var(--primary-opacity-2);
+        background: var(--black-color);
     }
 }

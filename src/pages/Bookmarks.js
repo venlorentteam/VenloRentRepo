@@ -10,7 +10,7 @@ function Bookmarks() {
         pageTitle= {<h2>Bookmarks</h2>}
         icons={
           [
-            {link: "/messages", element: < RiMessageLine />},
+            {link: "/inbox", element: < RiMessageLine />},
             {link: "/notifications", element: < FaRegBell />}
           ]
         }

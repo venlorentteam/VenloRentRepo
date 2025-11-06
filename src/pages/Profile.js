@@ -15,7 +15,7 @@ const Profile = () => {
         pageTitle= {<h2>My Profile</h2>}
         // icons={
         //   [
-        //     {link: "/messages", element: < RiMessageLine />},
+        //     {link: "/inbox", element: < RiMessageLine />},
         //     {link: "/notifications", element: < FaRegBell />}
         //   ]
         // }

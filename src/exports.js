@@ -35,7 +35,7 @@ export { default as ChatScreen } from "./pages/ChatScreen";
 export { default as ConfirmOrder } from "./pages/ConfirmOrder";
 export { default as Create } from "./pages/Create";
 export { default as CreateList } from "./pages/CreateList";
-export { default as CreatePost } from "./pages/CreatePost";
+export { default as CreateRequest } from "./pages/CreateRequest";
 export { default as Dashboard } from "./pages/Dashboard";
 export { default as EmailAuth } from "./pages/EmailAuth";
 export { default as Faq } from "./pages/Faq";

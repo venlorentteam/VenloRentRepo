@@ -8,7 +8,7 @@ function Search() {
         pageTitle= {<h2>Search</h2>}
         // icons={
         //   [
-        //     {link: "/messages", element: < RiMessageLine />},
+        //     {link: "/inbox", element: < RiMessageLine />},
         //     {link: "/notifications", element: < FaRegBell />}
         //   ]
         // }

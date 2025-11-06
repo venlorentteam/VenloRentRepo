@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { MessageListItem, SearchBar, ChatScreen } from "../exports";
+import { MessageListItem, SearchBar, ChatScreen, PageSetup, Header } from "../exports";
+import { FaRegBell } from 'react-icons/fa'
 import "./Inbox.css";
 
 const dummyMessages = [
@@ -62,36 +63,52 @@ const Inbox = () => {
   }
 
   return (
-    <div className="inbox-container">
-      {/* Left panel: Inbox list */}
-      <div className="inbox-sidebar">
-        <SearchBar placeholder="Search messages..." />
-        <div className="message-list">
-          {dummyMessages.map((msg, index) => (
-            <MessageListItem
-              key={index}
-              {...msg}
-              onClick={() => handleSelectChat(msg)}
-            />
-          ))}
+    <PageSetup> {/* Will display two types of others (Active and All) in tabbed nav */}
+        <Header //Top page header
+          pageTitle= {<h2>Messages</h2>}
+          icons={
+            [
+              {link: "/notifications", element: < FaRegBell />}
+            ]
+          }
+          //button={<ClickButton text="Hello" onClick={() => alert('Clicked!')} />} 
+        />
+        <div className="main-content">
+          <div className="content">
+            {/*To contain orders of the user*/}
+            <div className="inbox-container">
+            {/* Left panel: Inbox list */}
+            <div className="inbox-sidebar">
+              <SearchBar placeholder="Search messages..." />
+              <div className="message-list">
+                {dummyMessages.map((msg, index) => (
+                  <MessageListItem
+                    key={index}
+                    {...msg}
+                    onClick={() => handleSelectChat(msg)}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Right panel: Chat screen / placeholder */}
+            {!isMobile && (
+              <div className="inbox-chat-panel">
+                {selectedChat ? (
+                  <ChatScreen chat={selectedChat} />
+                ) : (
+                  <div className="empty-chat">
+                    <h2>Your Messages</h2>
+                    <p>Send a message to start a chat.</p>
+                    <button className="send-msg-btn">Send Message</button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
-
-      {/* Right panel: Chat screen / placeholder */}
-      {!isMobile && (
-        <div className="inbox-chat-panel">
-          {selectedChat ? (
-            <ChatScreen chat={selectedChat} />
-          ) : (
-            <div className="empty-chat">
-              <h2>Your Messages</h2>
-              <p>Send a message to start a chat.</p>
-              <button className="send-msg-btn">Send Message</button>
-            </div>
-          )}
-        </div>
-      )}
-    </div>
+    </PageSetup>
   );
 };
 

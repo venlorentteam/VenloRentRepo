@@ -40,10 +40,11 @@
 }
 .side-nav a.active{
     font-weight: bold;
-}
-.side-nav a:hover{
     background: var(--input-bg-focus)
 }
+/* .side-nav a:hover{
+    background: var(--input-bg-focus)
+} */
 .side-nav a .icon{
     font-size: var(--font-size-big);
     align-self: center;
@@ -62,12 +63,15 @@
     .side-nav a{
         color: var(--white-color);
     }
+    .side-nav a.active{
+        background: var(--side-nav-hover)
+    }
     .side-nav a .icon{
         color: var(--white-color)
     }
-    .side-nav a:hover{
+    /* .side-nav a:hover{
         background: var(--side-nav-hover)
-    }
+    } */
 }
 
 @media(max-width: 1050px){

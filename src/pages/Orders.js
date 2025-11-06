@@ -14,7 +14,7 @@ function Orders() {
           pageTitle= {<h2>Orders</h2>}
           icons={
             [
-              {link: "/messages", element: < RiMessageLine />},
+              {link: "/inbox", element: < RiMessageLine />},
               {link: "/notifications", element: < FaRegBell />}
             ]
           }

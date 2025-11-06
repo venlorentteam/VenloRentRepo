@@ -1,9 +1,9 @@
 import React from 'react'
-import { SideNav, Header, IconNav, ClickButton, PageSetup, PropertyCard } from '../exports'
+import { Header, ClickButton, PageSetup, PropertyCard } from '../exports'
 import { RiMessageLine } from 'react-icons/ri'
 import { FaRegBell } from 'react-icons/fa'
 import '../assets/css/global.css'
-import propertyImg from '../assets/img/house-isolated-field.jpg'
+// import propertyImg from '../assets/img/house-isolated-field.jpg'
 import propertyImg2 from '../assets/img/3d-rendering-house-model.jpg'
 function Dashboard() {
 const img = [propertyImg2]
@@ -13,7 +13,7 @@ const img = [propertyImg2]
           pageTitle= {<h2>Dashboard</h2>}
           icons={
             [
-              {link: "/messages", element: < RiMessageLine />},
+              {link: "/inbox", element: < RiMessageLine />},
               {link: "/notifications", element: < FaRegBell />}
             ]
           }

@@ -74,13 +74,14 @@
   .message-input-bar {
     background-color: var(--bg-box-dark-mode);
     box-shadow: 0 2px 10px var(--shadowBlack-color);
+    border: 1px solid var(--primary-opacity);
   }
   .message-input{
     color: var(--white-color);
   }
   .message-input:focus{
     background: var(--bg-box-dark-mode);
-    border: 1px solid var(--primary-color-light)
+    /* border: 1px solid var(--primary-color-light) */
   }
   .icon {
     color: var(--white-color)
