@@ -9,7 +9,7 @@
     align-items: center;
     flex-flow: row nowrap;
     background: var(--background-nav-light);
-    /* filter: blur(5px);  */
+    backdrop-filter: blur(5px); 
     border-bottom: 1px solid var(--primary-opacity);
     gap: 30px;
     text-align: center;
@@ -64,7 +64,10 @@
     .header h2{
         color: var(--white-color);
     }
-    .header .icon a{
+    .header .icon a, .header .icon {
+        color: var(--white-color)
+    }
+    .header .icon:hover{
         color: var(--white-color)
     }
 }

@@ -1,4 +1,5 @@
 import React from "react";
+import { BsGearWide } from "react-icons/bs";
 import * as Components from "../exports"
 const Profile = () => {
   const statsData = [
@@ -10,27 +11,19 @@ const Profile = () => {
 
   return (
     <Components.PageSetup>
-      <Components.SideNav />{/*Desktop left-side navigation*/}
       <Components.Header //Top page header
-        pageTitle= {<h2>My Profile</h2>}
-        // icons={
-        //   [
-        //     {link: "/inbox", element: < RiMessageLine />},
-        //     {link: "/notifications", element: < FaRegBell />}
-        //   ]
-        // }
-        //button={<ClickButton text="Hello" onClick={() => alert('Clicked!')} />} 
+        backIcon={true}
+        pageTitle= {<h2>My Profile</h2>} 
+        menuIcon={{element: <BsGearWide />, link: "/account"}}
       />
-      <div className="content">
-        {/*To contain property and post cards*/}
-        <Components.SearchBar placeholder="Search messages.."/>
-        <Components.AccountInfoCard/>
-        <Components.ListStats stats= {statsData}/>
+      <div className="main-content">
+        <div className="content">
+          {/*To contain property and post cards*/}
+          {/* <Components.SearchBar placeholder="Search messages.."/> */}
+          <Components.AccountInfoCard/>
+          <Components.ListStats stats={statsData}/>
+        </div>
       </div>
-      <div className="sidebar">
-        {/*Optional for follows and all*/}
-      </div>
-      <Components.IconNav />{/*Mobile bottom navigation*/}
     </Components.PageSetup>
   );
 };

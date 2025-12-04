@@ -27,7 +27,7 @@ function IconNav() {
           </>
         )}
       </NavLink>
-      <NavLink to="/create">
+      <NavLink to="/create/post-a-request">
         {({ isActive }) => (
           <>
             <span className="icon">

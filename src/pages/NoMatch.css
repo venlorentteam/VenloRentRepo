@@ -1,0 +1,74 @@
+/*********** 404 page container **********/
+.nomatch-cont{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    gap: 30px;
+    text-align: center;
+}
+.nomatch-cont .left-side{
+    width: 100%;
+    max-width: 500px;
+    flex: 0 0 auto;
+    text-align: center; /*Assuming texts will be on the nomatch left-side space*/
+    margin: 0px auto;
+}
+.nomatch-cont .left-side .left-img{
+    width: 100%;
+    height: 100%;
+    margin: 0px auto;
+}
+.nomatch-cont .left-side h2{
+    color: var(--text-color-light);
+    font-size: var(--font-size-medium);
+    font-weight: bold;
+}
+.nomatch-cont .left-side p{
+    color: var(--text-color-light);
+    font-size: var(--font-size-small);
+    font-weight: normal;
+}
+.nomatch-cont .nomatch{
+    max-width: 550px;
+    margin: 0px auto;
+    padding: 30px;
+}
+.nomatch-cont .nomatch .title{
+    font-size: var(--font-size-biggest);
+    color: var(--primary-color);
+    font-weight: bold;
+    text-align: center;
+}
+.nomatch-cont .nomatch .text{
+    font-size: var(--font-size-medium);
+    color: var(--primary-color);
+    line-height: 180%;
+    text-align: center;
+    margin: 10px auto;
+}
+.nomatch-icon{
+    font-size: 5em;
+    color: var(--primary-color);
+    display: block;
+    margin: 0px auto 20px auto;
+    line-height: 1;
+}
+@media (prefers-color-scheme: dark) {
+    .nomatch-cont .left-side h2,
+    .nomatch-cont .left-side p,
+    .nomatch-cont .nomatch .title,
+    .nomatch-cont .nomatch .text,
+    .nomatch-icon{
+        color: var(--white-color);
+    }
+}
+@media (max-width: 500px){
+    .nomatch-cont .nomatch .title{
+        font-size: var(--font-size-big);
+    }
+    .nomatch-cont .nomatch .text{
+        font-size: var(--font-size-small);
+    }
+}

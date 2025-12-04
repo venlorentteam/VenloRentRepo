@@ -3,9 +3,9 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 12px 24px;
+  padding: 8px 15px;
   font-size: var(--font-size-medium);
-  border-radius: 10px;
+  border-radius: 25px;
   font-weight: bold;
   color: var(--white-color);
   background: linear-gradient(
@@ -20,7 +20,7 @@
 
 .click-button:hover {
   opacity: 0.9;
-  transform: scale(1.03);
+  /* transform: scale(1.03); */
 }
 
 .click-button:active {
@@ -58,8 +58,6 @@
  box-shadow: 0 2px 8px var(--shadowBlack-color);
 
 }
-
-
 
 /* dark mode support */
 @media (prefers-color-scheme: dark) {
