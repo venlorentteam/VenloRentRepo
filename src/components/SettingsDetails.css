@@ -1,7 +1,12 @@
 /**Profile inputs**/
 .display-header{
-    margin: 10px;
+    margin: 0px auto;
+    width: 100%;
     padding: 10px;
+    display: flex;
+    align-items: center;
+    line-height: 1;
+    gap: 20px;
 }
 .profile-input{
     width: 100%;
