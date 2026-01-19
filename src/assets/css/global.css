@@ -19,14 +19,18 @@
 
   /* Background colors for pages */
   --bg-color-light: #f4f7f5;
-  --bg-color-dark: #18201d;
+  --bg-color-dark: #121514;
   --box-bg-color-light: #b9f9d8;
   --box-bg-color-light-2: #eff9f4;
   --box-bg-color-light-2-hover: #e2f4eb;
 
+  /* Borders for boxes */
+  --box-border-light: #eaeaea;
+  --box-border-dark: #1f1f1f;
+
   /* Navigation backgrounds */
   --background-nav-light: #ecf3ee9e;
-  --background-nav-black: #151c1988;
+  --background-nav-black: #161b1988;
   
   /* Green text color*/
   --text-color-light: #00A514; /* For Light Mode*/

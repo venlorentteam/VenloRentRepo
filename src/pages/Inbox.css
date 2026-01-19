@@ -1,4 +1,4 @@
-.inbox-container {
+.inbox-container{
   display: flex;
   height: 100vh;
   background-color: var(--app-bg);
@@ -6,7 +6,7 @@
 }
 
 /* Left sidebar (message list) */
-.inbox-sidebar {
+.inbox-sidebar{
   width: 35%;
   max-width: 400px;
   border-right: 1px solid var(--border-color-light);
@@ -15,7 +15,7 @@
 }
 
 /* Right panel (chat or placeholder) */
-.inbox-chat-panel {
+.inbox-chat-panel{
   flex: 1;
   display: flex;
   justify-content: center;
@@ -25,23 +25,23 @@
 }
 
 /* Empty chat placeholder */
-.empty-chat {
+.empty-chat{
   text-align: center;
   color: var(--text-color-dark);
 }
 
-.empty-chat h2 {
+.empty-chat h2{
   font-size: var(--font-size-large);
   margin-bottom: 0.5rem;
 }
 
-.empty-chat p {
+.empty-chat p{
   font-size: var(--font-size-small);
   color: var(--msg-snippet-color);
   margin-bottom: 1rem;
 }
 
-.send-msg-btn {
+.send-msg-btn{
   background-color: var(--primary-color);
   color: white;
   border: none;
@@ -52,37 +52,37 @@
   font-weight: 500;
 }
 
-.send-msg-btn:hover {
+.send-msg-btn:hover{
   background-color: var(--primary-color-dark);
 }
 
 /* Mobile View */
-@media (max-width: 768px) {
+@media (max-width: 768px){
   .inbox-container {
     flex-direction: column;
   }
 
-  .inbox-sidebar {
+  .inbox-sidebar{
     width: 100%;
     border: none;
   }
 
-  .inbox-chat-panel {
+  .inbox-chat-panel{
     display: none;
   }
 }
 
 /* Dark mode */
-@media (prefers-color-scheme: dark) {
-  .inbox-container {
+@media (prefers-color-scheme: dark){
+  .inbox-container{
     background-color: var(--dark-bg);
   }
 
-  .inbox-chat-panel {
+  .inbox-chat-panel{
     background-color: var(--dark-bg-light);
   }
 
-  .empty-chat {
+  .empty-chat{
     color: var(--text-color-light);
   }
 }

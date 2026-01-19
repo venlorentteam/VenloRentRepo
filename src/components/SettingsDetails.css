@@ -1,0 +1,27 @@
+/**Profile inputs**/
+.display-header{
+    margin: 0px auto;
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    line-height: 1;
+    gap: 20px;
+}
+.profile-input{
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0px;
+    border: 1px solid var(--input-border-color);
+    border-radius: 5px;
+    background: var(--input-bg-color);
+    font-size: var(--font-size-medium);
+    transition: 0.5s;
+}
+@media (prefers-color-scheme: dark){
+    .profile-input{
+        background: var(--input-bg-dark);
+        border: 1px solid var(--input-border-dark);
+        color: var(--white-color);
+    }
+}

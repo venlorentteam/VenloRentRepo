@@ -21,7 +21,10 @@ function App() {
       <Route path="/login" element={<Pages.Login />} />
       <Route path="/register" element={<Pages.Register />} />
       <Route path="/dashboard" element={<Pages.Dashboard />} />
-      <Route path="/account" element={<Pages.Account />} />
+      <Route path="/account" element={<Pages.Account />} >
+        <Route index element={<Pages.SettingsMenu />} /> {/* Default settings menu */}
+        <Route path=":settingId" element={<Pages.SettingsDetails />} /> {/* Dynamic route for individual settings */}
+      </Route>
       <Route path="/orders" element={<Pages.Orders />}>
         <Route index element={<Pages.AllOrders />} />
         <Route path="active-orders" element={<Pages.ActiveOrders />} />

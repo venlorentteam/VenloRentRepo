@@ -1,9 +1,8 @@
 import React from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { MdKeyboardBackspace } from "react-icons/md"
-import { FiMenu } from "react-icons/fi"
 import './Header.css'
-function Header({backIcon = false, pageTitle, icons = [], button, menuIcon = false}){
+function Header({backIcon = false, pageTitle, icons = [], button, menuIcon={}}){
   const navigate = useNavigate()
   const back = () => {
     navigate(-1)
@@ -19,15 +18,21 @@ function Header({backIcon = false, pageTitle, icons = [], button, menuIcon = fal
         {/*For items to be on the left hand side*/}
         {icons.map((item, index) => (//Icons on the left that don't don't show on desktop
           <span key={index} className="icon icon-right">
-            {item.link ? (
-              <Link to={item.link}>{item.element}</Link>
-            ) : (
-              item.element
-            )}
+            {item.link 
+              ? <Link to={item.link}>{item.element}</Link>
+              : item.element
+            }
           </span>
         ))}
         {(button) && button} {/*Built for buttons but can literally take anything*/}
-        {(menuIcon) && <span className="icon icon-right"><FiMenu /></span>}{/*Hamburger menu mostly*/}
+        {menuIcon?.element && (
+          <span className="icon">{/*Hamburger menu mostly*/}
+            {menuIcon.link
+              ? <Link to={menuIcon.link}>{menuIcon.element}</Link>
+              : menuIcon.element
+            }
+          </span>
+        )}
       </div>
     </div>
   )

@@ -21,16 +21,18 @@ export { default as PropertyCard } from "./components/PropertyCard";
 export { default as SearchBar } from "./components/SearchBar";
 export { default as SearchDisplayCard } from "./components/SearchDisplayCard";
 export { default as Section } from "./components/Section";
+export { default as SettingsDetails } from "./components/SettingsDetails";
+export { default as SettingsMenu } from "./components/SettingsMenu";
 export { default as SideNav } from "./components/SideNav";
 export { default as SubmitButton } from "./components/SubmitButton";
 export { default as TabbedNav } from "./components/TabbedNav";
+export { default as UpgradeWidget } from "./components/UpgradeWidget";
 
 // ==== PAGES ====
 export { default as Account } from "./pages/Account";
 export { default as ActiveOrders } from "./pages/ActiveOrders";
 export { default as AllOrders } from "./pages/AllOrders";
 export { default as Bookmarks } from "./pages/Bookmarks";
-export { default as Inbox } from "./pages/Inbox";
 export { default as ChatScreen } from "./pages/ChatScreen";
 export { default as ConfirmOrder } from "./pages/ConfirmOrder";
 export { default as Create } from "./pages/Create";
@@ -43,6 +45,7 @@ export { default as Followers } from "./pages/Followers";
 export { default as Following } from "./pages/Following";
 export { default as ForYou } from "./pages/ForYou";
 export { default as Home } from "./pages/Home";
+export { default as Inbox } from "./pages/Inbox";
 export { default as Login } from "./pages/Login";
 export { default as Logout } from "./pages/Logout";
 export { default as NoMatch } from "./pages/NoMatch";

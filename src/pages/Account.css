@@ -1,0 +1,120 @@
+/* Desktop: Flex container for side-by-side layout */
+.settings-cont {
+    display: flex;
+    width: 100%;
+    height: 100%; /* Important for full height */
+    transition: all 0.3s ease;
+    padding: 0px;
+    margin: 0px;
+    gap: 0; /* No gap between menu and details */
+}
+
+/* Left sidebar (navigation pane) */
+.settings-list {
+    max-width: 350px;
+    width: 100%;
+    padding: 10px;
+    height: 100%;
+    border-right: 1px solid var(--primary-opacity);
+    flex-shrink: 0;
+}
+
+.settings-list a {
+    background: var(--background-nav-light);
+    color: var(--primary-color);
+    font-size: var(--font-size-medium);
+    font-weight: normal;
+    margin: 5px auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none; 
+}
+
+.settings-list a:hover {
+    background: var(--input-bg-focus);
+}
+
+.settings-list a.active { 
+    background: var(--input-bg-focus);
+    font-weight: 600;
+}
+
+.settings-list a .left-side {
+    display: flex;
+    align-items: center;
+    line-height: 1;
+    gap: 15px;
+}
+
+.settings-list a .left-side .left-icon {
+    font-size: var(--font-size-average);
+}
+
+.settings-list a .right-icon {
+    font-size: var(--font-size-smallest);
+}
+
+/* Right details section of the settings */
+.settings-details {
+    flex: 1; 
+    padding: 20px;
+    overflow-y: auto; 
+    height: 100%;
+}
+
+/* Mobile container (block layout) */
+.settings-cont-mobile {
+    display: block;
+    width: 100%;
+}
+
+/* Scrollbar styles */
+::-webkit-scrollbar {
+    width: 4px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--primary-opacity);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--input-bg-focus);
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+    .settings-list a,
+    .left-icon,
+    .right-icon{
+        color: var(--white-color);
+    }
+    .settings-list a{
+        background: var(--background-nav-black);
+    }
+    .settings-list a:hover,
+    .settings-list a.active{
+        background: var(--side-nav-hover);
+    }
+}
+
+/* Mobile responsive */
+@media (max-width: 700px) {
+    .settings-list {
+        max-width: 100%;
+        border-right: none;
+    }
+    ::-webkit-scrollbar {
+        display: none;
+    }
+}

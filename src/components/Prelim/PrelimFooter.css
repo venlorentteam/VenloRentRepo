@@ -12,3 +12,6 @@
 .footer-links a{
     color: var(--footer-link-color);
 }
+.footer-links a:hover{
+    background: none;
+}

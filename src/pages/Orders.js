@@ -1,6 +1,6 @@
 import React from 'react'
 import '../assets/css/global.css'
-import { Header, PageSetup, TabbedNav } from '../exports'
+import { Header, PageSetup, TabbedNav, UpgradeWidget } from '../exports'
 import { RiMessageLine } from 'react-icons/ri'
 import { FaRegBell } from 'react-icons/fa'
 function Orders() {
@@ -11,6 +11,7 @@ function Orders() {
   return (
     <PageSetup> {/* Will display two types of others (Active and All) in tabbed nav */}
         <Header //Top page header
+          backIcon={true}
           pageTitle= {<h2>Orders</h2>}
           icons={
             [
@@ -27,6 +28,7 @@ function Orders() {
         </div>
         <div className="sidebar">
           {/*Optional for follows and all*/}
+          <UpgradeWidget />
         </div>
       </div>
     </PageSetup>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import './Login.css'
-import leftImg from '../assets/img/login-left1.png'
+import leftImg from '../assets/img/Venlo-welcome.png'
 import axios from 'axios'
 import { PrelimFooter, PrelimHeader, SubmitButton } from '../exports'
 import { MdOutlineMailOutline, MdLockOutline } from 'react-icons/md'

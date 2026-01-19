@@ -49,8 +49,8 @@
 
 @media (prefers-color-scheme: dark) {
   .list-stats{
-    background: #1f1f1f;
-    border: 1px solid #333;
+    background: var(--background-nav-black);
+    border: 1px solid var(--bg-box-dark-mode);
     box-shadow: 0 2px 10px var(--shadowBlack-color);
   }
 
