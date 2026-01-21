@@ -7,19 +7,30 @@ const ClickButton = ({
   type = "button",
   width = "auto",
   disabled = false,
+  isLoading = false,
   icon, // optional icon before text
-  variant = "primary", // can extend later e.g. 'outline', 'danger', etc.
+  variant = "primary", // 'primary', 'outline', 'secondary', 'danger'
+  size = "medium", // 'small', 'medium', 'large'
 }) => {
   return (
     <button
       type={type}
       onClick={onClick}
-      disabled={disabled}
-      className={`click-button ${variant} ${disabled ? "disabled" : ""}`}
+      disabled={disabled || isLoading}
+      className={`click-button ${variant} ${size} ${disabled || isLoading ? "disabled" : ""}`}
       style={{ width }}
     >
-      {icon && <span className="button-icon">{icon}</span>}
-      <span className="button-text">{text}</span>
+      {isLoading ? (
+        <>
+          <span className="button-spinner-small"></span>
+          <span className="button-text">Loading...</span>
+        </>
+      ) : (
+        <>
+          {icon && <span className="button-icon">{icon}</span>}
+          <span className="button-text">{text}</span>
+        </>
+      )}
     </button>
   );
 };
