@@ -1,131 +1,556 @@
-/***********White List************/
-*{
-  padding: 0px;
-  margin: 0px;
+/***********LeasePal Design System************/
+* {
+  padding: 0;
+  margin: 0;
   box-sizing: border-box;
 }
 
-:root{
-  /* Color Variables */
-  --primary-color: #00350e; /*Use with primary-color-light to get the button gradients*/
-  --primary-color-light: #009f13; /* Combine with the one above for button gradient*/
-  --primary-color-lightest: #9afbb4; /* Input background */
-  --input-bg-focus: #dcf1e2;
-  --side-nav-hover: #202926;
-  --bg-box-dark-mode: #1f1f1f;
- /* button gradients for dark mode */
-  --button-color-light: #009F13; 
-  --button-color-dark: #014D15;
-
-  /* Background colors for pages */
-  --bg-color-light: #f4f7f5;
-  --bg-color-dark: #121514;
-  --box-bg-color-light: #b9f9d8;
-  --box-bg-color-light-2: #eff9f4;
-  --box-bg-color-light-2-hover: #e2f4eb;
-
-  /* Borders for boxes */
-  --box-border-light: #eaeaea;
-  --box-border-dark: #1f1f1f;
-
-  /* Navigation backgrounds */
-  --background-nav-light: #ecf3ee9e;
-  --background-nav-black: #161b1988;
+:root {
+  /* ========================================
+     PRIMARY COLORS - Emerald Green Theme
+     ======================================== */
+  --primary-color: #10b981; /* Emerald-500 */
+  --primary-color-dark: #059669; /* Emerald-600 */
+  --primary-color-light: #6ee7b7; /* Emerald-300 */
+  --primary-color-accent: #047857; /* Emerald-700 */
+  --primary-color-lightest: #d1fae5; /* Emerald-100 - for backgrounds */
   
-  /* Green text color*/
-  --text-color-light: #00A514; /* For Light Mode*/
-  --text-color-dark: #00350e; /* For Light Mode*/
-  --text-color-light2: #00A514; /* For Dark Mode*/
-  --text-color-dark2: #74FF99; /* For Dark Mode*/
-  --msg-snippet-color: #71967B;
-  --footer-link-color: #5c605d; /* For Links at the Prelim pages */
-
-  /* Other color  props*/
-  --grey-color: #797777;
-  --black-color: #191e1d;
-  --primary-opacity: #a8f9cf; /* For shadows on buttons or containers*/
-  --black-color: #151818;  /* too harsh for shadows */ 
-  --shadowBlack-color: rgba(0, 0, 0, 0.05);
-  --white-color: #fff;
-  --warning-color: #ffe135;
-  --success-color: #03c04a;
-  --danger-color: #f6585e;
-  --primary-opacity-2: #b1c9bd; /* For shadows on inputs, buttons or containers*/
+  /* Primary with opacity for overlays */
+  --primary-opacity: rgba(16, 185, 129, 0.1);
+  --primary-opacity-hover: rgba(16, 185, 129, 0.15);
   
-  /********* Font Variables in ems **********/
-  --font-size-smallest: 0.6em;
-  --font-size-small: 0.8em;
-  --font-size-medium: 1em;
-  --font-size-average: 1.2em;
-  --font-size-big: 1.5em;
-  --font-size-bigger: 2em;
-  --font-size-biggest: 3em;
+  /* ========================================
+     BACKGROUND COLORS
+     ======================================== */
+  --bg-color-light: #ffffff;
+  --bg-color-dark: #0f172a; /* Slate-900 */
+  --bg-secondary-light: #f8fafc; /* Slate-50 */
+  --bg-secondary-dark: #1e293b; /* Slate-800 */
+  
+  /* Card/Box backgrounds */
+  --box-bg-light: #ffffff;
+  --box-bg-dark: #1e293b;
+  --box-bg-hover-light: #f8fafc;
+  --box-bg-hover-dark: #334155; /* Slate-700 */
+  
+  /* ========================================
+     TEXT COLORS
+     ======================================== */
+  --text-primary-light: #1f2937; /* Gray-800 */
+  --text-primary-dark: #f1f5f9; /* Slate-100 */
+  --text-secondary-light: #6b7280; /* Gray-500 */
+  --text-secondary-dark: #94a3b8; /* Slate-400 */
+  --text-tertiary-light: #9ca3af; /* Gray-400 */
+  --text-tertiary-dark: #64748b; /* Slate-500 */
+  
+  /* Accent text colors (green) */
+  --text-accent: #10b981;
+  --text-accent-dark: #059669;
+  
+  /* ========================================
+     BORDER COLORS
+     ======================================== */
+  --border-light: #e5e7eb; /* Gray-200 */
+  --border-dark: #374151; /* Gray-700 */
+  --border-focus: #10b981; /* Primary */
+  
+  /* ========================================
+     INPUT COLORS
+     ======================================== */
+  --input-bg-light: #ffffff;
+  --input-bg-dark: #1e293b;
+  --input-border-light: #e5e7eb;
+  --input-border-dark: #374151;
+  --input-focus-light: #d1fae5;
+  --input-focus-dark: #064e3b; /* Dark emerald */
+  
+  /* ========================================
+     BUTTON COLORS
+     ======================================== */
+  --button-primary-bg: #10b981;
+  --button-primary-hover: #059669;
+  --button-primary-text: #ffffff;
+  
+  --button-secondary-bg-light: #f3f4f6;
+  --button-secondary-bg-dark: #374151;
+  --button-secondary-text-light: #1f2937;
+  --button-secondary-text-dark: #f9fafb;
+  
+  /* ========================================
+     NAVIGATION
+     ======================================== */
+  --nav-bg-light: rgba(248, 250, 252, 0.95); /* Frosted glass */
+  --nav-bg-dark: rgba(15, 23, 42, 0.95);
+  --nav-hover-light: #f3f4f6;
+  --nav-hover-dark: #1e293b;
+  
+  /* ========================================
+     STATUS COLORS
+     ======================================== */
+  --success-color: #10b981; /* Emerald */
+  --warning-color: #f59e0b; /* Amber */
+  --danger-color: #ef4444; /* Red */
+  --info-color: #3b82f6; /* Blue */
+  
+  /* ========================================
+     SHADOWS
+     ======================================== */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --shadow-card-hover: 0 10px 25px -5px rgba(16, 185, 129, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  
+  /* ========================================
+     SPACING & SIZING
+     ======================================== */
+  --spacing-xs: 0.25rem;   /* 4px */
+  --spacing-sm: 0.5rem;    /* 8px */
+  --spacing-md: 1rem;      /* 16px */
+  --spacing-lg: 1.5rem;    /* 24px */
+  --spacing-xl: 2rem;      /* 32px */
+  --spacing-2xl: 3rem;     /* 48px */
+  
+  --radius-sm: 0.375rem;   /* 6px */
+  --radius-md: 0.5rem;     /* 8px */
+  --radius-lg: 0.75rem;    /* 12px */
+  --radius-xl: 1rem;       /* 16px */
+  --radius-full: 9999px;   /* Fully rounded */
+  
+  /* ========================================
+     FONT SIZES
+     ======================================== */
+  --font-xs: 0.75rem;      /* 12px */
+  --font-sm: 0.875rem;     /* 14px */
+  --font-base: 1rem;       /* 16px */
+  --font-lg: 1.125rem;     /* 18px */
+  --font-xl: 1.25rem;      /* 20px */
+  --font-2xl: 1.5rem;      /* 24px */
+  --font-3xl: 1.875rem;    /* 30px */
+  --font-4xl: 2.25rem;     /* 36px */
+  
+  /* ========================================
+     TRANSITIONS
+     ======================================== */
+  --transition-fast: 150ms ease-in-out;
+  --transition-base: 300ms ease-in-out;
+  --transition-slow: 500ms ease-in-out;
+  
+  /* ========================================
+     Z-INDEX LAYERS
+     ======================================== */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
 }
 
-/*********** Font ***********/
-/**Fonts**/
+/* ========================================
+   DARK MODE
+   ======================================== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Override colors for dark mode */
+    --bg-color: var(--bg-color-dark);
+    --bg-secondary: var(--bg-secondary-dark);
+    --box-bg: var(--box-bg-dark);
+    --box-bg-hover: var(--box-bg-hover-dark);
+    
+    --text-primary: var(--text-primary-dark);
+    --text-secondary: var(--text-secondary-dark);
+    --text-tertiary: var(--text-tertiary-dark);
+    
+    --border-color: var(--border-dark);
+    --input-bg: var(--input-bg-dark);
+    --input-border: var(--input-border-dark);
+    --input-focus-bg: var(--input-focus-dark);
+    
+    --nav-bg: var(--nav-bg-dark);
+    --nav-hover: var(--nav-hover-dark);
+    
+    --button-secondary-bg: var(--button-secondary-bg-dark);
+    --button-secondary-text: var(--button-secondary-text-dark);
+    
+    /* Adjust shadows for dark mode */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.2);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+    --shadow-card-hover: 0 10px 25px -5px rgba(16, 185, 129, 0.25), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* Light mode defaults */
+:root:([data-theme="dark"]) {
+  --bg-color: var(--bg-color-light);
+  --bg-secondary: var(--bg-secondary-light);
+  --box-bg: var(--box-bg-light);
+  --box-bg-hover: var(--box-bg-hover-light);
+  
+  --text-primary: var(--text-primary-light);
+  --text-secondary: var(--text-secondary-light);
+  --text-tertiary: var(--text-tertiary-light);
+  
+  --border-color: var(--border-light);
+  --input-bg: var(--input-bg-light);
+  --input-border: var(--input-border-light);
+  --input-focus-bg: var(--input-focus-light);
+  
+  --nav-bg: var(--nav-bg-light);
+  --nav-hover: var(--nav-hover-light);
+  
+  --button-secondary-bg: var(--button-secondary-bg-light);
+  --button-secondary-text: var(--button-secondary-text-light);
+}
+
+/* ========================================
+   FONT FACES
+   ======================================== */
 @font-face {
-  font-family: inter;
-  src: url('../font/inter-v20-latin-regular.woff2');
-  font-weight: normal;
+  font-family: 'Inter';
+  src: url('../font/inter-v20-latin-regular.woff2') format('woff2');
+  font-weight: 400;
   font-style: normal;
+  font-display: swap;
 }
+
 @font-face {
-  font-family: inter;
-  src: url('../font/inter-v20-latin-italic.woff2');
-  font-weight: normal;
+  font-family: 'Inter';
+  src: url('../font/inter-v20-latin-italic.woff2') format('woff2');
+  font-weight: 400;
   font-style: italic;
+  font-display: swap;
 }
+
 @font-face {
-  font-family: inter;
-  src: url('../font/inter-v20-latin-600.woff2');
-  font-weight: bold;
+  font-family: 'Inter';
+  src: url('../font/inter-v20-latin-600.woff2') format('woff2');
+  font-weight: 600;
   font-style: normal;
+  font-display: swap;
 }
+
 @font-face {
-  font-family: inter;
-  src: url('../font/inter-v20-latin-600italic.woff2');
-  font-weight: bold;
+  font-family: 'Inter';
+  src: url('../font/inter-v20-latin-600italic.woff2') format('woff2');
+  font-weight: 600;
   font-style: italic;
+  font-display: swap;
 }
-/*************** End of Fonts ****************/
-body{
-  background: var(--bg-color-light);
-  font-family: inter, sans-serif;
+
+/* ========================================
+   BASE STYLES
+   ======================================== */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  line-height: 1.6;
   width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  transition: background-color var(--transition-base), color var(--transition-base);
 }
-section{
+
+section {
   width: 100%;
-  padding: 20px 50px;
-  margin: 10px auto;
+  padding: var(--spacing-xl) var(--spacing-2xl);
+  margin: var(--spacing-md) auto;
 }
-button{
-  border: none;
-  font-weight: bold;
-  margin: 0px auto;
+
+button {
+  font-family: inherit;
+  font-weight: 600;
   cursor: pointer;
   border: none;
-  transition: 1s;
+  transition: all var(--transition-base);
+  outline: none;
 }
 
-/* ++++++++++++++ ++++++++++++++*/
+button:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
 
-@media (prefers-color-scheme: dark) {
-  body{
-    background: var(--bg-color-dark);
+a {
+  color: var(--text-accent);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--text-accent-dark);
+}
+
+input, textarea, select {
+  font-family: inherit;
+  font-size: var(--font-base);
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+/* Layout */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.gap-sm {
+  gap: var(--spacing-sm);
+}
+
+.gap-md {
+  gap: var(--spacing-md);
+}
+
+.gap-lg {
+  gap: var(--spacing-lg);
+}
+
+/* Text */
+.text-center {
+  text-align: center;
+}
+
+.text-primary {
+  color: var(--text-primary);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-accent {
+  color: var(--text-accent);
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+/* Buttons */
+.btn {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: var(--font-base);
+  transition: all var(--transition-base);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.btn-primary {
+  background-color: var(--button-primary-bg);
+  color: var(--button-primary-text);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-primary:hover {
+  background-color: var(--button-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-secondary {
+  background-color: var(--button-secondary-bg);
+  color: var(--button-secondary-text);
+  border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+  background-color: var(--box-bg-hover);
+}
+
+/* Cards */
+.card {
+  background-color: var(--box-bg);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-base);
+  border: 1px solid var(--border-color);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.card-listing {
+  border-left: 3px solid var(--primary-color);
+}
+
+.card-request {
+  border-left: 3px solid #06b6d4; /* Cyan for requests */
+}
+
+/* Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-full);
+  font-size: var(--font-xs);
+  font-weight: 600;
+}
+
+.badge-primary {
+  background-color: var(--primary-opacity);
+  color: var(--primary-color-dark);
+}
+
+.badge-verified {
+  background-color: var(--primary-opacity);
+  color: var(--primary-color);
+}
+
+.badge-boosted {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+
+/* Forms */
+.input {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-md);
+  background-color: var(--input-bg);
+  color: var(--text-primary);
+  font-size: var(--font-base);
+  transition: all var(--transition-fast);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--border-focus);
+  background-color: var(--input-focus-bg);
+  box-shadow: 0 0 0 3px var(--primary-opacity);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-tertiary);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-@media (max-width: 1200px){
-  /**rules for tablets**/ 
-  section{
-    padding: 20px 40px;
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+.fade-in {
+  animation: fadeIn var(--transition-base);
+}
+
+.slide-up {
+  animation: slideUp var(--transition-base);
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-secondary) 0%,
+    var(--box-bg-hover) 50%,
+    var(--bg-secondary) 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+  border-radius: var(--radius-md);
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 1200px) {
+  section {
+    padding: var(--spacing-lg) var(--spacing-xl);
   }
 }
 
-@media (max-width: 500px){
-  /**rules for mobile**/ 
-  section{
-    padding: 30px;
+@media (max-width: 768px) {
+  section {
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+  
+  .btn {
+    font-size: var(--font-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+}
+
+@media (max-width: 500px) {
+  section {
+    padding: var(--spacing-md);
+  }
+  
+  .container {
+    padding: 0 var(--spacing-sm);
   }
 }
