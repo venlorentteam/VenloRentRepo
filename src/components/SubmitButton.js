@@ -1,13 +1,24 @@
 import React from 'react'
 import "./SubmitButton.css"
-function SubmitButton ({text, bgColor, disabled, onClick}) {
+
+function SubmitButton({ text, bgColor, disabled, onClick, isLoading }) {
   return (
-    <>
-      {/* button to submit forms for prelim pages*/}
-      <button type="submit" className={`submit-button ${disabled ? "disabled" : ""}`} style={bgColor && {background: bgColor}} disabled={disabled}>
-        {text}
-      </button>
-    </>
+    <button 
+      type="submit" 
+      className={`submit-button ${disabled || isLoading ? "disabled" : ""}`} 
+      style={bgColor ? { background: bgColor } : undefined}
+      disabled={disabled || isLoading}
+      onClick={onClick}
+    >
+      {isLoading ? (
+        <>
+          <span className="button-spinner"></span>
+          <span>Loading...</span>
+        </>
+      ) : (
+        text
+      )}
+    </button>
   )
 }
 
