@@ -1,88 +1,180 @@
-.inbox-container{
+/* ========================================
+   INBOX PAGE
+   ======================================== */
+
+/* Inbox Layout */
+.inbox-layout {
   display: flex;
-  height: 100vh;
-  background-color: var(--app-bg);
-  transition: all 0.3s ease;
+  height: calc(100vh - 60px); /* Account for header */
+  background: var(--bg-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
 }
 
-/* Left sidebar (message list) */
-.inbox-sidebar{
-  width: 35%;
-  max-width: 400px;
-  border-right: 1px solid var(--border-color-light);
-  padding: 1rem;
+/* Left Sidebar - Message List */
+.inbox-sidebar {
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  background: var(--box-bg);
+  border-right: 1px solid var(--border-color);
+  transition: all var(--transition-base);
+}
+
+/* Search Section */
+.inbox-search {
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  flex-shrink: 0;
+}
+
+/* Message List Container */
+.inbox-message-list {
+  flex: 1;
   overflow-y: auto;
+  padding: var(--spacing-sm);
 }
 
-/* Right panel (chat or placeholder) */
-.inbox-chat-panel{
+/* Custom Scrollbar */
+.inbox-message-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.inbox-message-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.inbox-message-list::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-full);
+}
+
+.inbox-message-list::-webkit-scrollbar-thumb:hover {
+  background: var(--text-tertiary);
+}
+
+/* Empty Search State */
+.inbox-empty-search {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2xl);
+  text-align: center;
+}
+
+.inbox-empty-search p {
+  font-size: var(--font-sm);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* Right Panel - Chat Area */
+.inbox-chat-panel {
   flex: 1;
   display: flex;
-  justify-content: center;
   align-items: center;
-  background-color: var(--light-green-color);
-  transition: all 0.3s ease;
+  justify-content: center;
+  background: var(--bg-secondary);
+  position: relative;
 }
 
-/* Empty chat placeholder */
-.empty-chat{
+/* Empty State */
+.inbox-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  color: var(--text-color-dark);
+  padding: var(--spacing-2xl);
+  max-width: 400px;
 }
 
-.empty-chat h2{
-  font-size: var(--font-size-large);
-  margin-bottom: 0.5rem;
+.inbox-empty-state .empty-icon {
+  font-size: 4rem;
+  margin-bottom: var(--spacing-lg);
+  opacity: 0.5;
 }
 
-.empty-chat p{
-  font-size: var(--font-size-small);
-  color: var(--msg-snippet-color);
-  margin-bottom: 1rem;
+.inbox-empty-state h3 {
+  font-size: var(--font-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-sm);
 }
 
-.send-msg-btn{
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 25px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: 500;
+.inbox-empty-state p {
+  font-size: var(--font-base);
+  color: var(--text-secondary);
+  margin: 0;
 }
 
-.send-msg-btn:hover{
-  background-color: var(--primary-color-dark);
-}
-
-/* Mobile View */
-@media (max-width: 768px){
-  .inbox-container {
-    flex-direction: column;
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  .inbox-layout {
+    background: var(--bg-color-dark);
+    border-color: var(--border-dark);
   }
 
-  .inbox-sidebar{
+  .inbox-sidebar {
+    background: var(--box-bg-dark);
+    border-right-color: var(--border-dark);
+  }
+
+  .inbox-search {
+    border-bottom-color: var(--border-dark);
+    background: var(--bg-secondary-dark);
+  }
+
+  .inbox-chat-panel {
+    background: var(--bg-secondary-dark);
+  }
+
+  .inbox-empty-search p {
+    color: var(--text-secondary-dark);
+  }
+
+  .inbox-empty-state h3 {
+    color: var(--text-primary-dark);
+  }
+
+  .inbox-empty-state p {
+    color: var(--text-secondary-dark);
+  }
+}
+
+/* Responsive - Tablet */
+@media (max-width: 1024px) {
+  .inbox-sidebar {
+    max-width: 320px;
+  }
+}
+
+/* Responsive - Mobile */
+@media (max-width: 768px) {
+  .inbox-layout {
+    height: calc(100vh - 50px);
+  }
+
+  .inbox-sidebar {
+    max-width: 100%;
     width: 100%;
-    border: none;
+    border-right: none;
   }
 
-  .inbox-chat-panel{
+  .inbox-chat-panel {
     display: none;
   }
 }
 
-/* Dark mode */
-@media (prefers-color-scheme: dark){
-  .inbox-container{
-    background-color: var(--dark-bg);
+@media (max-width: 500px) {
+  .inbox-search {
+    padding: var(--spacing-sm);
   }
 
-  .inbox-chat-panel{
-    background-color: var(--dark-bg-light);
-  }
-
-  .empty-chat{
-    color: var(--text-color-light);
+  .inbox-message-list {
+    padding: var(--spacing-xs);
   }
 }

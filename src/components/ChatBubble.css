@@ -1,91 +1,156 @@
-/* Container row - controls alignment of the bubble */
-.chat-row {
+/* ========================================
+   CHAT BUBBLE
+   ======================================== */
+
+/* Bubble Row - Controls alignment */
+.chat-bubble-row {
   display: flex;
+  align-items: flex-end;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
   width: 100%;
-  margin: 4px 0;
-  padding: 0 .5rem;
-  box-sizing: border-box;
+  padding: 0 var(--spacing-md);
 }
 
-/* Left / right alignment classes */
-.chat-row--other { justify-content: flex-start; }
-.chat-row--me { 
-  justify-content: flex-end; 
-  padding: 0 0.1rem;
+.chat-bubble-row--other {
+  justify-content: flex-start;
 }
 
-/* The bubble itself */
+.chat-bubble-row--me {
+  justify-content: flex-end;
+}
+
+/* Avatar */
+.chat-bubble-avatar {
+  flex-shrink: 0;
+  margin-bottom: 2px;
+}
+
+.chat-bubble-avatar-img {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--border-color);
+}
+
+/* Message Bubble */
 .chat-bubble {
   position: relative;
   max-width: 70%;
-  padding: 10px 14px;
-  border-radius: 18px;
+  
+  padding: var(--spacing-sm) var(--spacing-md);
+  padding-bottom: var(--spacing-lg); /* Space for timestamp */
+  
+  border-radius: var(--radius-lg);
   word-wrap: break-word;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-  display: inline-block;
-  font-size: 0.95rem;
-  line-height: 1.3;
-  /* space reserved for timestamp so it doesn't overlap */
-  padding-right: 2rem;
-  /* ensure time can sit to the far right inside bubble */
+  box-shadow: var(--shadow-sm);
+  
+  transition: all var(--transition-fast);
 }
 
-/* Variant colors (user requested red for "me", blue for "other") */
-.chat-bubble--me {
-  background-color: var(--primary-color-lightest); /* red */
-  color: var(--text-color-dark);
-  font-weight: 600;
-  font-size: var(--font-size-medium);
-}
-
+/* Variant: Other Person */
 .chat-bubble--other {
-  background-color: var(--box-bg-color-light); /* blue */
-  color: var(--text-color-dark);
-  font-weight: 600;
-  font-size: var(--font-size-medium);
-}
-/* Avatar styling */
-.chat-bubble__avatar-image {
-   width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  object-fit: cover;;
-}
-/* Message text styling */
-.chat-bubble__text {
-  margin: 0 0 6px 0;
-  white-space: pre-wrap; 
-  text-align: justify;/* preserve line breaks */
+  background: var(--box-bg);
+  color: var(--text-primary);
+  border-bottom-left-radius: 4px; /* Tail effect */
 }
 
-/* Time placed at the extreme edge (inside the bubble) */
-.chat-bubble__time {
+/* Variant: Me */
+.chat-bubble--me {
+  background: var(--primary-color-dark);
+  color: var(--white-color);
+  border-bottom-right-radius: 4px; /* Tail effect */
+}
+
+/* Message Text */
+.chat-bubble-text {
+  margin: 0;
+  font-size: var(--font-base);
+  font-weight: 500;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Timestamp */
+.chat-bubble-time {
   position: absolute;
-  right: 10px;
-  bottom: 6px;
-  font-size: 0.4rem;
-  opacity: 0.85;
-  color: var(--text-color-dark);
+  right: var(--spacing-sm);
+  bottom: var(--spacing-xs);
+  
+  font-size: var(--font-xs);
+  font-weight: 500;
+  opacity: 0.7;
 }
 
-/* For 'other' variant, place time at left edge instead of right */
-/* .chat-row--other .chat-bubble__time {
-  left: 10px;
-  right: auto;
-  color: var(--text-color-dark);
-} */
+.chat-bubble--other .chat-bubble-time {
+  color: var(--text-tertiary);
+}
 
-/* Small screens: allow wider bubbles and slightly smaller text */
-@media (max-width: 600px) {
-  .chat-bubble {
-    max-width: 90%;
-    padding-right: 1.5rem;
-    font-size: 0.92rem;
+.chat-bubble--me .chat-bubble-time {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  .chat-bubble-avatar-img {
+    border-color: var(--border-dark);
   }
 
-  .chat-bubble__time {
-    font-size: 0.35rem;
+  .chat-bubble--other {
+    background: var(--box-bg-dark);
+    color: var(--text-primary-dark);
+  }
+
+  .chat-bubble--me {
+    background: var(--primary-color-dark);
+    color: var(--white-color);
+  }
+
+  .chat-bubble--other .chat-bubble-time {
+    color: var(--text-tertiary-dark);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .chat-bubble {
+    max-width: 80%;
+  }
+
+  .chat-bubble-text {
+    font-size: var(--font-sm);
+  }
+
+  .chat-bubble-time {
+    font-size: 0.65rem;
+  }
+}
+
+@media (max-width: 500px) {
+  .chat-bubble-row {
+    padding: 0 var(--spacing-sm);
+  }
+
+  .chat-bubble {
+    max-width: 85%;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    padding-bottom: var(--spacing-md);
+  }
+
+  .chat-bubble-avatar-img {
+    width: 24px;
+    height: 24px;
+  }
+
+  .chat-bubble-text {
+    font-size: var(--font-sm);
+  }
+
+  .chat-bubble-time {
+    font-size: 0.6rem;
     bottom: 4px;
-    font-weight: 600;
+    right: var(--spacing-xs);
   }
 }

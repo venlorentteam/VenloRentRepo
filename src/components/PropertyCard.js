@@ -5,18 +5,20 @@ import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-
-import './PropertyCard.css'
-import { FaRegEye, FaRegComment } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
+import './PropertyCard.css'
+
+import { FaRegEye, FaRegComment, FaBookmark, FaRegBookmark } from 'react-icons/fa'
 import { BsThreeDots } from 'react-icons/bs'
 import { GrLocation } from 'react-icons/gr'
-import { MdBookmarkBorder, MdIosShare } from 'react-icons/md'
+import { MdIosShare } from 'react-icons/md'
+import { RiVerifiedBadgeFill } from 'react-icons/ri'
 
 function PropertyCard({
-  avatar,
-  username = "Obinabo Walter",
-  handle = "@walcode",
+  avatar = "https://i.pravatar.cc/100",
+  username = "Jay carlos",
+  handle = "@jaycarlx",
+  verified = true,
   time = "1 min ago",
   image = [],
   price = "₦700,000",
@@ -24,97 +26,165 @@ function PropertyCard({
   category = "Apartment",
   views = "10k",
   comments = "532",
-  //liked = false,
+  bookmarked = false,
   description = "Self contained apartment, with steady water and light...",
-}){
-  const [isModalOpen, setIsModalOpen] = useState(false) 
+  onOrder,
+}) {
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [isComment, setIsComment] = useState(false)
+  const [isBookmarked, setIsBookmarked] = useState(bookmarked)
 
-  //Control opening and closing of Comment
+  // Control opening and closing of Comment
   const openComment = () => setIsComment(true)
   const closeComment = (e) => {
-    e.preventDefault()    
+    e?.preventDefault()
     setIsComment(false)
   }
 
-  //Control opening and closing of Modal
+  // Control opening and closing of Modal
   const openModal = () => setIsModalOpen(true)
   const closeModal = (e) => {
-    e.preventDefault()    
+    e?.preventDefault()
     setIsModalOpen(false)
   }
-  // const naviagte = useNavigate()
+
+  const toggleBookmark = () => {
+    setIsBookmarked(!isBookmarked)
+    // TODO: Add API call to save bookmark
+  }
+
+  const handleOrder = () => {
+    if (onOrder) onOrder()
+    // TODO: Navigate to order page or open order modal
+  }
 
   return (
     <>
-      <div className="property-card">
-        {/* Card that shows a property. appears on listings page and search results */}
-        <div className="top">
-          <div className="left">
-            <img className="avatar" src={avatar} alt="Profile-pic" />
-            <span className="handle">
-              <h4>{username}</h4>
-              <p>{handle} • {time}</p>
-            </span>
+      <article className="property-card">
+        {/* Header: User Info */}
+        <header className="property-card-header">
+          <div className="property-card-user">
+            <img className="property-avatar" src={avatar} alt={`${username}'s profile`} />
+            <div className="property-user-info">
+              <div className="property-username-row">
+                <h4 className="property-username">{username}</h4>
+                {verified && (
+                  <RiVerifiedBadgeFill className="verified-badge" aria-label="Verified agent" />
+                )}
+              </div>
+              <p className="property-handle">{handle} • {time}</p>
+            </div>
           </div>
-            <BsThreeDots 
-              className="activity-icon"
-              onClick={openModal}
-            />
-        </div>
-        <div className="body">
-          {image.length > 1 ? (//If imges uploded are greater than 1
-              <Swiper
-                modules={[Navigation, Pagination]}
-                pagination={{ clickable: true }}
-                spaceBetween={10}
-                slidesPerView={1}
-                className="property-swiper"
-              >
-                {image.map((img, i) => (
-                  <SwiperSlide key={i}>
-                    <img src={img} alt={`Property ${i + 1}`} />
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            ) : (//If just one image is uploaded
+          <button
+            className="property-options-btn"
+            onClick={openModal}
+            aria-label="More options"
+          >
+            <BsThreeDots />
+          </button>
+        </header>
+
+        {/* Image Gallery */}
+        <div className="property-images">
+          {image.length > 1 ? (
+            <Swiper
+              modules={[Navigation, Pagination]}
+              navigation
+              pagination={{ clickable: true }}
+              spaceBetween={0}
+              slidesPerView={1}
+              className="property-swiper"
+              loop
+            >
+              {image.map((img, i) => (
+                <SwiperSlide key={i}>
+                  <img src={img} alt={`Property view ${i + 1}`} className="property-image" />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          ) : (
             <img
               src={image[0]}
-              alt="Property"
-              className="single-image"
+              alt="Property view"
+              className="property-image property-image-single"
             />
           )}
-          {/* <img src={image} alt="Property-pic" /> */}
         </div>
-        <div className="bottom">{/** Conatiner for location and order button **/}
-          <div className="left">
-            <h2>{price}</h2>
-            <p className="location"><span className="location-icon"><GrLocation /></span> {location}  •  {category}</p>
+
+        {/* Price & Location */}
+        <div className="property-details">
+          <div className="property-info">
+            <h2 className="property-price">{price}</h2>
+            <p className="property-location">
+              <GrLocation className="location-icon" aria-hidden="true" />
+              <span>{location} • {category}</span>
+            </p>
           </div>
-          <button type="button" className="order-button" onClick="">Order</button>
+          <button
+            type="button"
+            className="property-order-btn"
+            onClick={handleOrder}
+          >
+            Order
+          </button>
         </div>
-        <div className="activity">{/** Conatiner for activity clicks like share, comment etc **/}
-          <div className="left">
-            <div className="item"><FaRegEye /> <p>{views}</p></div>
-            <div className="item" onClick={openComment}><FaRegComment className="activity-icon" /> <p>{comments}</p></div>
-            <div className="item"><MdIosShare className="activity-icon" /></div>
+
+        {/* Activity Bar */}
+        <div className="property-activity">
+          <div className="property-activity-left">
+            <button className="property-activity-item" aria-label={`${views} views`}>
+              <FaRegEye aria-hidden="true" />
+              <span>{views}</span>
+            </button>
+            <button
+              className="property-activity-item"
+              onClick={openComment}
+              aria-label={`${comments} comments`}
+            >
+              <FaRegComment aria-hidden="true" />
+              <span>{comments}</span>
+            </button>
+            <button className="property-activity-item" aria-label="Share listing">
+              <MdIosShare aria-hidden="true" />
+            </button>
           </div>
-          <MdBookmarkBorder className="activity-icon"/>
+          <button
+            className="property-bookmark-btn"
+            onClick={toggleBookmark}
+            aria-label={isBookmarked ? "Remove bookmark" : "Bookmark listing"}
+          >
+            {isBookmarked ? (
+              <FaBookmark className="bookmarked" />
+            ) : (
+              <FaRegBookmark />
+            )}
+          </button>
         </div>
-        <p>{description}</p>
-      </div>
+
+        {/* Description */}
+        {description && (
+          <p className="property-description">{description}</p>
+        )}
+      </article>
+
+      {/* More Options Modal */}
       <Modal isOpen={isModalOpen} onClose={closeModal} cancel={false}>
-        <div className="modal-link">
-          <p><Link to="">Report</Link></p>
-          <p><Link to="">Add to favorites</Link></p>
-          <p><Link to="">Share</Link></p>
-          <p><Link to="">About this account</Link></p>
-          <p><Link onClick={closeModal}>cancel</Link></p>
+        <div className="property-modal-menu">
+          <Link to="#" className="property-modal-link">Report</Link>
+          <Link to="#" className="property-modal-link">
+            {isBookmarked ? "Remove from favorites" : "Add to favorites"}
+          </Link>
+          <Link to="#" className="property-modal-link">Share</Link>
+          <Link to="#" className="property-modal-link">About this account</Link>
+          <button onClick={closeModal} className="property-modal-cancel">
+            Cancel
+          </button>
         </div>
       </Modal>
-      <Comments isCommentOpen={isComment} onClose={closeComment}/>
+
+      {/* Comments Modal */}
+      <Comments isCommentOpen={isComment} onClose={closeComment} />
     </>
   )
 }
-
 export default PropertyCard

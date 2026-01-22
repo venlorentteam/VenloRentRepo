@@ -1,55 +1,121 @@
-.input-container{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    gap: 10px;
-}
-input{
-    color: var(--primary-color);
-    font-size: var(--font-size-big);
-    text-align: left;
-    font-weight: normal;
-    width: 100%;
-    padding: 15px;
-    border: 2px solid var(--primary-color-light);
-    border-radius: 10px;
-    background: var(--primary-color-lightest);
-    outline: none;
-    margin: 5px auto; 
-    box-shadow: 0px 5px 5px var(--primary-opacity);
-    transition: 1s;
-}
-input:focus{
-    border: 2px solid var(--primary-color-light);
-    background: var(--input-bg-focus);
-    outline: none;
-}
-.login input::placeholder{
-    color: var(--primary-color);
-    font-size: var(--font-size-medium);
+
+/* ========================================
+   OTP INPUT
+   ======================================== */
+.otp-input-container {
+  width: 100%;
+  max-width: 450px;
+  margin: 0 auto;
 }
 
+/* Inputs Wrapper */
+.otp-inputs-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Individual OTP Input */
+.otp-input {
+  width: 50px;
+  height: 60px;
+  
+  font-size: var(--font-2xl);
+  font-weight: 700;
+  text-align: center;
+  color: var(--text-primary);
+  
+  background: var(--input-bg);
+  border: 2px solid var(--input-border);
+  border-radius: var(--radius-lg);
+  
+  outline: none;
+  transition: all var(--transition-fast);
+  
+  /* Remove spinner buttons */
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.otp-input::-webkit-outer-spin-button,
+.otp-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.otp-input:focus {
+  border-color: var(--primary-color);
+  background: var(--input-focus-bg);
+  box-shadow: 0 0 0 3px var(--primary-opacity);
+}
+
+.otp-input-filled {
+  border-color: var(--primary-color);
+  background: var(--input-focus-bg);
+}
+
+.otp-input-error {
+  border-color: var(--danger-color);
+  animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* Error Message */
+.otp-error {
+  display: block;
+  margin-top: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+  
+  font-size: var(--font-xs);
+  font-weight: 500;
+  color: var(--danger-color);
+  text-align: center;
+}
+
+/* Dark Mode */
 @media (prefers-color-scheme: dark) {
-    input{
-        box-shadow: 0px 5px 5px var(--shadowBlack-color);
-    }
+  .otp-input {
+    color: var(--text-primary-dark);
+    background: var(--input-bg-dark);
+    border-color: var(--input-border-dark);
+  }
+
+  .otp-input:focus {
+    border-color: var(--primary-color-light);
+    background: var(--input-focus-dark);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+  }
+
+  .otp-input-filled {
+    border-color: var(--primary-color-light);
+    background: var(--input-focus-dark);
+  }
 }
 
-@media (max-width: 900px){
-  /**rules for small screen tablets**/ 
-    .login-cont .left-side{
-        display: none;
-    }
+/* Responsive */
+@media (max-width: 500px) {
+  .otp-inputs-wrapper {
+    gap: var(--spacing-xs);
+  }
+
+  .otp-input {
+    width: 40px;
+    height: 50px;
+    font-size: var(--font-xl);
+  }
 }
 
-@media (max-width: 500px){
-  /**rules for mobile**/ 
-    .login-cont .login{
-        width: 100%;
-    }
-    .regular-texts{
-        font-size: var(--font-size-smallest);
-    }
-
+@media (max-width: 350px) {
+  .otp-input {
+    width: 35px;
+    height: 45px;
+    font-size: var(--font-lg);
+  }
 }
