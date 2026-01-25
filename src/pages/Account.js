@@ -1,24 +1,23 @@
-import React,{ useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Outlet, useNavigate, useParams, useLocation } from 'react-router-dom';
-import { PageSetup, Header, SettingsMenu, SettingsDetails } from '../exports'
+import { PageSetup, Header, SettingsMenu } from '../exports'
 import { FaRegBell } from 'react-icons/fa'
+import { RiMessageLine } from 'react-icons/ri'
 import "../assets/css/global.css";
 import "./Account.css";
 
-function Account(){
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 700);
-
+function Account() {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const navigate = useNavigate();
-  const { settingId } = useParams();
   const location = useLocation();
-
   const isIndexRoute = location.pathname === '/account';
 
   useEffect(() => {
     const handleResize = () => {
-      const mobile = window.innerWidth < 700;
+      const mobile = window.innerWidth < 768;
       setIsMobile(mobile);
       
+      // On desktop, if user is on /account, redirect to /account/profile
       if (!mobile && isIndexRoute) {
         navigate('/account/profile', { replace: true });
       }
@@ -30,26 +29,35 @@ function Account(){
     return () => window.removeEventListener('resize', handleResize);
   }, [isIndexRoute, navigate]);
 
-
   return (
     <PageSetup>
       <Header 
-        pageTitle= {<h2>Account and settings</h2>}
+        backIcon={isMobile && !isIndexRoute}
+        pageTitle={<h2>Account & Settings</h2>}
+        icons={[
+          { link: "/inbox", element: <RiMessageLine /> },
+          { link: "/notifications", element: <FaRegBell /> }
+        ]}
       />
+      
       <div className="main-content">
         <div className="content">
-          {/* Desktop: Show both menu and details side by side */}
           {!isMobile ? (
-            <div className="settings-cont"> {/* Keep flex container */}
-              <SettingsMenu /> {/* Left side */}
-              <div className="settings-details"> {/* Right side */}
+            /* Desktop: Side-by-side layout */
+            <div className="settings-container">
+              <SettingsMenu />
+              <div className="settings-details-wrapper">
                 <Outlet />
               </div>
             </div>
           ) : (
-            /* Mobile: Show only the current route */
-            <div className="settings-cont-mobile"> {/* Different class for mobile */}
-              <Outlet />
+            /* Mobile: Show menu or details based on route */
+            <div className="settings-container-mobile">
+              {isIndexRoute ? (
+                <SettingsMenu />
+              ) : (
+                <Outlet />
+              )}
             </div>
           )}
         </div>

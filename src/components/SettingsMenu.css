@@ -1,0 +1,239 @@
+/* ========================================
+   SETTINGS MENU
+   ======================================== */
+
+.settings-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  width: 100%;
+}
+
+/* Settings Menu Item (NavLink) */
+.settings-list > a,
+.settings-list > button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  
+  background: var(--box-bg);
+  border: 1px solid transparent;
+  
+  font-size: var(--font-base);
+  font-weight: 500;
+  color: var(--text-primary);
+  text-decoration: none;
+  cursor: pointer;
+  
+  transition: all var(--transition-fast);
+  
+  min-height: 80px;
+}
+
+.settings-list > a:hover,
+.settings-list > button:hover {
+  background: var(--box-bg-hover);
+  border-color: var(--primary-color-light);
+  transform: translateX(4px);
+  box-shadow: var(--shadow-md);
+}
+
+.settings-list > a.active {
+  background: var(--primary-opacity);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.settings-list > a:focus-visible,
+.settings-list > button:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Left Section (Icon + Text) */
+.left-side {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  flex: 1;
+}
+
+.left-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  color: var(--primary-color);
+  transition: all var(--transition-fast);
+}
+
+.settings-list > a:hover .left-icon,
+.settings-list > button:hover .left-icon {
+  color: var(--primary-color-dark);
+  transform: scale(1.1);
+}
+
+.settings-list > a.active .left-icon {
+  color: var(--primary-color-dark);
+}
+
+/* Setting Text Content */
+.setting-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  text-align: left;
+}
+
+.setting-label {
+  font-size: var(--font-base);
+  font-weight: 600;
+  color: var(--text-primary);
+  display: block;
+}
+
+.settings-list > a:hover .setting-label,
+.settings-list > button:hover .setting-label {
+  color: var(--primary-color);
+}
+
+.settings-list > a.active .setting-label {
+  color: var(--primary-color);
+}
+
+.setting-description {
+  font-size: var(--font-sm);
+  color: var(--text-secondary);
+  display: block;
+  line-height: 1.4;
+}
+
+.settings-list > a:hover .setting-description,
+.settings-list > button:hover .setting-description {
+  color: var(--text-secondary);
+}
+
+/* Right Icon (Chevron) */
+.right-icon {
+  font-size: 1.25rem;
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+}
+
+.settings-list > a:hover .right-icon,
+.settings-list > button:hover .right-icon {
+  color: var(--primary-color);
+  transform: translateX(4px);
+}
+
+.settings-list > a.active .right-icon {
+  color: var(--primary-color);
+}
+
+/* Logout Button Specific */
+.logout-button {
+  margin-top: var(--spacing-lg);
+  background: transparent;
+  border: 2px solid var(--danger-color);
+  color: var(--danger-color);
+}
+
+.logout-button .left-icon {
+  color: var(--danger-color);
+}
+
+.logout-button:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: var(--danger-color);
+}
+
+.logout-button:hover .left-icon {
+  color: var(--danger-color);
+  transform: scale(1.1);
+}
+
+.logout-button:hover .right-icon {
+  display: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .settings-list > a,
+  .settings-list > button {
+    padding: var(--spacing-md) var(--spacing-md);
+    min-height: 70px;
+  }
+
+  .left-icon {
+    font-size: 1.25rem;
+  }
+
+  .setting-description {
+    font-size: var(--font-xs);
+  }
+
+  .right-icon {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .settings-list > a,
+  .settings-list > button {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: var(--spacing-md);
+    min-height: auto;
+    gap: var(--spacing-md);
+  }
+
+  .left-side {
+    width: 100%;
+  }
+
+  .right-icon {
+    display: none;
+  }
+
+  .setting-description {
+    font-size: var(--font-xs);
+    margin-top: var(--spacing-xs);
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .settings-list > a,
+  .settings-list > button,
+  .left-icon,
+  .right-icon {
+    transition: none;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .settings-list > a,
+  .settings-list > button {
+    background: var(--box-bg-dark);
+  }
+
+  .settings-list > a:hover,
+  .settings-list > button:hover {
+    background: var(--box-bg-hover-dark);
+  }
+
+  .settings-list > a.active {
+    background: rgba(16, 185, 129, 0.15);
+  }
+
+  .setting-label {
+    color: var(--text-primary-dark);
+  }
+
+  .setting-description {
+    color: var(--text-secondary-dark);
+  }
+}

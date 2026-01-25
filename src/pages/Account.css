@@ -1,120 +1,191 @@
-/* Desktop: Flex container for side-by-side layout */
-.settings-cont {
-    display: flex;
-    width: 100%;
-    height: 100%; /* Important for full height */
-    transition: all 0.3s ease;
-    padding: 0px;
-    margin: 0px;
-    gap: 0; /* No gap between menu and details */
+/* ========================================
+   ACCOUNT & SETTINGS PAGE
+   ======================================== */
+
+/* Desktop Container */
+.settings-container {
+  display: flex;
+  width: 100%;
+  min-height: calc(100vh - 80px);
+  background: var(--bg-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
 }
 
-/* Left sidebar (navigation pane) */
+/* Settings Menu (Left Sidebar) */
 .settings-list {
-    max-width: 350px;
-    width: 100%;
-    padding: 10px;
-    height: 100%;
-    border-right: 1px solid var(--primary-opacity);
-    flex-shrink: 0;
+  width: 100%;
+  max-width: 320px;
+  background: var(--box-bg);
+  border-right: 1px solid var(--border-color);
+  padding: var(--spacing-md);
+  overflow-y: auto;
+  flex-shrink: 0;
 }
 
 .settings-list a {
-    background: var(--background-nav-light);
-    color: var(--primary-color);
-    font-size: var(--font-size-medium);
-    font-weight: normal;
-    margin: 5px auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 15px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    text-decoration: none; 
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-xs);
+  
+  font-size: var(--font-base);
+  font-weight: 500;
+  color: var(--text-primary);
+  text-decoration: none;
+  
+  background: transparent;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  
+  cursor: pointer;
+  transition: all var(--transition-fast);
 }
 
 .settings-list a:hover {
-    background: var(--input-bg-focus);
+  background: var(--box-bg-hover);
+  border-color: var(--border-color);
 }
 
-.settings-list a.active { 
-    background: var(--input-bg-focus);
-    font-weight: 600;
+.settings-list a.active {
+  background: var(--primary-opacity);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.settings-list a:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
 }
 
 .settings-list a .left-side {
-    display: flex;
-    align-items: center;
-    line-height: 1;
-    gap: 15px;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex: 1;
+  min-width: 0;
 }
 
-.settings-list a .left-side .left-icon {
-    font-size: var(--font-size-average);
+.settings-list a .left-icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
 }
 
 .settings-list a .right-icon {
-    font-size: var(--font-size-smallest);
+  font-size: 1rem;
+  color: var(--text-tertiary);
+  flex-shrink: 0;
 }
 
-/* Right details section of the settings */
-.settings-details {
-    flex: 1; 
-    padding: 20px;
-    overflow-y: auto; 
-    height: 100%;
+/* Settings Details (Right Panel) */
+.settings-details-wrapper {
+  flex: 1;
+  background: var(--bg-secondary);
+  padding: var(--spacing-xl);
+  overflow-y: auto;
 }
 
-/* Mobile container (block layout) */
-.settings-cont-mobile {
-    display: block;
-    width: 100%;
+/* Mobile Container */
+.settings-container-mobile {
+  width: 100%;
 }
 
-/* Scrollbar styles */
-::-webkit-scrollbar {
-    width: 4px;
-    height: 12px;
+/* Custom Scrollbar */
+.settings-list::-webkit-scrollbar,
+.settings-details-wrapper::-webkit-scrollbar {
+  width: 6px;
 }
 
-::-webkit-scrollbar-track {
-    background: var(--primary-opacity);
-    border-radius: 10px;
+.settings-list::-webkit-scrollbar-track,
+.settings-details-wrapper::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-::-webkit-scrollbar-thumb {
-    background: var(--primary-color);
-    border-radius: 10px;
+.settings-list::-webkit-scrollbar-thumb,
+.settings-details-wrapper::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-full);
 }
 
-::-webkit-scrollbar-thumb:hover {
-    background: var(--input-bg-focus);
+.settings-list::-webkit-scrollbar-thumb:hover,
+.settings-details-wrapper::-webkit-scrollbar-thumb:hover {
+  background: var(--text-tertiary);
 }
 
-/* Dark mode */
+/* Dark Mode */
 @media (prefers-color-scheme: dark) {
-    .settings-list a,
-    .left-icon,
-    .right-icon{
-        color: var(--white-color);
-    }
-    .settings-list a{
-        background: var(--background-nav-black);
-    }
-    .settings-list a:hover,
-    .settings-list a.active{
-        background: var(--side-nav-hover);
-    }
+  .settings-container {
+    background: var(--bg-color-dark);
+    border-color: var(--border-dark);
+  }
+
+  .settings-list {
+    background: var(--box-bg-dark);
+    border-right-color: var(--border-dark);
+  }
+
+  .settings-list a {
+    color: var(--text-primary-dark);
+  }
+
+  .settings-list a:hover {
+    background: var(--box-bg-hover-dark);
+    border-color: var(--border-dark);
+  }
+
+  .settings-list a.active {
+    background: rgba(16, 185, 129, 0.15);
+    border-color: var(--primary-color-light);
+    color: var(--primary-color-light);
+  }
+
+  .settings-list a .right-icon {
+    color: var(--text-tertiary-dark);
+  }
+
+  .settings-details-wrapper {
+    background: var(--bg-secondary-dark);
+  }
 }
 
-/* Mobile responsive */
-@media (max-width: 700px) {
-    .settings-list {
-        max-width: 100%;
-        border-right: none;
-    }
-    ::-webkit-scrollbar {
-        display: none;
-    }
+/* Responsive */
+@media (max-width: 768px) {
+  .settings-container {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+
+  .settings-list {
+    max-width: 100%;
+    border-right: none;
+    padding: var(--spacing-sm);
+  }
+
+  .settings-list a {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .settings-details-wrapper {
+    padding: var(--spacing-md);
+  }
+}
+
+@media (max-width: 500px) {
+  .settings-list {
+    padding: var(--spacing-xs);
+  }
+
+  .settings-list a {
+    font-size: var(--font-sm);
+  }
+
+  .settings-details-wrapper {
+    padding: var(--spacing-sm);
+  }
 }
