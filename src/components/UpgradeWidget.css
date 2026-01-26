@@ -1,29 +1,214 @@
-.upgrade-cont{
-    width: 100%;
-    border-radius: 10px;
-    background: var(--box-bg-color-light-2);
-    color: var(--primary-color);
-    box-shadow: 0px 1px 3px var(--primary-opacity-2);
-    text-align: left;
-    padding: 15px;
-}
-.upgrade-cont .upgrade-title{
-    font-size: var(--font-size-average);
-    font-weight: bold;
-    margin: 10px 0px;
-}
-.upgrade-cont .upgrade-text{
-    font-size: var(--font-size-small);
-    font-weight: normal;
-    margin: 5px 0px;
-    line-height: 180%;
+/* ========================================
+   UPGRADE WIDGET
+   ======================================== */
+.upgrade-widget {
+  width: 100%;
+  max-width: 400px;
+  
+  padding: var(--spacing-2xl);
+  
+  background: linear-gradient(
+    135deg,
+    var(--primary-color) 0%,
+    var(--primary-color-dark) 100%
+  );
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  
+  transition: all var(--transition-base);
 }
 
-@media (prefers-color-scheme: dark){
-    .upgrade-cont{
-        background: var(--background-nav-black);
-        border: 1px solid var(--box-border-dark);
-        box-shadow: 0px 1px 3px var(--shadowBlack-color);
-        color: var(--white-color);
-    }
+.upgrade-widget:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl);
+}
+
+/* Decorative Background Pattern */
+.upgrade-widget::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 70%
+  );
+  animation: rotate 20s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Icon Section */
+.upgrade-icon-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  
+  width: 70px;
+  height: 70px;
+  margin-bottom: var(--spacing-lg);
+  
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  backdrop-filter: blur(10px);
+}
+
+.upgrade-icon {
+  font-size: 2.5rem;
+  color: var(--white-color);
+  z-index: 1;
+}
+
+.upgrade-sparkle {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 1.25rem;
+  color: #fbbf24;
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
+  50% { opacity: 0.6; transform: scale(1.2) rotate(180deg); }
+}
+
+/* Content */
+.upgrade-title {
+  font-size: var(--font-2xl);
+  font-weight: 800;
+  color: var(--white-color);
+  margin: 0 0 var(--spacing-md) 0;
+  position: relative;
+  z-index: 1;
+}
+
+.upgrade-text {
+  font-size: var(--font-sm);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 var(--spacing-lg) 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* Features List */
+.upgrade-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--spacing-xl) 0;
+  
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  
+  position: relative;
+  z-index: 1;
+}
+
+.upgrade-feature-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  
+  font-size: var(--font-sm);
+  font-weight: 500;
+  color: var(--white-color);
+  text-align: left;
+}
+
+.upgrade-feature-check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  width: 20px;
+  height: 20px;
+  
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  
+  font-size: var(--font-xs);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* CTA Button Wrapper */
+.upgrade-widget button {
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  
+  background: var(--white-color) !important;
+  color: var(--primary-color) !important;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.upgrade-widget button:hover {
+  background: rgba(255, 255, 255, 0.95) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Dark Mode - Slightly different gradient */
+@media (prefers-color-scheme: dark) {
+  .upgrade-widget {
+    background: linear-gradient(
+      135deg,
+      var(--primary-color) 0%,
+      var(--primary-color-light) 100%
+    );
+  }
+
+  .upgrade-widget button {
+    background: var(--bg-color-dark) !important;
+    color: var(--primary-color-light) !important;
+  }
+
+  .upgrade-widget button:hover {
+    background: var(--box-bg-dark) !important;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .upgrade-widget {
+    max-width: 100%;
+    padding: var(--spacing-xl);
+  }
+
+  .upgrade-icon-wrapper {
+    width: 60px;
+    height: 60px;
+  }
+
+  .upgrade-icon {
+    font-size: 2rem;
+  }
+
+  .upgrade-title {
+    font-size: var(--font-xl);
+  }
+
+  .upgrade-text {
+    font-size: var(--font-xs);
+  }
+}
+
+@media (max-width: 500px) {
+  .upgrade-widget {
+    padding: var(--spacing-lg);
+  }
 }

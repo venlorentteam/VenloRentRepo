@@ -1,0 +1,60 @@
+/* ========================================
+   DASHBOARD / FEED
+   ======================================== */
+
+/* Feed Loading State */
+.feed-loading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  padding: var(--spacing-md);
+}
+
+.skeleton-card {
+  width: 100%;
+  max-width: 600px;
+  height: 400px;
+  margin: 0 auto;
+}
+
+/* Feed Empty State */
+.feed-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2xl);
+  text-align: center;
+  min-height: 400px;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: var(--spacing-lg);
+  opacity: 0.5;
+}
+
+.feed-empty h3 {
+  font-size: var(--font-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.feed-empty p {
+  font-size: var(--font-base);
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-xl);
+  max-width: 400px;
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  .feed-empty h3 {
+    color: var(--text-primary-dark);
+  }
+
+  .feed-empty p {
+    color: var(--text-secondary-dark);
+  }
+}

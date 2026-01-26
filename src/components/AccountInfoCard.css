@@ -1,166 +1,348 @@
-.account-container {
+/* ========================================
+   ACCOUNT INFO CARD
+   ======================================== */
+.account-info-container {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  margin: 1rem auto;
-  
+  gap: var(--spacing-lg);
+  margin: var(--spacing-xl) 0;
 }
+
+/* Main Card */
 .account-info-card {
   width: 100%;
-  background: var(--box-bg-color-light-2);
-  border-radius: 12px;
-  padding: 24px 48px;
-  border: 1px solid #eaeaea;
-  transition: all 0.3s ease-in-out;
+  background: var(--box-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-2xl);
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-base);
 }
 
-.account-header {
+.account-info-card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+/* Header Section */
+.account-card-header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--spacing-lg);
   flex-wrap: wrap;
-  gap: 16px;
+  margin-bottom: var(--spacing-xl);
 }
 
-.account-left {
+.account-card-left {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-lg);
+  flex: 1;
+  min-width: 0;
+}
+
+.account-card-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--primary-color);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+  flex-shrink: 0;
+}
+
+.account-card-user {
+  flex: 1;
+  min-width: 0;
+}
+
+.account-card-name-row {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-xs);
 }
 
-.account-avatar {
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  border: 3px solid #a8f9cf;
-  object-fit: cover;
-}
-
-.account-user h2 {
-  margin: 0;
-  font-size: 1.4rem;
-  color: var(--text-color-dark);
-}
-
-.username {
-  color: var(--text-color-dark);
-  font-size: var(--font-size-medium);
-  margin-top: 4px;
-}
-
-.occupation {
-  font-size: var(--font-size-small);
-  color: var(--text-color-dark);
-}
-
-.account-right {
-  text-align: left;
-}
-
-.followers-count {
-  margin: 0;
-  font-size: var(--font-size-big);
-  color: var(--text-color-dark);
+.account-card-name {
+  font-size: var(--font-2xl);
   font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.2;
 }
 
-.followers-label {
-  color: var(--text-color-dark);
-  font-size: var(--font-size-small);
+.account-verified-badge {
+  font-size: 1.25rem;
+  color: var(--primary-color);
+  flex-shrink: 0;
 }
 
-.account-details {
-  margin-top: 20px;
-  padding-top: 16px;
-  border-top: 1px solid #aaaaaa81;
-  margin-top: 40px;
- 
+.account-card-username {
+  font-size: var(--font-base);
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin: 0 0 var(--spacing-xs) 0;
 }
 
-.detail-item {
+.account-card-occupation {
+  font-size: var(--font-sm);
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Right Section */
+.account-card-right {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--spacing-sm);
 }
 
-.label {
-  color: var(--text-color-dark);
+.account-followers-section {
+  text-align: right;
+}
+
+.account-followers-count {
+  font-size: var(--font-3xl);
+  font-weight: 800;
+  color: var(--primary-color);
+  margin: 0;
+  line-height: 1;
+}
+
+.account-followers-label {
+  font-size: var(--font-sm);
+  color: var(--text-secondary);
   font-weight: 500;
 }
 
-.value {
-  color: var(--text-color-dark);
-  font-weight: 600;
+.account-member-since {
+  font-size: var(--font-xs);
+  color: var(--text-tertiary);
 }
 
-.account-actions {
+.account-member-label {
+  font-weight: 400;
+}
+
+.account-year {
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+/* Details Section */
+.account-card-details {
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--border-color);
+  
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.account-detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.account-detail-label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.account-detail-icon {
+  font-size: 1.1rem;
+  color: var(--primary-color);
+}
+
+.account-detail-value {
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: right;
+}
+
+/* Plan Badge */
+.account-plan-badge {
+  padding: var(--spacing-xs) var(--spacing-md);
+  
+  font-size: var(--font-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+
+.account-plan-badge.free {
+  background: rgba(156, 163, 175, 0.1);
+  color: var(--text-secondary);
+}
+
+.account-plan-badge.pro {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--primary-color);
+}
+
+.account-plan-badge.premium {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: var(--white-color);
+}
+
+/* Action Buttons */
+.account-card-actions {
   display: flex;
   justify-content: center;
-  gap: 16px;
-  padding: 16px 0;
-  border-radius: 12px;
-  border: 1px solid #eaeaea;
-  background: var(--box-bg-color-light-2);
+  gap: var(--spacing-md);
+  
+  padding: var(--spacing-lg);
+  background: var(--box-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
 }
 
-/* ========= DARK MODE ========= */
+/* Dark Mode */
 @media (prefers-color-scheme: dark) {
-  .account-info-card,
-  .account-actions{
-    background: var(--background-nav-black);
-    border: 1px solid var(--box-border-dark);
-    box-shadow: 0px 2px 10px var(--shadowBlack-color);
+  .account-info-card {
+    background: var(--box-bg-dark);
+    border-color: var(--border-dark);
   }
 
-  .account-user h2,
-  .followers-count,
-  .value{
-    color: #f5f5f5;
+  .account-card-avatar {
+    border-color: var(--primary-color-light);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
   }
 
-  .username,
-  .occupation,
-  .label,
-  .followers-label{
-    color: #aaa;
+  .account-card-name {
+    color: var(--text-primary-dark);
   }
 
-  .account-avatar {
-    border-color: var(--text-color-dark2);
+  .account-verified-badge {
+    color: var(--primary-color-light);
+  }
+
+  .account-card-username,
+  .account-card-occupation {
+    color: var(--text-secondary-dark);
+  }
+
+  .account-followers-count {
+    color: var(--primary-color-light);
+  }
+
+  .account-followers-label {
+    color: var(--text-secondary-dark);
+  }
+
+  .account-member-since {
+    color: var(--text-tertiary-dark);
+  }
+
+  .account-year {
+    color: var(--text-secondary-dark);
+  }
+
+  .account-card-details {
+    border-top-color: var(--border-dark);
+  }
+
+  .account-detail-label {
+    color: var(--text-secondary-dark);
+  }
+
+  .account-detail-icon {
+    color: var(--primary-color-light);
+  }
+
+  .account-detail-value {
+    color: var(--text-primary-dark);
+  }
+
+  .account-plan-badge.free {
+    background: rgba(156, 163, 175, 0.2);
+    color: var(--text-secondary-dark);
+  }
+
+  .account-plan-badge.pro {
+    background: rgba(16, 185, 129, 0.2);
+    color: var(--primary-color-light);
+  }
+
+  .account-card-actions {
+    background: var(--box-bg-dark);
+    border-color: var(--border-dark);
   }
 }
 
-/* ========= RESPONSIVE ========= */
-@media (max-width: 600px) {
+/* Responsive */
+@media (max-width: 768px) {
   .account-info-card {
-    padding: 16px;
+    padding: var(--spacing-lg);
   }
 
-  .account-header {
+  .account-card-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 12px;
   }
 
-  .account-right {
-    align-self: flex-start;
-    text-align: left;
-    display: flex;
-    justify-content: space-between;
+  .account-card-left {
     width: 100%;
-    align-items: flex-end;
   }
 
-  .account-actions {
-    gap: 10px;
-  }
-  .account-container{
-    gap: 12px;
-  }
-
-  .account-header{
-    margin-bottom: -1.7rem;
+  .account-card-right {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
   }
 
+  .account-followers-section {
+    text-align: left;
+  }
+
+  .account-member-since {
+    text-align: right;
+  }
+
+  .account-card-actions {
+    flex-direction: column;
+  }
+
+  .account-card-actions button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 500px) {
+  .account-info-card {
+    padding: var(--spacing-md);
+  }
+
+  .account-card-avatar {
+    width: 60px;
+    height: 60px;
+  }
+
+  .account-card-name {
+    font-size: var(--font-xl);
+  }
+
+  .account-followers-count {
+    font-size: var(--font-2xl);
+  }
+
+  .account-card-actions {
+    padding: var(--spacing-md);
+    gap: var(--spacing-sm);
+  }
 }
