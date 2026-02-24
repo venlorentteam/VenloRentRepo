@@ -11,7 +11,7 @@ function App() {
     {/*<Pages.ClickButton text="Hello" onClick={() => alert('Clicked!')} /> */}
 
     <Routes>
-      <Route path="/" element={<Pages.Login />} />
+        <Route path="/" element={<Pages.LandingPage />} />
       <Route path="/login" element={<Pages.Login />} />
       <Route path="/register" element={<Pages.Register />} />
       <Route path="/dashboard" element={<Pages.Dashboard />} />
