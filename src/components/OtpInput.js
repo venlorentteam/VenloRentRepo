@@ -69,7 +69,6 @@ if (!code.trim() || code.length < length) {
   setErrors(`Please enter the ${length}-digit code sent to your email`)
   return
 }
-
 setErrors("")
 if (onSubmit) {
   onSubmit(e, code)
