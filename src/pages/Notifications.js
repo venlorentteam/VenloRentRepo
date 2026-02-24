@@ -125,7 +125,7 @@ function Notifications() {
           id: 6,
           type: 'system',
           avatar: null,
-          username: "LeasePal",
+          username: "Venlorent",
           handle: "system",
           verified: false,
           action: "System notification",

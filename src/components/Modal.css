@@ -9,10 +9,8 @@
   left: 0;
   right: 0;
   bottom: 0;
-  
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(4px);
-  
   z-index: var(--z-modal-backdrop);
   animation: fadeIn 0.2s ease-out;
 }
@@ -28,13 +26,10 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  
   width: 90%;
   max-width: 450px;
   max-height: 90vh;
-  
   padding: var(--spacing-xl);
-  
   background: var(--box-bg);
   border-radius: var(--radius-xl);
   border: 1px solid var(--border-color);

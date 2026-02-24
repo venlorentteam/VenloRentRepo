@@ -13,7 +13,7 @@ function SideNav() {
     <nav className="side-nav" aria-label="Main navigation">
       {/* Logo */}
       <div className="nav-logo">
-        <img className="logo-img" src="https://i.pravatar.cc/100" alt="LeasePal" />
+        <img className="logo-img" src="https://i.pravatar.cc/100" alt="Venlorent" />
         <span className="logo-text">VenloRent</span>
       </div>
 

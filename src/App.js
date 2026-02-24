@@ -43,6 +43,8 @@ function App() {
       <Route path="/profile" element={<Pages.Profile />} />
       <Route path="/search" element={<Pages.Search />} />
       <Route path="/user" element={<Pages.User />} />
+      <Route path="/terms" element={<Pages.Terms />} />
+      <Route path="/privacy-policy" element={<Pages.PrivacyPolicy />} />
       <Route path="*" element={<Pages.NoMatch />} />
     </Routes>
     </>

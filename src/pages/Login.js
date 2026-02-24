@@ -80,7 +80,7 @@ function Login() {
                             <img 
                                 className="login-hero-image" 
                                 src={leftImg} 
-                                alt="Welcome to LeasePal" 
+                                alt="Welcome to Venlorent" 
                             />
                             <div className="login-hero-text">
                                 <h1 className="login-hero-title">
