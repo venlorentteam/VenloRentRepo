@@ -1,31 +1,200 @@
-.logo-img{
-    /** Assuming the logo is to be a square or circle image **/
-    width: 50px;
-    height: 50px;
-    margin: 10px;
+/* ========================================
+   SIDE NAVIGATION
+   ======================================== */
+.side-nav {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 20%;
+  max-width: 280px;
+  
+  display: flex;
+  flex-direction: column;
+  
+  padding: var(--spacing-xl) var(--spacing-md);
+  background: var(--bg-color);
+  border-right: 1px solid var(--border-color);
+  
+  overflow-y: auto;
+  z-index: var(--z-sticky);
+  transition: all var(--transition-base);
 }
-.logo-text{
-    /** Assuming the logo is to be text **/
-    width: 180px;
-    height: 50px;
-    margin: 10px auto;
-    display: block;
+
+/* Logo Section */
+.nav-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-2xl);
+  padding-bottom: var(--spacing-lg);
+  border-bottom: 1px solid var(--border-color);
 }
-.side-nav{
-    position: fixed;
-    left: 0px;
-    top: 0px;
-    bottom: 0px;
-    width: 20%;
-    border-right: 1px solid var(--primary-opacity);
-    background: transparent;
-    color: var(--primary-color);
-    padding: 30px;
-    text-align: left;
+
+.logo-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--primary-color);
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
 }
-.side-nav a{
-    display: flex;
-    justify-content: flex-start;
+
+.logo-text {
+  font-size: var(--font-lg);
+  font-weight: 800;
+  color: var(--primary-color);
+  letter-spacing: -0.01em;
+}
+
+/* Navigation Links */
+.nav-links {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-lg);
+  
+  font-size: var(--font-base);
+  font-weight: 500;
+  color: var(--text-primary);
+  text-decoration: none;
+  
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  line-height: 1;
+}
+
+.nav-link:hover {
+  background: var(--box-bg-hover);
+  color: var(--primary-color);
+}
+
+.nav-link.active {
+  background: var(--primary-opacity);
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.nav-link:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Nav Icons */
+.nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.nav-text {
+  flex: 1;
+  white-space: nowrap;
+}
+
+/* Profile Avatar */
+.profile-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.nav-link-account:hover .profile-avatar {
+  border-color: var(--primary-color);
+}
+
+/* Bottom Navigation */
+.nav-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  margin-top: auto;
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--border-color);
+}
+
+/* Custom Scrollbar */
+.side-nav::-webkit-scrollbar {
+  width: 6px;
+}
+
+.side-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.side-nav::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-full);
+}
+
+.side-nav::-webkit-scrollbar-thumb:hover {
+  background: var(--text-tertiary);
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  .side-nav {
+    background: var(--bg-color-dark);
+    border-right-color: var(--border-dark);
+  }
+
+  .nav-logo {
+    border-bottom-color: var(--border-dark);
+  }
+
+  .logo-img {
+    border-color: var(--primary-color-light);
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+  }
+
+  .logo-text {
+    color: var(--primary-color-light);
+  }
+
+  .nav-link {
+    color: var(--text-primary-dark);
+  }
+
+  .nav-link:hover {
+    background: var(--box-bg-hover-dark);
+    color: var(--primary-color-light);
+  }
+
+  .nav-link.active {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--primary-color-light);
+  }
+
+  .nav-bottom {
+    border-top-color: var(--border-dark);
+  }
+
+  .profile-avatar {
+    border-color: var(--border-dark);
+  }
+}
+
+/* Responsive - Tablet */
+@media (max-width: 1000px) {
+  .side-nav {
+    width: 80px;
+    max-width: 80px;
+    padding: var(--spacing-lg) var(--spacing-sm);
     align-items: center;
     gap: 10px;
     font-size: var(--font-size-medium);

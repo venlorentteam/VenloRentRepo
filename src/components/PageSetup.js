@@ -1,14 +1,20 @@
 import React from 'react'
 import "./PageSetup.css"
 import { SideNav, IconNav } from '../exports'
-const PageSetup = ({children}) => {
+
+const PageSetup = ({ children }) => {
   return (
     <div className="app">
-      <SideNav />{/*Desktop left-side navigation*/}
+      {/* Desktop Sidebar Navigation */}
+      <SideNav />
+      
+      {/* Main Content Area */}
       <div className="main-area">
         {children}
       </div>
-      <IconNav />{/*Mobile bottom navigation*/}
+      
+      {/* Mobile Bottom Navigation */}
+      <IconNav />
     </div>
   )
 }

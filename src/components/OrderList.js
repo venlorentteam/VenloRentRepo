@@ -1,47 +1,85 @@
 import React from 'react'
 import './OrderList.css'
-//OrderList takes an object prop probably order={}
-function OrderList({order = {}}){
+import { FaChevronRight } from 'react-icons/fa'
+
+/**
+ * OrderList Component
+ * @param {object} order - Order details object
+ * @param {function} onClick - Click handler for the order card
+ */
+function OrderList({ 
+  order = {
+    type: "Rent Order",
+    date: "Jan 15, 2026",
+    time: "10:30 AM",
+    status: "Pending",
+    amount: "₦2,500,000",
+    commission: "₦250,000",
+    no: "ORD-2024-001234",
+    agent: "John Doe Properties"
+  },
+  onClick
+}) {
   const statusClasses = {
-    Completed: "completed",
-    Failed: "failed",
-    Pending: "pending",
+    Completed: "order-status-completed",
+    Failed: "order-status-failed",
+    Pending: "order-status-pending",
+    "Payment Pending": "order-status-payment",
   };
+
   return (
-    <div className='order-container'>
-      {/* list of orders made by user. seen on ACTIVE ORDER PAGE */}
-      <div className="item">
-        <div className="left">
-          <h1>Rent Order</h1>
-          <p className="date-time">{order.date}  {order.time}</p>
+    <div 
+      className="order-card" 
+      onClick={onClick}
+      role="button"
+      tabIndex={0}
+      onKeyPress={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          onClick?.();
+        }
+      }}
+    >
+      {/* Header: Order Type & Status */}
+      <div className="order-header">
+        <div className="order-title-section">
+          <h3 className="order-title">{order.type}</h3>
+          <p className="order-datetime">
+            {order.date} • {order.time}
+          </p>
         </div>
-        <p className={`normal ${statusClasses[order.status] || ""}`}>{order.status}</p>
-      </div>      
-      <hr/>
-      <div className="item">
-        <div className="left">
-          <p className='normal'>Amount</p>
-        </div>
-        <h1>{order.amount}</h1>
-      </div> 
-      <div className="item">
-        <div className="left">
-          <p className='normal'>Commission</p>
-        </div>
-        <h2>{order.commission}</h2>
-      </div> 
-      <div className="item">
-        <div className="left">
-          <p className='normal'>Order No.</p>
-        </div>
-        <h2>{order.no}</h2>
-      </div> 
-       <div className="item">
-        <div className="left">
-          <p className='normal'>Agent</p>
-        </div>
-        <h2>{order.agent}</h2>
+        <span className={`order-status ${statusClasses[order.status] || ""}`}>
+          {order.status}
+        </span>
       </div>
+
+      {/* Divider */}
+      <div className="order-divider" />
+
+      {/* Order Details */}
+      <div className="order-details">
+        <div className="order-row">
+          <span className="order-label">Amount</span>
+          <span className="order-value order-amount">{order.amount}</span>
+        </div>
+
+        <div className="order-row">
+          <span className="order-label">Commission</span>
+          <span className="order-value">{order.commission}</span>
+        </div>
+
+        <div className="order-row">
+          <span className="order-label">Order No.</span>
+          <span className="order-value order-number">{order.no}</span>
+        </div>
+
+        <div className="order-row">
+          <span className="order-label">Agent</span>
+          <span className="order-value">{order.agent}</span>
+        </div>
+      </div>
+
+      {/* Arrow Icon */}
+      <FaChevronRight className="order-chevron" aria-hidden="true" />
     </div>
   )
 }

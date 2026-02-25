@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import './Login.css'
+import './login.css'
 import leftImg from '../assets/img/login-left1.png'
 import axios from 'axios'
 import { PrelimFooter, PrelimHeader, SubmitButton } from '../exports'

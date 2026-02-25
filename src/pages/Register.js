@@ -1,15 +1,18 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import './Register.css'
 import axios from 'axios'
-import { FaRegEyeSlash, FaRegEye} from 'react-icons/fa'
+import leftImg from '../assets/img/Venlo-welcome.png'
+import { FaRegEyeSlash, FaRegEye } from 'react-icons/fa'
 import { PrelimFooter, PrelimHeader, SubmitButton } from '../exports'
 import { MdOutlineMailOutline, MdLockOutline } from 'react-icons/md'
 import { RiAccountPinBoxLine } from 'react-icons/ri'
 import { PiIdentificationBadge } from 'react-icons/pi'
 
 function Register() {
+  const navigate = useNavigate()
   const [showPass, setShowPass] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const [errors, setErrors] = useState({})
   const [formData, setFormData] = useState({
     email: "",
@@ -20,110 +23,249 @@ function Register() {
   
   const handleChange = (e) => {
     const { name, value } = e.target
+    
+    // Update form data
     setFormData(prev => ({ ...prev, [name]: value }))
-     // validate the changed field
+    
+    // Validate the changed field
     let error = ""
     switch (name) {
       case "email":
-        if (!value.trim()) error = "Email is required"
-        else if (!/^\S+@\S+\.\S+$/.test(value)) error = "Invalid email address"
+        if (!value.trim()) {
+          error = "Email is required"
+        } else if (!/^\S+@\S+\.\S+$/.test(value)) {
+          error = "Invalid email address"
+        }
         break
       case "password":
-        if (!value.trim()) error = "Password is required"
-        else if (value.length < 6) error = "Password must be at least 6 characters"
+        if (!value.trim()) {
+          error = "Password is required"
+        } else if (value.length < 6) {
+          error = "Password must be at least 6 characters"
+        }
         break
       case "fullname":
-        if (!value.trim()) error = "Full name is required"
+        if (!value.trim()) {
+          error = "Full name is required"
+        }
         break
       case "username":
-        if (!value.trim()) error = "Username is required"
+        if (!value.trim()) {
+          error = "Username is required"
+        } else if (!/^[a-zA-Z0-9_]+$/.test(value)) {
+          error = "Username can only contain letters, numbers, and underscores"
+        } else if (value.length < 3) {
+          error = "Username must be at least 3 characters"
+        }
         break
       default:
         break
     }
 
-    // update errors state for that field
+    // Update errors state for that field
     setErrors((prev) => ({
       ...prev,
       [name]: error,
     }))
-
   }
-  //Password visibility toggle
+
+  // Password visibility toggle
   const showPassword = () => {
     setShowPass(prev => !prev)
   }
 
-   //check if form has  any or empty required field
+  // Check if form has any errors or empty required fields
   const hasErrors =
     Object.values(errors).some((err) => err) ||
-    Object.values(formData).some((val) => val === "" || val === false)
+    Object.values(formData).some((val) => !val.trim())
 
-  //Handle form submission
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    if (Object.keys(errors).length === 0) {
+    if (!hasErrors) {
+      setIsLoading(true)
       try {
-        const res = await axios.post("http://localhost:4000/api/login", formData)
+        const res = await axios.post("http://localhost:4000/api/register", formData)
         if (res.data.success) {
-          // generate token and navigate() to dashboard
+          // Store token and navigate to dashboard
+          localStorage.setItem('token', res.data.token)
+          navigate('/dashboard')
         }
         console.log(res.data)
       } catch (err) {
-        console.log(err.response?.data?.message || "Error submitting request")
+        setErrors({
+          submit: err.response?.data?.message || "Error creating account. Please try again."
+        })
+        console.error(err)
+      } finally {
+        setIsLoading(false)
       }
     }
   }
 
-const iconLeft = {
-  /** Left positioned descriptive icon for the input **/
-  fontSize: "var(--font-size-medium)",
-  position: "absolute",
-  top: "2.5px",
-  left: "8px",
-  color: "var(--primary-color)"
-}
-const iconRight = {
-  /** Right positioned descriptive icon for the input **/
-  fontSize: "var(--font-size-medium)",
-  position: "absolute",
-  top: "2.5px",
-  right: "8px",
-  color: "var(--primary-color)",
-  cursor: "pointer"
-}
   return (
     <>
-    <div className="register-cont">
-        {/* 
-          <div className="left-side">
-            <img className="left-img" src={leftImg} alt="Welcome" />
-            <h2>Find it. Love it. Rent it.</h2>
-            <p>Skip the stress, find the best...</p>
-          </div> 
-        */}
-        <div className="register">
-          <PrelimHeader pageTitle="Create an account" />
-          <form onSubmit={handleSubmit}>
-            <span className="input-cont"><input className="reg-input" type="text" name="email" placeholder="Email" value={formData.email} onChange={handleChange} /><MdOutlineMailOutline style={iconLeft} /></span>
-            {errors.email && <span className='error'>{errors.email}</span>}
-            <span className="input-cont"><input className="reg-input" type={showPass ? "text" : "password"} name="password" placeholder="Password" value={formData.password} onChange={handleChange} /><MdLockOutline style={iconLeft} /><span style={iconRight} onClick={showPassword}>{showPass ? <FaRegEye /> : <FaRegEyeSlash />}</span></span>
-            {errors.password && <span className='error'>{errors.password}</span>}
-            <span className="input-cont"><input className="reg-input" type="text" name="fullname" placeholder="Full Name" value={formData.fullname} onChange={handleChange} /><RiAccountPinBoxLine style={iconLeft} /></span>
-            {errors.fullname && <span className='error'>{errors.fullname}</span>}
-            <span className="input-cont"><input className="reg-input" type="text" name="username" placeholder="Username" value={formData.username} onChange={handleChange} /><PiIdentificationBadge style={iconLeft} /></span>
-            {errors.username && <span className='error'>{errors.username}</span>}
-            <span className="check-cont">
-              {/* <input type="checkbox" name="agree" /> */}
-              <p className="regular-texts">By signing up, you agree to NewProduct's <Link to="/terms">User Agreement</Link> and <Link to="/privacy-policy">Privacy Policy</Link>.</p>
-            </span>
-            <SubmitButton text="Sign up" disabled={hasErrors} />
-            <p className='regular-texts' style={{textAlign: 'center'}}>Have an account? <Link to="/login">Log in</Link></p>
-          </form>
+      <div className="register-page">
+        <div className="register-container">
+          {/* Left Side - Hero Section */}
+          <div className="register-hero">
+            <div className="register-hero-content">
+              <img 
+                className="register-hero-image" 
+                src={leftImg} 
+                alt="Welcome to LeasePal" 
+              />
+              <div className="register-hero-text">
+                <h1 className="register-hero-title">
+                  Join VenloRent Today
+                </h1>
+                <p className="register-hero-subtitle">
+                  Connect with trusted agents and find your perfect home in minutes.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Side - Registration Form */}
+          <div className="register-form-section">
+            <div className="register-form-container">
+              <PrelimHeader pageTitle="Create an account" />
+              
+              <form onSubmit={handleSubmit} className="register-form">
+                {/* Email Input */}
+                <div className="form-group">
+                  <label htmlFor="email" className="form-label">Email address</label>
+                  <div className="input-wrapper">
+                    <MdOutlineMailOutline className="input-icon-left" />
+                    <input
+                      id="email"
+                      className={`form-input ${errors.email ? 'input-error' : ''}`}
+                      type="email"
+                      name="email"
+                      placeholder="Enter your email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      autoComplete="email"
+                      disabled={isLoading}
+                    />
+                  </div>
+                  {errors.email && (
+                    <span className="error-message">{errors.email}</span>
+                  )}
+                </div>
+
+                {/* Password Input */}
+                <div className="form-group">
+                  <label htmlFor="password" className="form-label">Password</label>
+                  <div className="input-wrapper">
+                    <MdLockOutline className="input-icon-left" />
+                    <input
+                      id="password"
+                      className={`form-input ${errors.password ? 'input-error' : ''}`}
+                      type={showPass ? "text" : "password"}
+                      name="password"
+                      placeholder="Create a password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      autoComplete="new-password"
+                      disabled={isLoading}
+                    />
+                    <button
+                      type="button"
+                      className="input-icon-right"
+                      onClick={showPassword}
+                      aria-label={showPass ? "Hide password" : "Show password"}
+                    >
+                      {showPass ? <FaRegEye /> : <FaRegEyeSlash />}
+                    </button>
+                  </div>
+                  {errors.password && (
+                    <span className="error-message">{errors.password}</span>
+                  )}
+                </div>
+
+                {/* Full Name Input */}
+                <div className="form-group">
+                  <label htmlFor="fullname" className="form-label">Full Name</label>
+                  <div className="input-wrapper">
+                    <RiAccountPinBoxLine className="input-icon-left" />
+                    <input
+                      id="fullname"
+                      className={`form-input ${errors.fullname ? 'input-error' : ''}`}
+                      type="text"
+                      name="fullname"
+                      placeholder="Enter your full name"
+                      value={formData.fullname}
+                      onChange={handleChange}
+                      autoComplete="name"
+                      disabled={isLoading}
+                    />
+                  </div>
+                  {errors.fullname && (
+                    <span className="error-message">{errors.fullname}</span>
+                  )}
+                </div>
+
+                {/* Username Input */}
+                <div className="form-group">
+                  <label htmlFor="username" className="form-label">Username</label>
+                  <div className="input-wrapper">
+                    <PiIdentificationBadge className="input-icon-left" />
+                    <input
+                      id="username"
+                      className={`form-input ${errors.username ? 'input-error' : ''}`}
+                      type="text"
+                      name="username"
+                      placeholder="Choose a username"
+                      value={formData.username}
+                      onChange={handleChange}
+                      autoComplete="username"
+                      disabled={isLoading}
+                    />
+                  </div>
+                  {errors.username && (
+                    <span className="error-message">{errors.username}</span>
+                  )}
+                </div>
+
+                {/* Terms Agreement */}
+                <div className="terms-agreement">
+                  <p className="terms-text">
+                    By signing up, you agree to LeasePal's{' '}
+                    <Link to="/terms" className="terms-link">User Agreement</Link>
+                    {' '}and{' '}
+                    <Link to="/privacy-policy" className="terms-link">Privacy Policy</Link>.
+                  </p>
+                </div>
+
+                {/* Submit Error */}
+                {errors.submit && (
+                  <div className="submit-error">
+                    {errors.submit}
+                  </div>
+                )}
+
+                {/* Submit Button */}
+                <SubmitButton 
+                  text={isLoading ? "Creating account..." : "Sign up"} 
+                  disabled={hasErrors || isLoading}
+                  isLoading={isLoading}
+                />
+
+                {/* Login Link */}
+                <p className="login-prompt">
+                  Already have an account?{' '}
+                  <Link to="/login" className="login-link">
+                    Log in
+                  </Link>
+                </p>
+              </form>
+            </div>
+          </div>
         </div>
-    </div>
-   <PrelimFooter />
+      </div>
+      <PrelimFooter />
     </>
   )
 }

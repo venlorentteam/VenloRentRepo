@@ -1,4 +1,4 @@
-// 🚀 Auto-generated exports.js file
+//  Auto-generated exports.js file
 
 // ==== COMPONENTS ====
 export { default as AccountInfoCard } from "./components/AccountInfoCard";
@@ -29,7 +29,9 @@ export { default as TabbedNav } from "./components/TabbedNav";
 export { default as UpgradeWidget } from "./components/UpgradeWidget";
 
 // ==== PAGES ====
+export { default as AboutSettings } from "./pages/AboutSettings";
 export { default as Account } from "./pages/Account";
+export { default as AccountSettings } from "./pages/AccountSettings";
 export { default as ActiveOrders } from "./pages/ActiveOrders";
 export { default as AllOrders } from "./pages/AllOrders";
 export { default as Bookmarks } from "./pages/Bookmarks";
@@ -44,19 +46,25 @@ export { default as Faq } from "./pages/Faq";
 export { default as Followers } from "./pages/Followers";
 export { default as Following } from "./pages/Following";
 export { default as ForYou } from "./pages/ForYou";
+export { default as HelpSettings } from "./pages/HelpSettings";
 export { default as Home } from "./pages/Home";
 export { default as Inbox } from "./pages/Inbox";
+export { default as LandingPage } from "./pages/LandingPage";
 export { default as Login } from "./pages/Login";
 export { default as Logout } from "./pages/Logout";
 export { default as NoMatch } from "./pages/NoMatch";
 export { default as Notifications } from "./pages/Notifications";
+export { default as NotificationSettings } from "./pages/NotificationSettings";
 export { default as Orders } from "./pages/Orders";
 export { default as PasswordRecovery } from "./pages/PasswordRecovery";
 export { default as PasswordReset } from "./pages/PasswordReset";
 export { default as Profile } from "./pages/Profile";
 export { default as Register } from "./pages/Register";
 export { default as Search } from "./pages/Search";
+export { default as SecuritySettings } from "./pages/SecuritySettings";
+export { default as SubscriptionSettings } from "./pages/SubscriptionSettings";
 export { default as User } from "./pages/User";
+export { default as VerificationSettings } from "./pages/VerificationSettings";
 
 // ==== PRELIM ====
 export { default as PrelimFooter } from "./components/Prelim/PrelimFooter";
