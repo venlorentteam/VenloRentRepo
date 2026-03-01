@@ -190,7 +190,7 @@
 }
 
 /* Responsive - Tablet */
-@media (max-width: 1000px) {
+@media (max-width: 1000px){
   .side-nav {
     width: 80px;
     max-width: 80px;
@@ -206,27 +206,28 @@
     width: 100%;
     line-height: 1;
     transition: .3s;
-}
-.side-nav a.active{
-    font-weight: bold;
-    background: var(--input-bg-focus)
-}
-.side-nav a:hover{
-    background: var(--input-bg-focus)
-}
-.side-nav a .icon{
-    font-size: var(--font-size-big);
-    align-self: center;
-}
-.side-nav a .link{
-    align-self: center;
-}
-/* Styling for user display picture */
-.side-nav a .profile-img{
-    align-self: center;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
+  }
+  .side-nav a.active{
+      font-weight: bold;
+      background: var(--input-bg-focus)
+  }
+  .side-nav a:hover{
+      background: var(--input-bg-focus)
+  }
+  .side-nav a .icon{
+      font-size: var(--font-size-big);
+      align-self: center;
+  }
+  .side-nav a .link{
+      align-self: center;
+  }
+  /* Styling for user display picture */
+  .side-nav a .profile-img{
+      align-self: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+  }
 }
 @media(prefers-color-scheme: dark){
     .side-nav a{

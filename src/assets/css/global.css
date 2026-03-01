@@ -151,7 +151,7 @@
 /* ========================================
    DARK MODE
    ======================================== */
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: dark){
   :root {
     /* Override colors for dark mode */
     --bg-color: var(--bg-color-dark);
@@ -184,28 +184,29 @@
 }
 
 /* Light mode defaults */
-:root{
-  --bg-color: var(--bg-color-light);
-  --bg-secondary: var(--bg-secondary-light);
-  --box-bg: var(--box-bg-light);
-  --box-bg-hover: var(--box-bg-hover-light);
-  
-  --text-primary: var(--text-primary-light);
-  --text-secondary: var(--text-secondary-light);
-  --text-tertiary: var(--text-tertiary-light);
-  
-  --border-color: var(--border-light);
-  --input-bg: var(--input-bg-light);
-  --input-border: var(--input-border-light);
-  --input-focus-bg: var(--input-focus-light);
-  
-  --nav-bg: var(--nav-bg-light);
-  --nav-hover: var(--nav-hover-light);
-  
-  --button-secondary-bg: var(--button-secondary-bg-light);
-  --button-secondary-text: var(--button-secondary-text-light);
+@media (prefers-color-scheme: light){
+  :root{
+    --bg-color: var(--bg-color-light);
+    --bg-secondary: var(--bg-secondary-light);
+    --box-bg: var(--box-bg-light);
+    --box-bg-hover: var(--box-bg-hover-light);
+    
+    --text-primary: var(--text-primary-light);
+    --text-secondary: var(--text-secondary-light);
+    --text-tertiary: var(--text-tertiary-light);
+    
+    --border-color: var(--border-light);
+    --input-bg: var(--input-bg-light);
+    --input-border: var(--input-border-light);
+    --input-focus-bg: var(--input-focus-light);
+    
+    --nav-bg: var(--nav-bg-light);
+    --nav-hover: var(--nav-hover-light);
+    
+    --button-secondary-bg: var(--button-secondary-bg-light);
+    --button-secondary-text: var(--button-secondary-text-light);
+  }
 }
-
 /* ========================================
    FONT FACES
    ======================================== */

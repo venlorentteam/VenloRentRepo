@@ -2,6 +2,7 @@
 // ========================================
 import React from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
+import { useAuth } from "../context/AuthProvider";
 import { FiUser, FiBell, FiShield, FiHelpCircle } from 'react-icons/fi'
 import { MdOutlineWorkspacePremium, MdVerifiedUser } from 'react-icons/md'
 import { HiOutlineExclamationCircle } from "react-icons/hi2"
@@ -9,7 +10,14 @@ import { LiaAngleRightSolid } from "react-icons/lia"
 import './SettingsMenu.css'
 import { IoLogOutOutline } from "react-icons/io5"
 
+// ========================================
+// Settings Menu Component for Account Settings Page
+// ========================================
+
+
 const SettingsMenu = () => {
+  //Call useAuth to get user info and logout function
+  const { logout } = useAuth();
   const location = useLocation()
   const settingsMenu = [
     { id: 'account', label: 'Account', icon: FiUser, description: 'Edit profile, change password' },
@@ -56,7 +64,7 @@ const SettingsMenu = () => {
       })}
 
       {/* Logout Button */}
-      <button className="logout-button" onClick={handleLogout}>
+      <button className="logout-button" onClick={logout}>
         <span className="left-side">
           <IoLogOutOutline className="left-icon"/>
           <span className="setting-text">

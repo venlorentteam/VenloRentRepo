@@ -147,12 +147,13 @@ function Register() {
 
         const res = await axios.post("http://localhost:4000/auth/register", payload)
         if (res.data.success) {
-          // Store token and navigate to dashboard
-          localStorage.setItem('token', res.data.token)
-          if (payload.role === "agent") navigate('/kyc')
-          navigate('/dashboard')
+          navigate('/email-auth', {
+            state: { 
+              email: res.data.user.email,
+              role: res.data.user.role,
+            }
+          })
         }
-        console.log(res.data)
       } catch (err) {
         setErrors({
           submit: err.response?.data?.message || "Error creating account. Please try again."

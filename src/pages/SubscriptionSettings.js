@@ -1,6 +1,7 @@
+// ========================================
 // Settings/SubscriptionSettings.js
 // ========================================
-import React from 'react'
+
 import { ClickButton, UpgradeWidget } from '../exports'
 import { FiCheck } from 'react-icons/fi'
 

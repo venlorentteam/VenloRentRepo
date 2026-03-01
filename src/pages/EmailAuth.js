@@ -1,24 +1,29 @@
 
-import { Link } from 'react-router-dom'
+import { useState } from 'react'
 import './EmailAuth.css'
 import axios from 'axios'
 import { PrelimFooter, PrelimHeader, OtpInput } from '../exports'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 function EmailAuth(){
-
-const handleSubmit = async (e, otp) => {
-  e.preventDefault()
-  try{
-    const res = await axios.post("http://localhost:4000/api/email-auth", {otp})
-    if(res.data.success){
-      //validation successful,
+  const [errors, setErrors] = useState()
+  const { state } = useLocation()
+  const navigate = useNavigate()
+  const handleSubmit = async (e, otp) => {
+    e.preventDefault()
+    try{
+      const res = await axios.post("http://localhost:4000/auth/email-verify", {email: state?.email, otp})
+      if(res.data.success){//validation successful
+        localStorage.setItem("token", res.data.token);
+        const nextPath = state?.role === "agent" ? "/kyc" : "/dashboard"
+        navigate(nextPath)
+      }
+      console.log(res.data)
     }
-    console.log(res.data)
+    catch(err){
+      setErrors(err.response?.data?.message || "Error proccessing OTP")
+    }
   }
-  catch(err){
-    console.log(err.response?.data?.message || "Error submitting request")
-  }
-}
 
   return (
     <>

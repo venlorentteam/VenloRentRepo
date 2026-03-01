@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useAuth } from "../context/AuthProvider"
 import leftImg from '../assets/img/Venlo-welcome.png'
-import axios from 'axios'
 import { PrelimFooter, PrelimHeader, SubmitButton } from '../exports'
 import { MdOutlineMailOutline, MdLockOutline } from 'react-icons/md'
 import { FaRegEyeSlash, FaRegEye } from 'react-icons/fa'
 import './login.css'
 
 function Login() {
+    const { login } = useAuth();
+    const navigate = useNavigate();
     const [showPass, setShowPass] = useState(false)
     const [errors, setErrors] = useState({})
     const [isLoading, setIsLoading] = useState(false)
@@ -52,18 +54,10 @@ function Login() {
         if (Object.keys(formErrors).length === 0) {
             setIsLoading(true)
             try {
-                const res = await axios.post("http://localhost:4000/api/login", formData)
-                if (res.data.success) {
-                    // Generate token and navigate to dashboard
-                    // localStorage.setItem('token', res.data.token)
-                    // navigate('/dashboard')
-                }
-                console.log(res.data)
+                await login(formData.email, formData.password);
+                navigate("/dashboard");
             } catch (err) {
-                setErrors({ 
-                    submit: err.response?.data?.message || "Error logging in. Please try again." 
-                })
-                console.error(err)
+                setErrors(prev => ({ ...prev, submit: err.response?.data?.message || err.message || "Login failed" }));
             } finally {
                 setIsLoading(false)
             }

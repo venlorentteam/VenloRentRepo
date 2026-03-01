@@ -2,7 +2,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const baseDirs = ["src/components", "src/pages", "src/components/Prelim"];
+const baseDirs = ["src/components", "src/pages", "src/components/Prelim", "src/context"];
 const outputFile = "src/exports.js";
 
 let content = "// 🚀 Auto-generated exports.js file\n\n";

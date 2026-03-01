@@ -1,4 +1,4 @@
-//  Auto-generated exports.js file
+// 🚀 Auto-generated exports.js file
 
 // ==== COMPONENTS ====
 export { default as AccountInfoCard } from "./components/AccountInfoCard";
@@ -18,6 +18,7 @@ export { default as OrderList } from "./components/OrderList";
 export { default as OtpInput } from "./components/OtpInput";
 export { default as PageSetup } from "./components/PageSetup";
 export { default as PropertyCard } from "./components/PropertyCard";
+export { default as ProtectedRoute } from "./components/ProtectedRoute";
 export { default as SearchBar } from "./components/SearchBar";
 export { default as SearchDisplayCard } from "./components/SearchDisplayCard";
 export { default as Section } from "./components/Section";
@@ -47,11 +48,9 @@ export { default as Followers } from "./pages/Followers";
 export { default as Following } from "./pages/Following";
 export { default as ForYou } from "./pages/ForYou";
 export { default as HelpSettings } from "./pages/HelpSettings";
-export { default as Home } from "./pages/Home";
 export { default as Inbox } from "./pages/Inbox";
 export { default as LandingPage } from "./pages/LandingPage";
 export { default as Login } from "./pages/Login";
-export { default as Logout } from "./pages/Logout";
 export { default as NoMatch } from "./pages/NoMatch";
 export { default as Notifications } from "./pages/Notifications";
 export { default as NotificationSettings } from "./pages/NotificationSettings";
@@ -71,4 +70,7 @@ export { default as VerificationSettings } from "./pages/VerificationSettings";
 // ==== PRELIM ====
 export { default as PrelimFooter } from "./components/Prelim/PrelimFooter";
 export { default as PrelimHeader } from "./components/Prelim/PrelimHeader";
+
+// ==== CONTEXT ====
+export { default as AuthProvider } from "./context/AuthProvider";
 
