@@ -1,6 +1,6 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-
+import { Routes, Route } from 'react-router-dom'
+import AuthProvider from './context/AuthProvider'
 // Import *everything* from your new exports.js file
 import * as Pages from './exports';
 
@@ -9,9 +9,9 @@ function App() {
   return (
     <>
     {/*<Pages.ClickButton text="Hello" onClick={() => alert('Clicked!')} /> */}
-    <Pages.AuthProvider>
+    <AuthProvider>
       <Routes>
-          <Route path="/" element={<Pages.LandingPage />} />
+        <Route path="/" element={<Pages.LandingPage />} />
         <Route path="/login" element={<Pages.Login />} />
         <Route path="/register" element={<Pages.Register />} />
         <Route path="/dashboard" element={<Pages.ProtectedRoute><Pages.Dashboard /></Pages.ProtectedRoute>} />
@@ -47,7 +47,7 @@ function App() {
         <Route path="/privacy-policy" element={<Pages.PrivacyPolicy />} />
         <Route path="*" element={<Pages.NoMatch />} />
       </Routes>
-    </Pages.AuthProvider>
+    </AuthProvider>
     </>
   );
 }
