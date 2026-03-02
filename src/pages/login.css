@@ -174,10 +174,14 @@
 
 .input-error {
     border-color: var(--danger-color);
+    background:
+        linear-gradient(0deg, rgba(239, 68, 68, 0.04), rgba(239, 68, 68, 0.04)),
+        var(--input-bg);
 }
 
 .input-error:focus {
-    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+    border-color: var(--danger-color);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.18);
 }
 
 /* Input Icons */
@@ -225,25 +229,146 @@
 }
 
 /* ========================================
-   ERROR MESSAGES
+   TOAST NOTIFICATIONS
    ======================================== */
-.error-message {
-    display: block;
-    margin-top: var(--spacing-xs);
-    font-size: var(--font-xs);
-    color: var(--danger-color);
-    font-weight: 500;
+
+/* ── Keyframes ── */
+@keyframes toastSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
 }
 
+@keyframes toastCountdown {
+    from { width: 100%; }
+    to   { width: 0%; }
+}
+
+/* ── Shared toast base ── */
+.error-message,
+.submit-error,
+.submit-success {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #ffffff;
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.06),
+        0 8px 24px rgba(0, 0, 0, 0.10),
+        0 0 0 1px rgba(0, 0, 0, 0.05);
+    animation: toastSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+    font-family: inherit;
+    line-height: 1.45;
+}
+
+/* ── Countdown progress bar (bottom) ── */
+.error-message::after,
+.submit-error::after,
+.submit-success::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    animation: toastCountdown 4s linear both;
+}
+
+/* ── Left accent stripe ── */
+.error-message::before,
+.submit-error::before,
+.submit-success::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+}
+
+/* ── Field-level inline error ── */
+.error-message {
+    display: flex;
+    align-items: center;
+    margin-top: 6px;
+    padding: 9px 14px 12px 16px;
+    font-size: var(--font-xs);
+    font-weight: 500;
+    color: #b91c1c;
+}
+
+.error-message::before {
+    background: #ef4444;
+    border-radius: 10px 0 0 10px;
+}
+
+.error-message::after {
+    background: #ef4444;
+    border-radius: 0;
+}
+
+/* ── Submit-level error ── */
 .submit-error {
-    padding: var(--spacing-sm) var(--spacing-md);
+    display: flex;
+    align-items: center;
+    gap: 10px;
     margin-bottom: var(--spacing-md);
-    background-color: rgba(239, 68, 68, 0.1);
-    border: 1px solid var(--danger-color);
-    border-radius: var(--radius-md);
-    color: var(--danger-color);
+    padding: 13px 16px 16px 18px;
     font-size: var(--font-sm);
-    text-align: center;
+    font-weight: 500;
+    color: #991b1b;
+}
+
+.submit-error::before {
+    background: #ef4444;
+    border-radius: 10px 0 0 10px;
+}
+
+.submit-error::after {
+    background: #ef4444;
+    border-radius: 0;
+}
+
+/* ── Submit-level success ── */
+.submit-success {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: var(--spacing-md);
+    padding: 13px 16px 16px 18px;
+    font-size: var(--font-sm);
+    font-weight: 500;
+    color: #065f46;
+}
+
+.submit-success::before {
+    background: #10b981;
+    border-radius: 10px 0 0 10px;
+}
+
+.submit-success::after {
+    background: #10b981;
+    border-radius: 0;
+}
+
+/* ── Dark mode ── */
+@media (prefers-color-scheme: dark) {
+    .error-message,
+    .submit-error,
+    .submit-success {
+        background: #1e293b;
+        box-shadow:
+            0 2px 4px rgba(0, 0, 0, 0.3),
+            0 8px 24px rgba(0, 0, 0, 0.4),
+            0 0 0 1px rgba(255, 255, 255, 0.06);
+    }
+    .error-message  { color: #fca5a5; }
+    .submit-error   { color: #fca5a5; }
+    .submit-success { color: #6ee7b7; }
 }
 
 /* ========================================
@@ -384,7 +509,7 @@
 
     .login-hero-subtitle {
         font-size: var(--font-sm);
-        display: none; /* Hide on very small screens */
+        display: none;
     }
 
     .login-form-section {
@@ -423,7 +548,6 @@
     }
 }
 
-/* Focus visible for keyboard navigation */
 .form-input:focus-visible {
     outline: 2px solid var(--primary-color);
     outline-offset: 2px;
