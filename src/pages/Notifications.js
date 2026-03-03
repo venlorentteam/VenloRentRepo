@@ -328,7 +328,7 @@ function Notifications() {
                   <div className="notification-actions">
                     {!notification.read && (
                       <button 
-                        className="action-btn read-btn"
+                        className="notification-action-btn read-btn"
                         onClick={() => markAsRead(notification.id)}
                         title="Mark as read"
                       >
@@ -336,7 +336,7 @@ function Notifications() {
                       </button>
                     )}
                     <button 
-                      className="action-btn delete-btn"
+                      className="notification-action-btn delete-btn"
                       onClick={() => deleteNotification(notification.id)}
                       title="Delete notification"
                     >

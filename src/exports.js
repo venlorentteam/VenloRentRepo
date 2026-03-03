@@ -57,6 +57,7 @@ export { default as NotificationSettings } from "./pages/NotificationSettings";
 export { default as Orders } from "./pages/Orders";
 export { default as PasswordRecovery } from "./pages/PasswordRecovery";
 export { default as PasswordReset } from "./pages/PasswordReset";
+export { default as PrelimHelp } from "./pages/PrelimHelp";
 export { default as PrivacyPolicy } from "./pages/PrivacyPolicy";
 export { default as Profile } from "./pages/Profile";
 export { default as Register } from "./pages/Register";
@@ -68,6 +69,7 @@ export { default as User } from "./pages/User";
 export { default as VerificationSettings } from "./pages/VerificationSettings";
 
 // ==== PRELIM ====
+export { default as LandingPageHeader } from "./components/Prelim/LandingPageHeader";
 export { default as PrelimFooter } from "./components/Prelim/PrelimFooter";
 export { default as PrelimHeader } from "./components/Prelim/PrelimHeader";
 

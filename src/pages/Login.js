@@ -103,7 +103,7 @@ function Login() {
                                         <input
                                             id="email"
                                             className={`form-input ${errors.email ? 'input-error' : ''}`}
-                                            type="email"
+                                            type="text"
                                             name="email"
                                             placeholder="Enter your email"
                                             value={formData.email}

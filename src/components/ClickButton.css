@@ -4,14 +4,11 @@
   align-items: center;
   justify-content: center;
   gap: var(--spacing-sm);
-  
-  font-family: inherit;
   font-weight: 600;
   border: none;
   cursor: pointer;
   transition: all var(--transition-base);
   white-space: nowrap;
-  
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
 }
@@ -40,7 +37,7 @@
 
 /* Primary Variant (Default) */
 .click-button.primary {
-  color: var(--white-color);
+  color: var(--button-primary-text);
   background: linear-gradient(
     135deg,
     var(--primary-color) 0%,
@@ -97,7 +94,7 @@
 /* Danger Variant (for destructive actions) */
 .click-button.danger {
   background: var(--danger-color);
-  color: var(--white-color);
+  color: var(--button-primary-text);
 }
 
 .click-button.danger:hover:not(.disabled) {
@@ -130,7 +127,7 @@
   width: 14px;
   height: 14px;
   border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: var(--white-color);
+  border-top-color: var(--input-border-light);
   border-radius: 50%;
   animation: spin 0.6s linear infinite;
 }

@@ -148,7 +148,11 @@ function CreateList(){
           </div>
           <div className={`empty-container ${amount ? "show-feature" : ""}`}>
             <div className="content-feature">
-              <input type="number" name="amount" className="location-input" placeholder="0.00" />
+              <input type="number" 
+                name="amount" 
+                className="location-input" 
+                placeholder="0.00" 
+              />
             </div>
           </div>
         </div>

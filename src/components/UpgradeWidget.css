@@ -4,17 +4,15 @@
 .upgrade-widget {
   width: 100%;
   max-width: 400px;
-  
   padding: var(--spacing-2xl);
-  
   background: linear-gradient(
     135deg,
     var(--primary-color) 0%,
     var(--primary-color-dark) 100%
   );
+  background: var(--box-bg);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-lg);
-  
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -88,7 +86,7 @@
 .upgrade-title {
   font-size: var(--font-2xl);
   font-weight: 800;
-  color: var(--white-color);
+  color: var(--text-primary);
   margin: 0 0 var(--spacing-md) 0;
   position: relative;
   z-index: 1;
@@ -97,7 +95,7 @@
 .upgrade-text {
   font-size: var(--font-sm);
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
   margin: 0 0 var(--spacing-lg) 0;
   position: relative;
   z-index: 1;
@@ -149,15 +147,14 @@
   width: 100%;
   position: relative;
   z-index: 1;
-  
-  background: var(--white-color) !important;
-  color: var(--primary-color) !important;
+  /* background: var(--white-color) !important;
+  color: var(--primary-color) !important; */
   font-weight: 700;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .upgrade-widget button:hover {
-  background: rgba(255, 255, 255, 0.95) !important;
+  /* background: rgba(255, 255, 255, 0.95) !important; */
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
 }

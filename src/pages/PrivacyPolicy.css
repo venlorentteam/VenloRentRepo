@@ -1,0 +1,184 @@
+/* Privacy page styles
+   Reuses global tokens from: src/assets/css/global.css (:root variables)
+   Reuses utility classes from: src/assets/css/global.css (.btn, .card)
+   Keeps the same legal layout pattern as Terms for consistency.
+*/
+.privacy-page {
+  background:
+    radial-gradient(circle at 0% 0%, rgba(16, 185, 129, 0.12), transparent 42%),
+    radial-gradient(circle at 100% 20%, rgba(59, 130, 246, 0.08), transparent 40%),
+    var(--bg-color);
+  min-height: 100vh;
+}
+
+.privacy-page .legal-main {
+  width: min(1120px, 92%);
+  margin: var(--spacing-xl) auto var(--spacing-2xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.privacy-page .legal-hero {
+  background: var(--box-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-xl);
+}
+
+.privacy-page .legal-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-full);
+  background: rgba(59, 130, 246, 0.12);
+  color: #2563eb;
+  font-size: var(--font-sm);
+  font-weight: 700;
+}
+
+.privacy-page .legal-hero h1 {
+  margin-top: var(--spacing-sm);
+  font-size: clamp(1.8rem, 2.8vw, 2.6rem);
+  line-height: 1.2;
+}
+
+.privacy-page .legal-hero p {
+  margin-top: var(--spacing-sm);
+  color: var(--text-secondary);
+  max-width: 70ch;
+}
+
+.privacy-page .legal-meta {
+  margin-top: var(--spacing-md);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  color: var(--text-secondary);
+  font-size: var(--font-sm);
+}
+
+.privacy-page .legal-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: var(--spacing-md);
+}
+
+.privacy-page .legal-toc {
+  position: sticky;
+  top: 90px;
+  height: fit-content;
+}
+
+.privacy-page .legal-toc h2 {
+  font-size: var(--font-base);
+  margin-bottom: var(--spacing-sm);
+}
+
+.privacy-page .legal-toc a {
+  display: block;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-size: var(--font-sm);
+}
+
+.privacy-page .legal-toc a:hover {
+  background: rgba(59, 130, 246, 0.12);
+  color: #2563eb;
+}
+
+.privacy-page .legal-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.privacy-page .legal-content section {
+  margin: 0;
+  padding: 0;
+}
+
+.privacy-page .legal-content h2 {
+  font-size: var(--font-xl);
+  margin-bottom: var(--spacing-sm);
+}
+
+.privacy-page .legal-content p,
+.privacy-page .legal-content li {
+  color: var(--text-secondary);
+}
+
+.privacy-page .legal-content ul {
+  padding-left: 1.25rem;
+  display: grid;
+  gap: var(--spacing-xs);
+}
+
+.privacy-page .legal-cta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.privacy-page .legal-cta p {
+  color: var(--text-secondary);
+}
+
+.privacy-page .legal-cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+/* Badge variants used by PrivacyPolicy tables.
+   Base .badge style comes from: src/assets/css/global.css */
+.privacy-page .badge-green {
+  background: var(--success-pale);
+  color: var(--success-color);
+  border: 1px solid color-mix(in srgb, var(--success-color) 30%, transparent);
+}
+
+.privacy-page .badge-red {
+  background: var(--danger-pale);
+  color: var(--danger-color);
+  border: 1px solid color-mix(in srgb, var(--danger-color) 30%, transparent);
+}
+
+.privacy-page .badge-gold {
+  background: var(--warning-pale);
+  color: var(--warning-color);
+  border: 1px solid color-mix(in srgb, var(--warning-color) 30%, transparent);
+}
+
+.privacy-page .badge-gray {
+  background: color-mix(in srgb, var(--border-color) 20%, transparent);
+  color: var(--text-secondary);
+  border: 1px solid color-mix(in srgb, var(--text-secondary) 25%, transparent);
+}
+
+@media (max-width: 980px) {
+  .privacy-page .legal-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .privacy-page .legal-toc {
+    position: static;
+  }
+}
+
+@media (max-width: 640px) {
+  .privacy-page .legal-main {
+    width: 94%;
+    margin-top: var(--spacing-md);
+  }
+
+  .privacy-page .legal-hero,
+  .privacy-page .legal-toc,
+  .privacy-page .legal-content,
+  .privacy-page .legal-cta {
+    padding: var(--spacing-md);
+  }
+}
