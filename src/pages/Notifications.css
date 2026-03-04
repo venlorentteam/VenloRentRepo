@@ -300,9 +300,11 @@
   flex-shrink: 0;
 }
 
-.action-btn {
+.notification-action-btn {
   width: 36px;
   height: 36px;
+  aspect-ratio: 1 / 1;
+  padding: 0;
   border-radius: 50%;
   border: 1px solid var(--border-color);
   background: transparent;
@@ -311,10 +313,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  line-height: 1;
   transition: all var(--transition-fast);
 }
 
-.action-btn:hover {
+.notification-action-btn:hover {
   background: var(--box-bg-hover);
   border-color: var(--primary-color);
 }
@@ -465,7 +468,7 @@
     gap: var(--spacing-xs);
   }
 
-  .action-btn {
+  .notification-action-btn {
     width: 32px;
     height: 32px;
     font-size: 0.875rem;
@@ -531,7 +534,7 @@
     gap: var(--spacing-xs);
   }
 
-  .action-btn {
+  .notification-action-btn {
     width: 28px;
     height: 28px;
   }
@@ -627,11 +630,11 @@
     color: var(--primary-color-light);
   }
 
-  .action-btn {
+  .notification-action-btn {
     border-color: var(--border-dark);
   }
 
-  .action-btn:hover {
+  .notification-action-btn:hover {
     background: var(--box-bg-hover-dark);
     border-color: var(--primary-color);
   }
@@ -673,7 +676,7 @@
 @media (prefers-reduced-motion: reduce) {
   .notification-item,
   .notification-property-preview,
-  .action-btn,
+  .notification-action-btn,
   .filter-btn,
   .mark-all-read-btn {
     transition: none;
@@ -688,7 +691,7 @@
     background: var(--bg-secondary);
   }
 
-  .action-btn:hover {
+  .notification-action-btn:hover {
     background: transparent;
   }
 }

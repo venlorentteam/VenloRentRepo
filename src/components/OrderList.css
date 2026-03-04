@@ -3,14 +3,11 @@
    ======================================== */
 .order-card {
   position: relative;
-  
   padding: var(--spacing-lg);
   margin-bottom: var(--spacing-md);
-  
   background: var(--box-bg);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  
   cursor: pointer;
   transition: all var(--transition-base);
   box-shadow: var(--shadow-sm);

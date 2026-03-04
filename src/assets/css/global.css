@@ -91,7 +91,9 @@
   --warning-color: #f59e0b; /* Amber */
   --danger-color: #ef4444; /* Red */
   --info-color: #3b82f6; /* Blue */
-  
+  --success-pale: rgba(16, 185, 129, 0.066);
+  --warning-pale: rgba(245, 159, 11, 0.087);
+  --danger-pale: rgba(239, 68, 68, 0.084);
   /* ========================================
      SHADOWS
      ======================================== */
@@ -445,7 +447,45 @@ input, textarea, select {
   background-color: rgba(245, 158, 11, 0.1);
   color: #f59e0b;
 }
-
+/* Tables */
+.table-wrap { 
+  overflow: scroll; 
+  border-radius: 12px; 
+  border: 1px solid var(--border-color); 
+  margin-bottom: 20px; 
+  width: 100%;
+}
+  table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    font-size: var(--font-sm); 
+    background: transparent;
+    margin: var(--spacing-md) auto;
+  }
+  thead th { 
+    text-align: left; 
+    padding: var(--spacing-md) var(--spacing-lg); 
+    background: var(--bg-secondary); 
+    color: var(--text-primary); 
+    font-weight: var(--font-bold); 
+    font-size: var(--font-lg); 
+    letter-spacing: 0.07em; 
+    border-bottom: 1px solid var(--border-color); 
+    white-space: nowrap; 
+  }
+  tbody td { 
+    padding: var(--spacing-md) var(--spacing-lg); 
+    border-bottom: 1px solid var(--border-color); 
+    color: var(--text-primary); 
+    vertical-align: top; 
+    line-height: 1.55; 
+  }
+  tbody tr:last-child td {
+    border-bottom: none; 
+  }
+  tbody tr:hover td { 
+    background: var(--box-bg);
+  }
 /* Forms */
 .input {
   width: 100%;

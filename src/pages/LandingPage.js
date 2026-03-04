@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import './LandingPage.css'
-import { PrelimFooter } from '../exports'
+import { PrelimFooter, LandingPageHeader } from '../exports'
 
 // Icons (react-icons)
 import { RiVerifiedBadgeFill } from 'react-icons/ri'
@@ -118,7 +118,9 @@ function StatCounter({ value, label }) {
   )
 }
 
-// ─── MAIN LANDING PAGE ────────────────────────────────────────────────────────
+// ==================================
+//  Main Landing Page Component
+// ==================================
 function LandingPage() {
   const navigate = useNavigate()
   const [showAuthGate, setShowAuthGate] = useState(false)
@@ -212,30 +214,10 @@ function LandingPage() {
 
   return (
     <div className="landing-page">
-
-      {/* ── NAV ─────────────────────────────────────────────────────────── */}
-      <nav className="landing-nav">
-        <div className="landing-nav-inner">
-          <Link to="/" className="landing-nav-logo">
-            <span className="landing-logo-dot" />
-            VenloRent
-          </Link>
-          <div className="landing-nav-links">
-            <a href="#features" className="landing-nav-link">Features</a>
-            <a href="#listings" className="landing-nav-link">Listings</a>
-            <a href="#how" className="landing-nav-link">How It Works</a>
-          </div>
-          <div className="landing-nav-ctas">
-            <Link to="/login" className="btn btn-ghost">Log In</Link>
-            <Link to="/register" className="btn btn-primary btn-sm">Get Started</Link>
-          </div>
-          {/* Mobile hamburger placeholder */}
-          <button className="landing-nav-hamburger" onClick={openGate} aria-label="menu">
-            <span /><span /><span />
-          </button>
-        </div>
-      </nav>
-
+      {/* Import Landing Navgation */}
+      <LandingPageHeader 
+        openGateModal={openGate}
+      />
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
       <section className="hero-section">
         {/* Decorative blobs */}
@@ -459,7 +441,7 @@ function LandingPage() {
                 },
               ].map(({ icon, title, desc }) => (
                 <div className="feature-item" key={title}>
-                  <div className="feature-icon">{icon}</div>
+                  <div className="feature-icon-home">{icon}</div>
                   <div>
                     <h4 className="feature-title">{title}</h4>
                     <p className="feature-desc">{desc}</p>
