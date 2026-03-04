@@ -30,6 +30,7 @@ export { default as TabbedNav } from "./components/TabbedNav";
 export { default as UpgradeWidget } from "./components/UpgradeWidget";
 
 // ==== PAGES ====
+export { default as AboutPage } from "./pages/AboutPage";
 export { default as AboutSettings } from "./pages/AboutSettings";
 export { default as Account } from "./pages/Account";
 export { default as AccountSettings } from "./pages/AccountSettings";
