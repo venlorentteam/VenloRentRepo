@@ -1,0 +1,726 @@
+@import url('../assets/css/global.css');
+
+/* ========================================
+   KYC PAGE LAYOUT
+   ======================================== */
+.kyc-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-color);
+}
+
+.kyc-container {
+  display: flex;
+  flex: 1;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* ========================================
+   LEFT PANEL
+   ======================================== */
+.kyc-left {
+  width: 380px;
+  flex-shrink: 0;
+  background: linear-gradient(160deg, var(--primary-color-dark) 0%, #065f46 100%);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: var(--spacing-2xl) var(--spacing-xl);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.kyc-left::before {
+  content: '';
+  position: absolute;
+  bottom: -60px;
+  right: -60px;
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+}
+
+.kyc-left::after {
+  content: '';
+  position: absolute;
+  top: -40px;
+  left: -40px;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+}
+
+.kyc-left-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  padding-top: var(--spacing-lg);
+}
+
+.kyc-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: white;
+}
+
+.kyc-brand-icon {
+  font-size: 1.6rem;
+  opacity: 0.95;
+}
+
+.kyc-brand-name {
+  font-size: var(--font-lg);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.kyc-left-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.kyc-left-title {
+  font-size: var(--font-2xl);
+  font-weight: 800;
+  color: white;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.kyc-left-subtitle {
+  font-size: var(--font-sm);
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.65;
+}
+
+/* ─── Step List ─── */
+.kyc-steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+}
+
+.kyc-step-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  transition: background var(--transition-fast);
+}
+
+.kyc-step-item--active {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.kyc-step-item--done .kyc-step-dot,
+.kyc-step-item--active .kyc-step-dot {
+  background: white;
+  color: var(--primary-color-dark);
+}
+
+.kyc-step-item--upcoming .kyc-step-dot {
+  background: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.kyc-step-dot {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+}
+
+.kyc-step-dot svg {
+  font-size: 1.1rem;
+}
+
+.kyc-step-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.kyc-step-label {
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: white;
+  opacity: 0.9;
+}
+
+.kyc-step-item--upcoming .kyc-step-label {
+  opacity: 0.45;
+}
+
+/* ─── Skip Button ─── */
+.kyc-skip-btn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: var(--font-xs);
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0;
+  margin-top: auto;
+  text-align: left;
+  transition: color var(--transition-fast);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.kyc-skip-btn:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ========================================
+   RIGHT PANEL
+   ======================================== */
+.kyc-right {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: var(--spacing-2xl) var(--spacing-xl);
+  overflow-y: auto;
+}
+
+.kyc-form-wrapper {
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  padding-top: var(--spacing-lg);
+}
+
+/* Mobile progress bar */
+.kyc-mobile-progress {
+  display: none;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.kyc-mobile-progress-bar {
+  width: 100%;
+  height: 4px;
+  background: var(--border-color);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.kyc-mobile-progress-fill {
+  height: 100%;
+  background: var(--primary-color);
+  border-radius: var(--radius-full);
+  transition: width 0.4s ease;
+}
+
+.kyc-mobile-progress-label {
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* ========================================
+   STEP CONTENT
+   ======================================== */
+.kyc-step {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  animation: slideUp 0.3s ease-out;
+}
+
+.kyc-step-header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+}
+
+.kyc-step-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: var(--primary-color-lightest);
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .kyc-step-icon {
+    background: rgba(16, 185, 129, 0.15);
+  }
+}
+
+.kyc-step-title {
+  font-size: var(--font-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.kyc-step-desc {
+  font-size: var(--font-sm);
+  color: var(--text-secondary);
+  margin: 4px 0 0;
+}
+
+.kyc-fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+/* ─── Form Fields (shared with Register) ─── */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.form-label {
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon-left {
+  position: absolute;
+  left: 14px;
+  font-size: 1.15rem;
+  color: var(--text-secondary);
+  pointer-events: none;
+  z-index: 1;
+  transition: color var(--transition-fast);
+}
+
+.input-wrapper:focus-within .input-icon-left {
+  color: var(--primary-color);
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 14px 12px 42px;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--input-bg);
+  color: var(--text-primary);
+  font-size: var(--font-base);
+  font-family: inherit;
+  transition: all var(--transition-fast);
+  outline: none;
+}
+
+.form-select {
+  padding-left: 14px;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+
+.form-input:focus {
+  border-color: var(--primary-color);
+  background: var(--input-focus-bg);
+  box-shadow: 0 0 0 3px var(--primary-opacity);
+}
+
+.form-input.input-error {
+  border-color: var(--danger-color);
+}
+
+.form-input::placeholder {
+  color: var(--text-tertiary);
+}
+
+.error-message {
+  font-size: var(--font-xs);
+  color: var(--danger-color);
+  font-weight: 500;
+}
+
+/* ─── Document Upload ─── */
+.kyc-doc-hint {
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-xs);
+  margin-top: -2px;
+}
+
+.kyc-upload-zone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  min-height: 110px;
+  background: var(--box-bg);
+}
+
+.kyc-upload-zone:hover {
+  border-color: var(--primary-color);
+  background: var(--primary-opacity);
+}
+
+.kyc-upload-zone--filled {
+  border-style: solid;
+  border-color: var(--primary-color);
+  background: var(--primary-color-lightest);
+}
+
+@media (prefers-color-scheme: dark) {
+  .kyc-upload-zone--filled {
+    background: rgba(16, 185, 129, 0.08);
+  }
+}
+
+.kyc-upload-zone--error {
+  border-color: var(--danger-color);
+  background: rgba(239, 68, 68, 0.04);
+}
+
+.kyc-upload-input {
+  display: none;
+}
+
+.kyc-upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--text-secondary);
+}
+
+.kyc-upload-icon {
+  font-size: 2rem;
+  color: var(--primary-color);
+  opacity: 0.7;
+}
+
+.kyc-upload-text {
+  font-size: var(--font-sm);
+  font-weight: 500;
+}
+
+.kyc-upload-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+  width: 100%;
+}
+
+.kyc-upload-img-preview {
+  width: 100%;
+  max-height: 140px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+}
+
+.kyc-upload-pdf-preview {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--primary-color);
+  font-weight: 500;
+  font-size: var(--font-sm);
+}
+
+.kyc-upload-pdf-preview svg {
+  font-size: 1.4rem;
+}
+
+.kyc-upload-change {
+  font-size: var(--font-xs);
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+/* ─── Review Summary (Step 3) ─── */
+.kyc-review-summary {
+  background: var(--box-bg);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.kyc-review-title {
+  font-size: var(--font-sm);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.7rem;
+  color: var(--text-tertiary);
+}
+
+.kyc-review-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  padding: var(--spacing-xs) 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.kyc-review-item:last-child {
+  border-bottom: none;
+}
+
+.kyc-review-label {
+  font-size: var(--font-sm);
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.kyc-review-value {
+  font-size: var(--font-sm);
+  color: var(--text-primary);
+  font-weight: 500;
+  text-align: right;
+  word-break: break-all;
+}
+
+.kyc-review-file {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.kyc-review-check {
+  color: var(--success-color);
+  flex-shrink: 0;
+}
+
+/* ─── Didit Info Box ─── */
+.kyc-didit-info {
+  background: var(--primary-color-lightest);
+  border: 1.5px solid rgba(16, 185, 129, 0.25);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+@media (prefers-color-scheme: dark) {
+  .kyc-didit-info {
+    background: rgba(16, 185, 129, 0.08);
+    border-color: rgba(16, 185, 129, 0.2);
+  }
+}
+
+.kyc-didit-badge {
+  display: inline-flex;
+  align-items: center;
+  background: var(--primary-color);
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  width: fit-content;
+}
+
+.kyc-didit-text {
+  font-size: var(--font-sm);
+  color: var(--text-primary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.kyc-didit-checklist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.kyc-didit-checklist li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--font-sm);
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.kyc-didit-checklist svg {
+  color: var(--primary-color);
+  flex-shrink: 0;
+  font-size: 1rem;
+}
+
+/* ========================================
+   NAVIGATION BUTTONS
+   ======================================== */
+.kyc-nav-buttons {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  justify-content: flex-end;
+}
+
+.kyc-btn-back {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 1.5px solid var(--border-color);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: var(--font-sm);
+  font-weight: 600;
+  padding: 11px var(--spacing-lg);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.kyc-btn-back:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.kyc-btn-next,
+.kyc-btn-submit {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-color-dark));
+  color: white;
+  border: none;
+  font-family: inherit;
+  font-size: var(--font-sm);
+  font-weight: 600;
+  padding: 11px var(--spacing-xl);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+}
+
+.kyc-btn-next:hover,
+.kyc-btn-submit:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+.kyc-btn-submit:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.kyc-btn-loading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.kyc-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.kyc-submit-error {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-sm);
+  color: var(--danger-color);
+  text-align: center;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 900px) {
+  .kyc-left {
+    display: none;
+  }
+
+  .kyc-right {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+
+  .kyc-mobile-progress {
+    display: flex;
+  }
+}
+
+@media (max-width: 480px) {
+  .kyc-nav-buttons {
+    flex-direction: column-reverse;
+  }
+
+  .kyc-btn-back,
+  .kyc-btn-next,
+  .kyc-btn-submit {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

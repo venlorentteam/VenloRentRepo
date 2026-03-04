@@ -5,7 +5,7 @@ import axios from 'axios'
 import leftImg from '../assets/img/Venlo-welcome.png'
 import { FaRegEyeSlash, FaRegEye } from 'react-icons/fa'
 import { PrelimFooter, PrelimHeader, SubmitButton } from '../exports'
-import { MdOutlineMailOutline, MdLockOutline } from 'react-icons/md'
+import { MdOutlineMailOutline, MdLockOutline, MdOutlineBusinessCenter } from 'react-icons/md'
 import { RiAccountPinBoxLine } from 'react-icons/ri'
 import { PiIdentificationBadge } from 'react-icons/pi'
 
@@ -81,21 +81,16 @@ function Register() {
         break
     }
 
-    // Update errors state for that field
     setErrors((prev) => {
-      const nextErrors = {
-        ...prev,
-        [name]: error,
-      }
-
+      const nextErrors = { ...prev, [name]: error }
       if (name === "password") {
         nextErrors.confirmPassword = confirmPasswordError
       }
-
       return nextErrors
     })
   }
-  //Check if user exists on blur of email and username fields
+
+  // Check if user exists on blur of email and username fields
   const checkUserAvailability = async () => {
     const email = formData.email.trim()
     const username = formData.username.trim()
@@ -119,8 +114,11 @@ function Register() {
   }
 
   // Password visibility toggle
-  const showPassword = () => {
-    setShowPass(prev => !prev)
+  const showPassword = () => setShowPass(prev => !prev)
+
+  // Toggle agent card
+  const toggleAgent = () => {
+    if (!isLoading) setFormData(prev => ({ ...prev, agent: !prev.agent }))
   }
 
   // Check if form has any errors or empty required fields
@@ -147,6 +145,10 @@ function Register() {
 
         const res = await axios.post("http://localhost:4000/auth/register", payload)
         if (res.data.success) {
+          // Always go to email-auth first for OTP verification.
+          // Pass role in state so email-auth can redirect correctly after verification:
+          //   role === "agent"   → navigate('/kyc')
+          //   role === "regular" → navigate('/dashboard')
           navigate('/email-auth', {
             state: { 
               email: res.data.user.email,
@@ -175,7 +177,7 @@ function Register() {
               <img 
                 className="register-hero-image" 
                 src={leftImg} 
-                alt="Welcome to Venlorent" 
+                alt="Welcome to VenloRent" 
               />
               <div className="register-hero-text">
                 <h1 className="register-hero-title">
@@ -194,6 +196,7 @@ function Register() {
               <PrelimHeader pageTitle="Create an account" />
               
               <form onSubmit={handleSubmit} className="register-form">
+
                 {/* Email Input */}
                 <div className="form-group">
                   <label htmlFor="email" className="form-label">Email address</label>
@@ -246,7 +249,8 @@ function Register() {
                     <span className="error-message">{errors.password}</span>
                   )}
                 </div>
-                {/* Confirm password Input */}
+
+                {/* Confirm Password Input */}
                 <div className="form-group">
                   <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
                   <div className="input-wrapper">
@@ -275,6 +279,7 @@ function Register() {
                     <span className="error-message">{errors.confirmPassword}</span>
                   )}
                 </div>
+
                 {/* Full Name Input */}
                 <div className="form-group">
                   <label htmlFor="fullname" className="form-label">Full Name</label>
@@ -320,31 +325,56 @@ function Register() {
                   )}
                 </div>
 
-                {/* Agent selection option */}
-                <div className="form-group">
-                  <label htmlFor="Agent" className="form-label"> Register as an Agent</label>
-                  <div className="check-wrapper">
-                    <input
-                      type="checkbox"
-                      id="Agent"
-                      name="agent"
-                      checked={formData.agent}
-                      onChange={handleChange}
-                      disabled={isLoading}
-                    />
-                    <p>Check this box to register as an agent</p>
+                {/* ── Agent Selection Card ──────────────────────────────────
+                    Hidden checkbox keeps formData.agent in sync for the payload.
+                    The visible card below drives the toggle interaction.
+                ─────────────────────────────────────────────────────────── */}
+                <input
+                  type="checkbox"
+                  id="agent"
+                  name="agent"
+                  checked={formData.agent}
+                  onChange={handleChange}
+                  disabled={isLoading}
+                  style={{ display: 'none' }}
+                />
+                <div
+                  className={`agent-card ${formData.agent ? 'agent-card--active' : ''}`}
+                  onClick={toggleAgent}
+                  role="checkbox"
+                  aria-checked={formData.agent}
+                  aria-label="Register as an agent"
+                  tabIndex={0}
+                  onKeyDown={(e) => e.key === ' ' && toggleAgent()}
+                >
+                  <div className={`agent-card-icon ${formData.agent ? 'agent-card-icon--active' : ''}`}>
+                    <MdOutlineBusinessCenter />
+                  </div>
+                  <div className="agent-card-text">
+                    <span className="agent-card-title">I'm a property agent</span>
+                    <span className="agent-card-subtitle">
+                      You'll complete a quick KYC verification after signing up
+                    </span>
+                  </div>
+                  <div className={`agent-card-check ${formData.agent ? 'agent-card-check--active' : ''}`}>
+                    {formData.agent && (
+                      <svg width="11" height="9" viewBox="0 0 11 9" fill="none">
+                        <path d="M1 4L4 7.5L10 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    )}
                   </div>
                 </div>
+
                 {/* Terms Agreement */}
                 <div className="terms-agreement">
                   <p className="terms-text">
-                    By signing up, you agree to Venlorent's{' '}
+                    By signing up, you agree to VenloRent's{' '}
                     <Link to="/terms" className="terms-link">User Agreement</Link>
                     {' '}and{' '}
                     <Link to="/privacy-policy" className="terms-link">Privacy Policy</Link>.
                   </p>
                 </div>
-                
+
                 {/* Submit Error */}
                 {errors.submit && (
                   <div className="submit-error">
@@ -352,9 +382,14 @@ function Register() {
                   </div>
                 )}
 
-                {/* Submit Button */}
+                {/* Submit Button — label reacts to agent intent */}
                 <SubmitButton 
-                  text={isLoading ? "Creating account..." : "Sign up"} 
+                  text={isLoading 
+                    ? "Creating account..." 
+                    : formData.agent 
+                      ? "Sign up & Get Verified" 
+                      : "Sign up"
+                  } 
                   disabled={hasErrors || isLoading}
                   isLoading={isLoading}
                 />
