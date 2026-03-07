@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import './AboutPage.css'
-import { PrelimFooter, LandingPageHeader } from '../exports'
+import { PrelimFooter, LandingPageHeader, StatCounter, CtaBanner } from '../exports'
 
 // Icons — same library choices as LandingPage
 import { RiVerifiedBadgeFill } from 'react-icons/ri'
@@ -12,50 +12,6 @@ import { LuBuilding2, LuTarget, LuHeart } from 'react-icons/lu'
 import { MdOutlineVerified, MdOutlinePayments } from 'react-icons/md'
 import { BiTrendingUp } from 'react-icons/bi'
 import { BsPersonCheck } from 'react-icons/bs'
-import { register } from 'swiper/element'
-
-
-// ANIMATED STAT COUNTER (reused pattern from LandingPage)
-function StatCounter({ value, label, delay = 0 }) {
-  const [count, setCount] = useState(0)
-  const [triggered, setTriggered] = useState(false)
-  const ref = useRef(null)
-  // Trigger on scroll into view
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setTriggered(true) },
-      { threshold: 0.3 }
-    )
-    if (ref.current) observer.observe(ref.current)
-    return () => observer.disconnect()
-  }, [])
-
-  useEffect(() => {
-    if (!triggered) return
-    const timer = setTimeout(() => {
-      const target = parseInt(value.replace(/\D/g, ''))
-      const duration = 1500
-      const step = Math.ceil(target / (duration / 16))
-      let current = 0
-      const interval = setInterval(() => {
-        current = Math.min(current + step, target)
-        setCount(current)
-        if (current >= target) clearInterval(interval)
-      }, 16)
-      return () => clearInterval(interval)
-    }, delay)
-    return () => clearTimeout(timer)
-  }, [triggered, value, delay])
-
-  const suffix = value.replace(/[0-9]/g, '')
-  return (
-    <div className="stat-item" ref={ref}>
-      <span className="stat-value">{count.toLocaleString()}{suffix}</span>
-      <span className="stat-label">{label}</span>
-    </div>
-  )
-}
-
 
 // VALUE CARD
 function ValueCard({ icon, title, desc }) {
@@ -67,7 +23,6 @@ function ValueCard({ icon, title, desc }) {
     </div>
   )
 }
-
 
 //  TEAM MEMBER CARD 
 function TeamCard({ avatar, name, role, bio }) {
@@ -224,9 +179,9 @@ function AboutPage() {
               <Link to="/register" className="btn btn-primary">
                 Join VenloRent <FiArrowRight />
               </Link>
-              <Link to="/listings" className="btn btn-secondary">
+              {/* <Link to="/listings" className="btn btn-secondary">
                 Browse Listings
-              </Link>
+              </Link> */}
             </div>
           </div>
 
@@ -281,16 +236,16 @@ function AboutPage() {
         </div>
       </section>
 
-      {/* STATS */}
+      {/* ── STATS {Imported styles from LandingPage.css} */}
       <section className="stats-section">
         <div className="stats-inner">
-          <StatCounter value="500+" label="Verified Agents" delay={0} />
+          <StatCounter value="500+" label="Verified Agents" />
           <div className="stats-divider" aria-hidden="true" />
-          <StatCounter value="2000+" label="Active Seekers" delay={150} />
+          <StatCounter value="2000+" label="Active Seekers" />
           <div className="stats-divider" aria-hidden="true" />
-          <StatCounter value="1200+" label="Properties Listed" delay={300} />
+          <StatCounter value="1200+" label="Properties Listed" />
           <div className="stats-divider" aria-hidden="true" />
-          <StatCounter value="100+" label="Deals Closed" delay={450} />
+          <StatCounter value="100+" label="Deals Closed" />
         </div>
       </section>
 
@@ -454,20 +409,19 @@ function AboutPage() {
           </div>
 
           {/* Right: phone mock — same component pattern as LandingPage */}
+          {/* Left: Illustration */}
           <div className="features-illustration">
             <div className="features-phone-mock">
               <div className="phone-screen">
                 <div className="phone-header">
                   <span className="phone-logo">VenloRent</span>
                 </div>
-                {/* Simulated feed */}
                 <div className="phone-card" />
                 <div className="phone-card phone-card-sm" />
                 <div className="phone-card phone-card-sm" />
                 <div className="phone-verified-badge">
                   <RiVerifiedBadgeFill /> Verified Agent
                 </div>
-                {/* Order status row */}
                 <div className="phone-order-row">
                   <span className="phone-order-dot" />
                   <span className="phone-order-label">3-day reservation active</span>
@@ -555,25 +509,17 @@ function AboutPage() {
         </div>
       </section>
 
-      {/* CTA BANNER (mirrors LandingPage cta-section) */}
-      <section className="cta-section">
-        <div className="cta-blob" aria-hidden="true" />
-        <div className="cta-inner">
-          <h2 className="cta-title">Ready to find your home — the right way?</h2>
-          <p className="cta-sub">
-            Join thousands of property seekers and verified agents who trust VenloRent to get the deal done.
-          </p>
-          <div className="cta-actions">
-            <Link to="/register" className="btn btn-white">
-              Create Free Account
-            </Link>
-            <Link to="/login" className="btn btn-outline-white">
-              I have an account
-            </Link>
-          </div>
-        </div>
-      </section>
-
+{/* Import CTA Banner */}
+      <CtaBanner 
+        title = "Ready to find your home - the right way?"
+        subtitle = "Join thousands of property seekers and verified agents who trust VenloRent to get the deal done."
+        buttons = {[
+          { href: "/register", name: "Create Free Account", style: "white" },
+          { href: "/login", name: "I have an account", style: "outline-white" }
+        ]}
+      />
+      
+      {/* Import Footer */}
       <PrelimFooter />
     </div>
   )

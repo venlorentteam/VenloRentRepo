@@ -1,0 +1,44 @@
+
+/* ============================================================
+   STATS
+   ============================================================ */
+.stats-section {
+  background: linear-gradient(135deg, var(--primary-color-dark, #059669), var(--primary-color, #10b981));
+  padding: 2.5rem 1.5rem;
+}
+.stats-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.5rem 1rem;
+}
+.stat-value {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+.stat-label {
+  font-size: var(--font-sm, 0.875rem);
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 500;
+}
+.stats-divider {
+  width: 1px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.2);
+}
+@media (max-width: 600px) {
+  .stats-divider { display: none; }
+  .stats-inner { gap: 1.5rem; }
+}
