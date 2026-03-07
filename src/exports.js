@@ -50,6 +50,7 @@ export { default as Following } from "./pages/Following";
 export { default as ForYou } from "./pages/ForYou";
 export { default as HelpSettings } from "./pages/HelpSettings";
 export { default as Inbox } from "./pages/Inbox";
+export { default as KycFlow } from "./pages/KycFlow";
 export { default as LandingPage } from "./pages/LandingPage";
 export { default as Login } from "./pages/Login";
 export { default as NoMatch } from "./pages/NoMatch";

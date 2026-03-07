@@ -43,10 +43,8 @@ function App() {
         <Route path="/profile" element={<Pages.ProtectedRoute><Pages.Profile /></Pages.ProtectedRoute>} />
         <Route path="/search" element={<Pages.ProtectedRoute><Pages.Search /></Pages.ProtectedRoute>} />
         <Route path="/user" element={<Pages.ProtectedRoute><Pages.User /></Pages.ProtectedRoute>} />
-        <Route path="/about" element={<Pages.AboutPage />} />
         <Route path="/terms" element={<Pages.Terms />} />
         <Route path="/privacy-policy" element={<Pages.PrivacyPolicy />} />
-        <Route path="/help" element={<Pages.PrelimHelp />} />
         <Route path="*" element={<Pages.NoMatch />} />
       </Routes>
     </AuthProvider>
