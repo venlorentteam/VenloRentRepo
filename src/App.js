@@ -46,6 +46,7 @@ function App() {
         <Route path="/terms" element={<Pages.Terms />} />
         <Route path="/privacy-policy" element={<Pages.PrivacyPolicy />} />
         <Route path="/about" element={<Pages.AboutPage />} />
+        <Route path="/help" element={<Pages.PrelimHelp />} />
         <Route path="*" element={<Pages.NoMatch />} />
         <Route path="*" element={<Pages.NoMatch />} />
       </Routes>
