@@ -5,7 +5,7 @@ const path = require("path");
 const baseDirs = ["src/components", "src/pages", "src/components/Prelim", "src/context"];
 const outputFile = "src/exports.js";
 
-let content = "// 🚀 Auto-generated exports.js file\n\n";
+let content = "//  Auto-generated exports.js file\n\n";
 
 baseDirs.forEach((dir) => {
   const files = fs.readdirSync(dir);
