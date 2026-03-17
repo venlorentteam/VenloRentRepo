@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import './LandingPage.css'
-import { PrelimFooter, LandingPageHeader } from '../exports'
+import { CtaBanner, StatCounter, PrelimFooter, LandingPageHeader } from '../exports'
 
 // Icons (react-icons)
 import { RiVerifiedBadgeFill } from 'react-icons/ri'
@@ -13,7 +13,7 @@ import { HiOutlineShieldCheck } from 'react-icons/hi'
 import { TbHomeSearch } from 'react-icons/tb'
 import { LuBuilding2 } from 'react-icons/lu'
 
-// ─── AUTH GATE MODAL ─────────────────────────────────────────────────────────
+// Auth gate modal
 function AuthGateModal({ onClose }) {
   return (
     <div className="authgate-overlay" onClick={onClose}>
@@ -53,7 +53,7 @@ function AuthGateModal({ onClose }) {
   )
 }
 
-// ─── FEATURED PROPERTY CARD ───────────────────────────────────────────────────
+// Featured Property Card
 function FeaturedCard({ property, onGate }) {
   return (
     <div className="featured-card" onClick={onGate}>
@@ -88,32 +88,6 @@ function FeaturedCard({ property, onGate }) {
           {property.verified && <RiVerifiedBadgeFill className="verified-icon" />}
         </div>
       </div>
-    </div>
-  )
-}
-
-// ─── STAT COUNTER ─────────────────────────────────────────────────────────────
-function StatCounter({ value, label }) {
-  const [count, setCount] = useState(0)
-
-  useEffect(() => {
-    const target = parseInt(value.replace(/\D/g, ''))
-    const duration = 1500
-    const step = Math.ceil(target / (duration / 16))
-    let current = 0
-    const timer = setInterval(() => {
-      current = Math.min(current + step, target)
-      setCount(current)
-      if (current >= target) clearInterval(timer)
-    }, 16)
-    return () => clearInterval(timer)
-  }, [value])
-
-  const suffix = value.replace(/[0-9]/g, '')
-  return (
-    <div className="stat-item">
-      <span className="stat-value">{count.toLocaleString()}{suffix}</span>
-      <span className="stat-label">{label}</span>
     </div>
   )
 }
@@ -218,7 +192,7 @@ function LandingPage() {
       <LandingPageHeader 
         openGateModal={openGate}
       />
-      {/* ── HERO ─────────────────────────────────────────────────────────── */}
+      {/* HERO */}
       <section className="hero-section">
         {/* Decorative blobs */}
         <div className="hero-blob hero-blob-1" aria-hidden="true" />
@@ -297,7 +271,7 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* ── STATS ────────────────────────────────────────────────────────── */}
+      {/* Stats */}
       <section className="stats-section">
         <div className="stats-inner">
           <StatCounter value="500+" label="Verified Agents" />
@@ -310,7 +284,7 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* ── HOW IT WORKS ─────────────────────────────────────────────────── */}
+      {/* How it works */}
       <section className="how-section" id="how">
         <div className="section-header">
           <span className="section-eyebrow">Simple Process</span>
@@ -355,7 +329,7 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* ── FEATURED LISTINGS ─────────────────────────────────────────────── */}
+      {/* Featured Listings */}
       <section className="listings-section" id="listings">
         <div className="section-header">
           <span className="section-eyebrow">Featured Properties</span>
@@ -392,7 +366,7 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* ── FEATURES ─────────────────────────────────────────────────────── */}
+      {/* Features */}
       <section className="features-section" id="features">
         <div className="features-inner">
           {/* Left: Illustration */}
@@ -456,23 +430,13 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* ── CTA BANNER ───────────────────────────────────────────────────── */}
-      <section className="cta-section">
-        <div className="cta-blob" aria-hidden="true" />
-        <div className="cta-inner">
-          <h2 className="cta-title">Ready to find your home?</h2>
-          <p className="cta-sub">Join thousands of Nigerians who've found their perfect property on VenloRent.</p>
-          <div className="cta-actions">
-            <Link to="/register" className="btn btn-white">Create Free Account</Link>
-            <Link to="/login" className="btn btn-outline-white">I have an account</Link>
-          </div>
-        </div>
-      </section>
+      {/* CTA Banner */}
+      <CtaBanner />
 
-      {/* ── FOOTER ───────────────────────────────────────────────────────── */}
+      {/* Footer */}
       <PrelimFooter />
 
-      {/* ── AUTH GATE MODAL ───────────────────────────────────────────────── */}
+      {/* Auth Gate Modal */}
       {showAuthGate && <AuthGateModal onClose={closeGate} />}
     </div>
   )

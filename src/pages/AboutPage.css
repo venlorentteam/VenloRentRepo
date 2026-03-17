@@ -48,51 +48,6 @@
   line-height: 1.7;
 }
 
-/* ── STATS SECTION (exact match to LandingPage stats-section) ─ */
-.stats-section {
-  background-color: var(--box-bg);
-  border-top: 1px solid var(--border-color);
-  border-bottom: 1px solid var(--border-color);
-  padding: var(--spacing-2xl) var(--spacing-2xl);
-}
-
-.stats-inner {
-  max-width: 900px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-2xl);
-  flex-wrap: wrap;
-}
-
-.stat-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--spacing-xs);
-}
-
-.stat-value {
-  font-size: var(--font-4xl);
-  font-weight: 700;
-  color: var(--primary-color);
-  line-height: 1;
-}
-
-.stat-label {
-  font-size: var(--font-sm);
-  color: var(--text-secondary);
-  font-weight: 500;
-}
-
-.stats-divider {
-  width: 1px;
-  height: 48px;
-  background-color: var(--border-color);
-  flex-shrink: 0;
-}
-
 /* About Hero Section */
 .about-hero-section {
   padding: var(--spacing-2xl) var(--spacing-2xl);
@@ -499,7 +454,7 @@
   line-height: 1.65;
 }
 
-/* Phone mock — exact class names from LandingPage */
+/* Phone mock — exact class names from LandingPage
 .features-illustration {
   position: relative;
   display: flex;
@@ -569,7 +524,7 @@
   padding: 4px 10px;
   border-radius: var(--radius-full);
   align-self: flex-start;
-}
+} */
 
 /* New: order status row for About page phone mock */
 .phone-order-row {
@@ -817,58 +772,6 @@
   flex-shrink: 0;
 }
 
-/*  CTA SECTION (exact match to LandingPage cta-section)  */
-.cta-section {
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(135deg, var(--primary-color-accent) 0%, var(--primary-color) 100%);
-  padding: var(--spacing-2xl) var(--spacing-2xl);
-  text-align: center;
-}
-
-.cta-blob {
-  position: absolute;
-  width: 500px;
-  height: 500px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 50%;
-  top: -200px;
-  right: -100px;
-  pointer-events: none;
-}
-
-.cta-inner {
-  position: relative;
-  z-index: 1;
-  max-width: 600px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--spacing-md);
-}
-
-.cta-title {
-  font-size: var(--font-3xl);
-  font-weight: 700;
-  color: #ffffff;
-  line-height: 1.2;
-}
-
-.cta-sub {
-  font-size: var(--font-lg);
-  color: rgba(255, 255, 255, 0.85);
-  line-height: 1.6;
-}
-
-.cta-actions {
-  display: flex;
-  gap: var(--spacing-md);
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: var(--spacing-sm);
-}
-
 .btn-white {
   background-color: #ffffff;
   color: var(--primary-color-accent);
@@ -942,21 +845,8 @@
   .about-features-section,
   .milestones-section,
   .team-section,
-  .kyc-section,
-  .cta-section {
+  .kyc-section {
     padding: var(--spacing-xl) var(--spacing-lg);
-  }
-
-  .stats-section {
-    padding: var(--spacing-xl) var(--spacing-lg);
-  }
-
-  .stats-inner {
-    gap: var(--spacing-xl);
-  }
-
-  .stats-divider {
-    display: none;
   }
 
   .problem-grid,
@@ -975,21 +865,15 @@
   .milestone-item {
     grid-template-columns: 72px 28px 1fr;
   }
-
-  .cta-title {
-    font-size: var(--font-2xl);
-  }
 }
 
 @media (max-width: 500px) {
-  .about-hero-actions,
-  .cta-actions {
+  .about-hero-actions{
     flex-direction: column;
     width: 100%;
   }
 
-  .about-hero-actions .btn,
-  .cta-actions .btn {
+  .about-hero-actions .btn{
     width: 100%;
     justify-content: center;
   }

@@ -45,6 +45,7 @@ function App() {
         <Route path="/user" element={<Pages.ProtectedRoute><Pages.User /></Pages.ProtectedRoute>} />
         <Route path="/terms" element={<Pages.Terms />} />
         <Route path="/privacy-policy" element={<Pages.PrivacyPolicy />} />
+        <Route path="/about" element={<Pages.AboutPage />} />
         <Route path="*" element={<Pages.NoMatch />} />
         <Route path="*" element={<Pages.NoMatch />} />
       </Routes>

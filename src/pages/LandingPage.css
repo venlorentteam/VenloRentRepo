@@ -400,50 +400,6 @@
 }
 
 /* ============================================================
-   STATS
-   ============================================================ */
-.stats-section {
-  background: linear-gradient(135deg, var(--primary-color-dark, #059669), var(--primary-color, #10b981));
-  padding: 2.5rem 1.5rem;
-}
-.stats-inner {
-  max-width: 960px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-.stat-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.3rem;
-  padding: 0.5rem 1rem;
-}
-.stat-value {
-  font-size: clamp(2rem, 4vw, 2.75rem);
-  font-weight: 900;
-  color: #fff;
-  letter-spacing: -0.02em;
-}
-.stat-label {
-  font-size: var(--font-sm, 0.875rem);
-  color: rgba(255, 255, 255, 0.75);
-  font-weight: 500;
-}
-.stats-divider {
-  width: 1px;
-  height: 50px;
-  background: rgba(255, 255, 255, 0.2);
-}
-@media (max-width: 600px) {
-  .stats-divider { display: none; }
-  .stats-inner { gap: 1.5rem; }
-}
-
-/* ============================================================
    HOW IT WORKS
    ============================================================ */
 .how-section {
@@ -882,55 +838,6 @@
   .features-section { padding: 3.5rem 1.25rem; }
 }
 
-/* ============================================================
-   CTA BANNER
-   ============================================================ */
-.cta-section {
-  position: relative;
-  padding: 5rem 1.5rem;
-  background: linear-gradient(135deg, var(--primary-color-accent, #047857) 0%, var(--primary-color-dark, #059669) 50%, var(--primary-color, #10b981) 100%);
-  overflow: hidden;
-  text-align: center;
-}
-.cta-blob {
-  position: absolute;
-  width: 500px;
-  height: 500px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.06);
-  top: -200px;
-  right: -100px;
-  pointer-events: none;
-}
-.cta-inner {
-  position: relative;
-  z-index: 1;
-  max-width: 600px;
-  margin: 0 auto;
-}
-.cta-title {
-  font-size: clamp(1.75rem, 4vw, 2.5rem);
-  font-weight: 900;
-  color: #fff;
-  letter-spacing: -0.02em;
-  margin: 0 0 1rem;
-}
-.cta-sub {
-  font-size: 1rem;
-  color: rgba(255, 255, 255, 0.8);
-  line-height: 1.7;
-  margin-bottom: 2rem;
-}
-.cta-actions {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-@media (max-width: 500px) {
-  .cta-section { padding: 3.5rem 1rem; }
-  .cta-actions { flex-direction: column; align-items: center; }
-}
 
 /* ============================================================
    AUTH GATE MODAL

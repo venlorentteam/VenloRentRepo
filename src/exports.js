@@ -71,9 +71,11 @@ export { default as User } from "./pages/User";
 export { default as VerificationSettings } from "./pages/VerificationSettings";
 
 // ==== PRELIM ====
+export { default as CtaBanner } from "./components/Prelim/CtaBanner";
 export { default as LandingPageHeader } from "./components/Prelim/LandingPageHeader";
 export { default as PrelimFooter } from "./components/Prelim/PrelimFooter";
 export { default as PrelimHeader } from "./components/Prelim/PrelimHeader";
+export { default as StatCounter } from "./components/Prelim/StatCounter";
 
 // ==== CONTEXT ====
 export { default as AuthProvider } from "./context/AuthProvider";
