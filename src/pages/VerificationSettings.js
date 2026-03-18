@@ -1,13 +1,12 @@
 import React, { useState } from 'react'
+import axios from 'axios'
 import { ClickButton } from '../exports'
 import { FiUpload, FiCheckCircle, FiClock, FiXCircle } from 'react-icons/fi'
 
 const VerificationSettings = () => {
   const [verificationStatus, setVerificationStatus] = useState('unverified') // unverified, pending, approved, rejected
   const [documents, setDocuments] = useState({
-    idDocument: null,
     businessProof: null,
-    headshot: null
   })
   const [formData, setFormData] = useState({
     businessName: '',
@@ -36,7 +35,6 @@ const VerificationSettings = () => {
 
   const validateForm = () => {
     const newErrors = {}
-    if (!documents.idDocument) newErrors.idDocument = 'Government ID is required'
     if (!documents.businessProof) newErrors.businessProof = 'Business proof is required'
     if (!formData.businessName.trim()) newErrors.businessName = 'Business name is required'
     if (!formData.officeAddress.trim()) newErrors.officeAddress = 'Office address is required'
@@ -51,10 +49,30 @@ const VerificationSettings = () => {
 
     setIsSubmitting(true)
     try {
-      // TODO: Upload documents to Cloudinary and submit to API
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      setVerificationStatus('pending')
-      alert('Verification application submitted! We will review within 24-48 hours.')
+      const token = localStorage.getItem('token')
+
+      // 1. Upload business info + documents to your backend
+      const formData = new FormData()
+      formData.append('businessName', formData.businessName)
+      formData.append('officeAddress', formData.officeAddress)
+      formData.append('yearsExperience', formData.yearsExperience)
+      formData.append('addressProof', documents.businessProof)
+
+      const res = await axios.post(
+        'http://localhost:4000/auth/kyc/submit-documents',
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+
+      if (res.data.success && res.data.diditUrl) {
+        // 2. Backend returns Didit verification URL → redirect user
+        window.location.href = res.data.diditUrl
+      }
+      
     } catch (error) {
       console.error('Error submitting verification:', error)
       alert('Failed to submit application. Please try again.')
@@ -133,21 +151,6 @@ const VerificationSettings = () => {
           <div className="upload-item">
             <label className="upload-label">
               <FiUpload className="upload-icon" />
-              <span>Government ID</span>
-              <input
-                type="file"
-                accept="image/*,.pdf"
-                onChange={(e) => handleFileChange('idDocument', e.target.files[0])}
-                style={{ display: 'none' }}
-              />
-            </label>
-            {documents.idDocument && <span className="file-name">{documents.idDocument.name}</span>}
-            {errors.idDocument && <span className="error-message">{errors.idDocument}</span>}
-          </div>
-
-          <div className="upload-item">
-            <label className="upload-label">
-              <FiUpload className="upload-icon" />
               <span>Business Proof</span>
               <input
                 type="file"
@@ -158,20 +161,6 @@ const VerificationSettings = () => {
             </label>
             {documents.businessProof && <span className="file-name">{documents.businessProof.name}</span>}
             {errors.businessProof && <span className="error-message">{errors.businessProof}</span>}
-          </div>
-
-          <div className="upload-item">
-            <label className="upload-label">
-              <FiUpload className="upload-icon" />
-              <span>Headshot (Optional)</span>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => handleFileChange('headshot', e.target.files[0])}
-                style={{ display: 'none' }}
-              />
-            </label>
-            {documents.headshot && <span className="file-name">{documents.headshot.name}</span>}
           </div>
         </div>
       </div>

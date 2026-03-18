@@ -1,0 +1,370 @@
+/* ============================================================
+   RequestResponsesModal.css
+
+   IMPORTANT: This file only declares styles that are NEW and
+   specific to RequestResponsesModal. It intentionally does NOT
+   redeclare anything already in Comments.css.
+
+   Shared classes reused directly from Comments.css:
+     Shell:       .comments-overlay, .comments-modal
+     Controls:    .comments-close-btn
+     Header:      .comments-header, .comments-title
+     List:        .comments-list (scrollable body)
+     Items:       .comment-item, .comment-avatar, .comment-content
+                  .comment-name-row, .comment-name, .comment-handle
+                  .comment-text, .comment-actions, .comment-time
+                  .comment-likes, .comment-reply-btn
+     Like btn:    .comment-like-btn, .liked, heartBeat animation
+     Footer:      .comments-input-section
+     Dark mode:   all dark overrides in Comments.css apply automatically
+     Responsive:  all breakpoints in Comments.css apply automatically
+   ============================================================ */
+
+
+/* ── MODAL MODIFIER ────────────────────────────────────────────
+   .rrm-modal extends .comments-modal.
+   No size or position changes — Comments.css handles all that.
+   Only addition is removing the default bottom padding so the
+   tab bar sits flush against the header border.
+── */
+.rrm-modal .comments-header {
+  /* Tab bar replaces comments-count — remove bottom gap */
+  padding-bottom: 0;
+}
+
+/* ── TAB BAR ───────────────────────────────────────────────────
+   Sits inside .comments-header, below the title.
+   Replaces .comments-count for this modal.
+── */
+.rrm-tab-bar {
+  display: flex;
+  gap: var(--spacing-xs);
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  padding: 3px;
+  margin-top: var(--spacing-sm);
+  margin-bottom: 0;
+}
+
+.rrm-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-xs);
+  font-weight: 700;
+  font-family: inherit;
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.rrm-tab:hover {
+  color: var(--text-primary);
+}
+
+.rrm-tab--active {
+  background: var(--box-bg);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.rrm-tab-icon {
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+/* Count pill on each tab */
+.rrm-tab-count {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+/* Agent tab count — green tint */
+.rrm-tab-count--agent {
+  background-color: var(--primary-opacity);
+  color: var(--primary-color);
+}
+
+/* Discussion tab count — neutral */
+.rrm-tab-count--discussion {
+  background-color: var(--border-color);
+  color: var(--text-secondary);
+}
+
+@media (prefers-color-scheme: dark) {
+  .rrm-tab-bar {
+    background-color: var(--bg-secondary-dark);
+  }
+
+  .rrm-tab--active {
+    background: var(--box-bg-dark);
+  }
+
+  .rrm-tab-count--discussion {
+    background-color: var(--border-dark);
+    color: var(--text-secondary-dark);
+  }
+}
+
+
+/* ── AGENT RESPONSE ITEM ───────────────────────────────────────
+   Mirrors .comment-item layout from Comments.css (flex row,
+   avatar left, content right) but with a green left border to
+   signal this is an accountable, KYC-backed response.
+
+   Uses .comment-avatar, .comment-name-row, .comment-name,
+   .comment-handle, .comment-text, .comment-actions,
+   .comment-time directly from Comments.css — no redeclaration.
+── */
+.rrm-agent-reply {
+  display: flex;         /* mirrors .comment-item from Comments.css */
+  gap: var(--spacing-sm);
+  align-items: flex-start;
+
+  /* Left border distinguishes agent offer from discussion comment */
+  border-left: 3px solid var(--primary-color);
+  padding-left: var(--spacing-sm);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+/* Avatar border — green instead of the neutral border-color
+   used in .comment-avatar (Comments.css) to reinforce agent identity */
+.rrm-agent-avatar {
+  border-color: var(--primary-color) !important;
+}
+
+.rrm-agent-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Override comment-text bottom margin for tighter agent reply layout */
+.rrm-reply-text {
+  margin-bottom: var(--spacing-sm) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  .rrm-agent-reply {
+    border-left-color: var(--primary-color-light);
+  }
+
+  .rrm-agent-avatar {
+    border-color: var(--primary-color-light) !important;
+  }
+}
+
+
+/* ── LISTING CHIP ──────────────────────────────────────────────
+   Tappable card that shows the property snapshot attached to
+   an agent response. Absent when agent responded text-only.
+── */
+.rrm-listing-chip {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background-color var(--transition-fast),
+              border-color var(--transition-fast);
+  margin-bottom: var(--spacing-xs);
+}
+
+.rrm-listing-chip:hover {
+  background-color: var(--primary-opacity);
+  border-color: rgba(16, 185, 129, 0.25);
+}
+
+.rrm-listing-thumb {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.rrm-listing-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rrm-listing-price {
+  font-size: var(--font-sm);
+  font-weight: 800;
+  color: var(--primary-color);
+  line-height: 1.2;
+}
+
+.rrm-listing-loc {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rrm-listing-loc svg {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+}
+
+.rrm-listing-arrow {
+  font-size: 1.25rem;
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+@media (prefers-color-scheme: dark) {
+  .rrm-listing-chip {
+    background-color: var(--bg-secondary-dark);
+    border-color: var(--border-dark);
+  }
+
+  .rrm-listing-chip:hover {
+    background-color: var(--primary-opacity);
+    border-color: rgba(16, 185, 129, 0.3);
+  }
+
+  .rrm-listing-price { color: var(--primary-color-light); }
+  .rrm-listing-loc   { color: var(--text-secondary-dark); }
+}
+
+
+/* ── DISCUSSION NOTE ───────────────────────────────────────────
+   Context banner at the top of the discussion lane.
+   Styled like a soft info callout.
+── */
+.rrm-discussion-note {
+  margin: var(--spacing-sm) var(--spacing-md) 0;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+  line-height: 1.55;
+  flex-shrink: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .rrm-discussion-note {
+    background-color: var(--bg-secondary-dark);
+    border-color: var(--border-dark);
+    color: var(--text-secondary-dark);
+  }
+}
+
+
+/* ── AGENT FOOTER ──────────────────────────────────────────────
+   Extends .comments-input-section (Comments.css) with an extra
+   row layout to accommodate the attach-listing button alongside
+   the SearchBar.
+── */
+.rrm-agent-footer {
+  /* No layout overrides — .comments-input-section handles padding/border */
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+/* Row that wraps SearchBar + attach button side by side */
+.rrm-agent-input-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+/* Attach listing button — sits beside the SearchBar */
+.rrm-attach-btn {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-size: 1rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+}
+
+.rrm-attach-btn:hover {
+  background-color: var(--primary-opacity);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: var(--primary-color);
+}
+
+.rrm-attach-btn:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .rrm-attach-btn {
+    background-color: var(--bg-secondary-dark);
+    border-color: var(--border-dark);
+    color: var(--text-secondary-dark);
+  }
+}
+
+
+/* ── FOOTER NOTES ──────────────────────────────────────────────
+   Contextual messages shown in the footer instead of the input.
+   Three variants: default info, read-only (non-agent), expired.
+── */
+.rrm-footer-note {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--font-xs);
+  font-weight: 500;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* Non-agent viewing agent lane */
+.rrm-footer-note--readonly {
+  color: var(--text-tertiary);
+  font-style: italic;
+}
+
+/* Expired request — both lanes show this */
+.rrm-footer-note--expired {
+  color: var(--danger-color);
+  background-color: var(--danger-pale);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  font-style: normal;
+}
+
+@media (prefers-color-scheme: dark) {
+  .rrm-footer-note          { color: var(--text-secondary-dark); }
+  .rrm-footer-note--readonly { color: var(--text-tertiary-dark); }
+}

@@ -5,11 +5,9 @@
   max-width: 600px;
   width: 100%;
   margin: 0 auto var(--spacing-2xl);
-  
   background: var(--box-bg);
   border-radius: var(--radius-xl);
   border: 1px solid var(--border-color);
-  
   overflow: hidden;
   box-shadow: var(--shadow-md);
   transition: all var(--transition-base);
@@ -62,12 +60,6 @@
   color: var(--text-primary);
   margin: 0;
   line-height: 1.2;
-}
-
-.verified-badge {
-  font-size: 1rem;
-  color: var(--primary-color);
-  flex-shrink: 0;
 }
 
 .property-handle {
@@ -259,18 +251,14 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
-  
   padding: var(--spacing-xs) var(--spacing-sm);
-  
   font-size: var(--font-sm);
   font-weight: 600;
   color: var(--text-secondary);
-  
   background: transparent;
   border: none;
   border-radius: var(--radius-md);
   cursor: pointer;
-  
   transition: all var(--transition-fast);
 }
 
@@ -287,7 +275,6 @@
   outline: 2px solid var(--primary-color);
   outline-offset: 2px;
 }
-
 .property-bookmark-btn {
   display: flex;
   align-items: center;
@@ -384,10 +371,6 @@
 
   .property-username {
     color: var(--text-primary-dark);
-  }
-
-  .verified-badge {
-    color: var(--primary-color-light);
   }
 
   .property-handle {

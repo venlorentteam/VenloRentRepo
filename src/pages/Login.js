@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from "../context/AuthProvider"
 import leftImg from '../assets/img/Venlo-welcome.png'
@@ -8,16 +9,24 @@ import { FaRegEyeSlash, FaRegEye } from 'react-icons/fa'
 import './login.css'
 
 function Login() {
-    const { login } = useAuth();
+    const { login, user, isLoading } = useAuth();
     const navigate = useNavigate();
     const [showPass, setShowPass] = useState(false)
     const [errors, setErrors] = useState({})
-    const [isLoading, setIsLoading] = useState(false)
+    const [Loading, setLoading] = useState(false)
     const [formData, setFormData] = useState({
         email: "",
         password: "",
     })
 
+    //Auto redirect logged in users to dashboard
+    useEffect(() => {
+        if (!isLoading && user) {
+            navigate("/dashboard")
+        }
+    }, [user, isLoading, navigate])
+
+    //Password visibility toggle handler
     const showPassword = () => {
         setShowPass(prev => !prev)
     }
@@ -52,14 +61,28 @@ function Login() {
         setErrors(formErrors)
         
         if (Object.keys(formErrors).length === 0) {
-            setIsLoading(true)
+            setLoading(true)
             try {
                 await login(formData.email, formData.password);
                 navigate("/dashboard");
             } catch (err) {
-                setErrors(prev => ({ ...prev, submit: err.response?.data?.message || err.message || "Login failed" }));
+                const data = err.response?.data
+
+                // Unverified email — redirect straight to OTP page
+                // Login endpoint already sent them a fresh OTP at this point
+                if (data?.isEmailVerified === false) {
+                    navigate('/email-auth', {
+                        state: {
+                            email: formData.email,
+                            role:  data.role,        // from the updated backend response
+                        }
+                    })
+                    return
+                }  
+                // Any other error — show inline message as before
+                setErrors(prev => ({ ...prev, submit: data?.message || err.message || 'Login failed' }))
             } finally {
-                setIsLoading(false)
+                setLoading(false)
             }
         }
     }
@@ -109,7 +132,7 @@ function Login() {
                                             value={formData.email}
                                             onChange={handleChange}
                                             autoComplete="email"
-                                            disabled={isLoading}
+                                            disabled={Loading}
                                         />
                                     </div>
                                     {errors.email && (
@@ -133,7 +156,7 @@ function Login() {
                                             value={formData.password}
                                             onChange={handleChange}
                                             autoComplete="current-password"
-                                            disabled={isLoading}
+                                            disabled={Loading}
                                         />
                                         <button
                                             type="button"
@@ -162,11 +185,11 @@ function Login() {
                                         {errors.submit}
                                     </div>
                                 )}
-
+                               
                                 {/* Submit Button */}
                                 <SubmitButton 
-                                    text={isLoading ? "Logging in..." : "Log In"} 
-                                    disabled={isLoading}
+                                    text={Loading ? "Logging in..." : "Log In"} 
+                                    disabled={Loading}
                                 />
 
                                 {/* Sign Up Link */}

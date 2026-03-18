@@ -31,7 +31,7 @@ function App() {
           <Route path="create-list" element={<Pages.ProtectedRoute><Pages.CreateList /></Pages.ProtectedRoute>} />
           <Route path="post-a-request" element={<Pages.ProtectedRoute><Pages.CreateRequest /></Pages.ProtectedRoute>} />
         </Route>
-        <Route path="/email-auth" element={<Pages.ProtectedRoute><Pages.EmailAuth /></Pages.ProtectedRoute>} />
+        <Route path="/email-auth" element={<Pages.EmailAuth />} />
         <Route path="/followers" element={<Pages.ProtectedRoute><Pages.Followers /></Pages.ProtectedRoute>} />
         <Route path="/following" element={<Pages.ProtectedRoute><Pages.Following /></Pages.ProtectedRoute>} />
         {/* <Route path="/logout" element={<Pages.Logout />} /> */}
@@ -46,6 +46,9 @@ function App() {
         <Route path="/terms" element={<Pages.Terms />} />
         <Route path="/privacy-policy" element={<Pages.PrivacyPolicy />} />
         <Route path="/about" element={<Pages.AboutPage />} />
+        <Route path="/help" element={<Pages.PrelimHelp />} />
+        <Route path="/kyc" element={<Pages.KycFlow />} />
+        <Route path="/kyc-completed" element={<Pages.KycCompleted />} />
         <Route path="*" element={<Pages.NoMatch />} />
       </Routes>
     </AuthProvider>

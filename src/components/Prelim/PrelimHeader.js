@@ -1,5 +1,6 @@
 import React from 'react'
 import "./PrelimHeader.css"
+import logo from '../../assets/img/venlorent-light.png'
 
 function PrelimHeader({ pageTitle, pageSubTitle }) {
   return (
@@ -8,10 +9,10 @@ function PrelimHeader({ pageTitle, pageSubTitle }) {
       <div className="logo-container">
         <img 
           className="login-logo-img" 
-          src="https://i.pravatar.cc/100" 
+          src={logo} 
           alt="VenloRent Logo" 
         />
-        <h1 className="logo-text">VenloRent</h1>
+        {/* <h1 className="logo-text">VenloRent</h1> */}
       </div>
       
       {/* Page Title & Subtitle */}

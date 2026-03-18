@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { SearchBar } from "../exports"
 import { FaXmark } from "react-icons/fa6"
 import { IoMdHeartEmpty, IoMdHeart } from "react-icons/io"
-import { RiVerifiedBadgeFill } from "react-icons/ri"
+import { AgentBadge, PremiumBadge } from './Badges'
 import "./Comments.css"
 
 function Comments({
@@ -80,7 +80,7 @@ function Comments({
                   <div className="comment-name-row">
                     <span className="comment-name">{item.name}</span>
                     {item.verified && (
-                      <RiVerifiedBadgeFill className="comment-verified" />
+                      <AgentBadge className="comment-verified" />
                     )}
                   </div>
                   <span className="comment-handle">{item.handle}</span>

@@ -566,6 +566,7 @@
   color: var(--text-primary);
   line-height: 1.6;
   margin: 0;
+  text-align: left;
 }
 
 .kyc-didit-checklist {

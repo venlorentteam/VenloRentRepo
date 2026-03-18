@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Comments, Modal } from '../exports'
+import { AgentBadge, PremiumBadge } from './Badges'
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -7,12 +8,12 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Link } from 'react-router-dom'
 import './PropertyCard.css'
-
-import { FaRegEye, FaRegComment, FaBookmark, FaRegBookmark } from 'react-icons/fa'
+//Import Icons
+import { IoMdHeartEmpty, IoMdHeart } from "react-icons/io"
+import { FaRegComment, FaBookmark, FaRegBookmark } from 'react-icons/fa'
 import { BsThreeDots } from 'react-icons/bs'
 import { GrLocation } from 'react-icons/gr'
 import { MdIosShare } from 'react-icons/md'
-import { RiVerifiedBadgeFill } from 'react-icons/ri'
 
 function PropertyCard({
   avatar = "https://i.pravatar.cc/100",
@@ -24,7 +25,7 @@ function PropertyCard({
   price = "₦700,000",
   location = "Gwagwalada, Abuja",
   category = "Apartment",
-  views = "10k",
+  likes = "0",
   comments = "532",
   bookmarked = false,
   description = "Self contained apartment, with steady water and light...",
@@ -33,7 +34,12 @@ function PropertyCard({
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isComment, setIsComment] = useState(false)
   const [isBookmarked, setIsBookmarked] = useState(bookmarked)
+  const [isLiked, setIsLiked] = useState(false)
 
+  const toggleLike = () => {
+    setIsLiked(p => !p)
+    // TODO: POST /api/listings/:id/like
+  }
   // Control opening and closing of Comment
   const openComment = () => setIsComment(true)
   const closeComment = (e) => {
@@ -69,7 +75,7 @@ function PropertyCard({
               <div className="property-username-row">
                 <h4 className="property-username">{username}</h4>
                 {verified && (
-                  <RiVerifiedBadgeFill className="verified-badge" aria-label="Verified agent" />
+                  <AgentBadge />
                 )}
               </div>
               <p className="property-handle">{handle} • {time}</p>
@@ -132,9 +138,16 @@ function PropertyCard({
         {/* Activity Bar */}
         <div className="property-activity">
           <div className="property-activity-left">
-            <button className="property-activity-item" aria-label={`${views} views`}>
-              <FaRegEye aria-hidden="true" />
-              <span>{views}</span>
+            <button
+              className="property-activity-item"
+              onClick={toggleLike}
+              aria-label={isLiked ? 'Unlike listing' : 'Like listing'}
+            >
+              {isLiked
+                ? <IoMdHeart className="liked" aria-hidden="true" /> 
+                : <IoMdHeartEmpty aria-hidden="true" />
+              }
+              <span>{likes}</span>
             </button>
             <button
               className="property-activity-item"
