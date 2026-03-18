@@ -50,6 +50,7 @@ function App() {
         <Route path="/kyc" element={<Pages.KycFlow />} />
         <Route path="/kyc-completed" element={<Pages.KycCompleted />} />
         <Route path="*" element={<Pages.NoMatch />} />
+        <Route path="*" element={<Pages.NoMatch />} />
       </Routes>
     </AuthProvider>
     </>
