@@ -171,12 +171,12 @@ const KycCompleted = () => {
                     <p className="kyc-cb-message">{config.message}</p>
                     </div>
 
-                    {/* Powered by Didit (reused style) */}
+                    {/* Powered by Didit (reused style from KycFlow.css) */}
                     <div className="kyc-didit-info kyc-cb-didit-info">
                     <div className="kyc-didit-badge">Powered by Didit</div>
-                    <p className="kyc-didit-text">
-                        Identity verification is handled securely by Didit. Your data is encrypted end-to-end and never shared without your consent.
-                    </p>
+                      <p className="kyc-didit-text">
+                          Identity verification is handled securely by Didit. Your data is encrypted end-to-end and never shared without your consent.
+                      </p>
                     </div>
 
                     {/* Action buttons */}

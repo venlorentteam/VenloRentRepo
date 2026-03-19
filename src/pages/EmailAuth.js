@@ -90,7 +90,12 @@ function EmailAuth(){
     <>
     <div className="email-cont">
       <div className="login">
-        <PrelimHeader pageSubTitle="Enter the code sent to your email"/>
+        <PrelimHeader pageTitle="Almost There!" pageSubTitle="Check your inbox"/>
+        <div className="email-is-sent">
+          <p className="email-is-sent-text">
+            A verification has been sent to <strong>{state?.email}.</strong> Please enter it below to complete your setup.
+          </p>
+        </div>
         <OtpInput onSubmit={handleSubmit} serverError={errors} onClearError={() => setErrors("")} />
         {/* 
           Three states:

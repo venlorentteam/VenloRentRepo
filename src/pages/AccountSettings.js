@@ -181,9 +181,9 @@ const AccountSettings = () => {
             className={`profile-input profile-textarea`}
             placeholder="Tell us about yourself..."
             rows="4"
-            maxLength="200"
+            maxLength="100"
           />
-          <span className="char-count">{formData.bio.length}/200</span>
+          <span className="char-count">{formData.bio.length}/100</span>
         </div>
 
         {/* Action Buttons */}

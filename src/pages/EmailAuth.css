@@ -55,12 +55,30 @@ a{/*for prelim links*/
     text-align: left;
     font-style: italic;
 }
+/* ====== Email Sent COnfirmation Header =======*/
+.email-is-sent{
+  background: var(--success-pale);
+  border: 1.5px solid rgba(16, 185, 129, 0.25);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.email-is-sent-text{
+  font-size: var(--font-sm);
+  color: var(--text-primary);
+  line-height: 1.6;
+  margin: 0;
+  text-align: left;
+}
 
 /* ========================================
     OTP Resend Feature Styles
    ========================================*/ 
-   .resend-section {
-  margin-top: 24px;
+.resend-section {
+  margin-top: var(--spacing-lg);
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -123,6 +141,10 @@ a{/*for prelim links*/
     }
     a{/*for prelim links*/
         color: var(--text-color-dark2);
+    }
+    .email-is-sent{/*Email is sent header*/
+        background: rgba(16, 185, 129, 0.08);
+        border-color: rgba(16, 185, 129, 0.2);
     }
     /* Email Resend */
     .resend-prompt {

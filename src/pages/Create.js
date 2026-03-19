@@ -13,11 +13,11 @@ function Create() {
           (CreatList & CreateRequest), Nested routes to serve both pages as outlets in here.
         */}
         <Header //Top page header
-          pageTitle= {<h2>Create</h2>}
-          icons={
+          pageTitle = {<h2>Create</h2>}
+          icons = {
             [
-              {link: "/inbox", element: < RiMessageLine />},
-              {link: "/notifications", element: < FaRegBell />}
+              {link: "/inbox", element: <RiMessageLine />},
+              {link: "/notifications", element: <FaRegBell />}
             ]
           }
           //button={<ClickButton text="Hello" onClick={() => alert('Clicked!')} />} 
