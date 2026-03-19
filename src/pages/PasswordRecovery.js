@@ -1,75 +1,82 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import './login.css'
-import leftImg from '../assets/img/login-left1.png'
+import './passwordRecovery.css'
 import axios from 'axios'
 import { PrelimFooter, PrelimHeader, SubmitButton } from '../exports'
-import { MdOutlineMailOutline, MdLockOutline } from 'react-icons/md'
-import { FaRegEyeSlash, FaRegEye} from 'react-icons/fa'
+import { MdOutlineMailOutline } from 'react-icons/md'
+
 function PasswordRecovery () {
     const [errors, setErrors] = useState({})
     const [formData, setFormData] = useState({
-    email: "",
-})
-
-const handleChange = (e) => {
-    setFormData({
-        ...formData, [e.target.name] : e.target.value
+        email: "",
     })
-}
-const handleSubmit = async (e) => {
-    e.preventDefault()
 
-    const formErrors = {}
-    if (!formData.email.trim()){
-         formErrors.email = "Email is required"
-    }else if(!/^\S+@\S+\.\S+$/.test(formData.email)){
-        formErrors.email = "Please enter a valid email address"
+    const handleChange = (e) => {
+        if (errors[e.target.name]) {
+            setErrors({ ...errors, [e.target.name]: "" })
+        }
+        setFormData({
+            ...formData, [e.target.name]: e.target.value
+        })
     }
 
-   setErrors(formErrors)
+    const handleSubmit = async (e) => {
+        e.preventDefault()
 
-    if(Object.keys(formErrors).length === 0){
-        try{
-            const res = await axios.post("http://localhost:4000/api/password-recovery", formData)
-            if(res.data.success){
-                //generate token and navgate() to dashboard
+        const formErrors = {}
+        if (!formData.email.trim()) {
+            formErrors.email = "Email is required"
+        } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
+            formErrors.email = "Please enter a valid email address"
+        }
+
+        setErrors(formErrors)
+
+        if (Object.keys(formErrors).length === 0) {
+            try {
+                const res = await axios.post("http://localhost:4000/api/password-recovery", formData)
+                if (res.data.success) {
+                    //generate token and navigate() to dashboard
+                }
+                console.log(res.data)
+            } catch (err) {
+                console.log(err.response?.data?.message || "Error submitting request")
             }
-            console.log(res.data)
-        }
-        catch(err){
-            console.log(err.response?.data?.message || "Error submitting request")
         }
     }
-}
-const iconLeft = {
-    /** Left positioned descriptive icon for the input **/
-    fontSize: "var(--font-size-medium)",
-    position: "absolute",
-    top: "2.5px",
-    left: "8px",
-    color: "var(--primary-color)"
-}
-  return (
-    <>
-    <div className="login-cont">
-        {/* <div className="left-side">
-            <img className="left-img" src={leftImg} alt="Welcome" />
-            <h2>Find it. Love it. Rent it.</h2>
-            <p>Skip the stress, find the best...</p>
-        </div> */}
-        <div className="login">
-           <PrelimHeader pageTitle="Recover your password" pageSubTitle="Please enter email associated with your account"/>
-            <form onSubmit={handleSubmit}>
-              <span className="input-cont"><input className="login-input" type="text" name="email" placeholder="Email" value={formData.email} onChange={handleChange} /><MdOutlineMailOutline style={iconLeft} /></span>
-              {errors.email && <span className='error'>{errors.email}</span>}
-              <SubmitButton text="Continue" />
-            </form>
-        </div>
-    </div>
-    <PrelimFooter />
-    </>
-  )
+
+    return (
+        <>
+            <div className="login-cont">
+                <div className="login">
+                    <PrelimHeader
+                        pageTitle="Recover your password"
+                        pageSubTitle="Enter the email associated with your account"
+                    />
+                    <form onSubmit={handleSubmit}>
+                        <span className="input-cont">
+                            <input
+                                className="login-input"
+                                type="text"
+                                name="email"
+                                placeholder="Email address"
+                                value={formData.email}
+                                onChange={handleChange}
+                                autoComplete="email"
+                            />
+                            <MdOutlineMailOutline />
+                        </span>
+                        {errors.email && <span className='error'>{errors.email}</span>}
+                        <SubmitButton text="Continue" />
+                    </form>
+                    <Link to="/login" className="recovery-back-link">
+                        Remembered it? <span>Back to login</span>
+                    </Link>
+                </div>
+            </div>
+            <PrelimFooter />
+        </>
+    )
 }
 
 export default PasswordRecovery
