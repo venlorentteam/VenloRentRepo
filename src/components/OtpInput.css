@@ -68,7 +68,7 @@
 }
 
 /* Error Message */
-.otp-error {
+/* .otp-error {
   display: block;
   margin-top: var(--spacing-sm);
   margin-bottom: var(--spacing-md);
@@ -77,7 +77,7 @@
   font-weight: 500;
   color: var(--danger-color);
   text-align: center;
-}
+} */
 
 /* Dark Mode */
 @media (prefers-color-scheme: dark) {

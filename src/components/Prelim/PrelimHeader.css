@@ -15,11 +15,13 @@
 .login-logo-img {
   width: 80px;
   height: 80px;
-  border-radius: 50%;
+  border-radius: 25px;
   object-fit: cover;
-  border: 3px solid var(--primary-color);
+  padding: 15px;
+  border: 1px solid var(--primary-color);
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
   transition: transform var(--transition-base);
+  overflow: visible;
 }
 
 .login-logo-img:hover {

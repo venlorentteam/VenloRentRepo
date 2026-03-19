@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './KycFlow.css'
 import axios from 'axios'
-import { PrelimHeader, PrelimFooter } from '../exports'
+import { PrelimFooter } from '../exports'
 import { MdOutlineBusinessCenter, MdOutlineLocationOn, MdOutlineUploadFile } from 'react-icons/md'
 import { BsPersonBadge, BsBuildingCheck } from 'react-icons/bs'
 import { HiOutlineIdentification } from 'react-icons/hi'
@@ -31,15 +31,13 @@ function KycFlow() {
 
   // Step 2 data
   const [documents, setDocuments] = useState({
-    idDocument: null,     // Gov ID
     businessProof: null,  // CAC / business card
   })
   const [previews, setPreviews] = useState({
-    idDocument: null,
     businessProof: null,
   })
 
-  // ─── Step 1 Handlers ──────────────────────────────────────────
+  // === Step 1 Handlers ========================================
   const handleBusinessChange = (e) => {
     const { name, value } = e.target
     setBusinessData(prev => ({ ...prev, [name]: value }))
@@ -55,7 +53,7 @@ function KycFlow() {
     return Object.keys(newErrors).length === 0
   }
 
-  // ─── Step 2 Handlers ──────────────────────────────────────────
+  // === Step 2 Handlers ========================================
   const handleFileChange = (e, docType) => {
     const file = e.target.files[0]
     if (!file) return
@@ -88,13 +86,13 @@ function KycFlow() {
 
   const validateStep2 = () => {
     const newErrors = {}
-    if (!documents.idDocument) newErrors.idDocument = 'Government-issued ID is required'
+    //if (!documents.idDocument) newErrors.idDocument = 'Government-issued ID is required'
     if (!documents.businessProof) newErrors.businessProof = 'Business proof is required'
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
 
-  // ─── Step Navigation ──────────────────────────────────────────
+  // === Step Navigation ========================================
   const handleNext = () => {
     if (currentStep === 1 && !validateStep1()) return
     if (currentStep === 2 && !validateStep2()) return
@@ -103,7 +101,7 @@ function KycFlow() {
 
   const handleBack = () => setCurrentStep(prev => prev - 1)
 
-  // ─── Final Submit → Didit ─────────────────────────────────────
+  // === Final Submit → Didit ========================================
   // Step 3: Submit business info + docs to backend, then redirect to Didit
   const handleSubmitAndRedirectToDidit = async () => {
     setIsLoading(true)
@@ -115,16 +113,16 @@ function KycFlow() {
       formData.append('businessName', businessData.businessName)
       formData.append('officeAddress', businessData.officeAddress)
       formData.append('yearsExperience', businessData.yearsExperience)
-      formData.append('idDocument', documents.idDocument)
-      formData.append('businessProof', documents.businessProof)
+      formData.append('addressProof', documents.businessProof)
 
       const res = await axios.post(
-        'http://localhost:4000/api/kyc/submit-documents',
+        'http://localhost:4000/auth/kyc/submit-documents',
         formData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data',
+            // Removed 'Content-Type': 'multipart/form-data',
+            //Since Backend is using multer, it will automatically set the correct Content-Type with boundary when FormData is passed. Setting it manually can cause issues. 
           },
         }
       )
@@ -135,17 +133,17 @@ function KycFlow() {
       }
     } catch (err) {
       setErrors({
-        submit: err.response?.data?.message || 'Something went wrong. Please try again.',
+        submit: err.response?.data?.message || err.message || 'Something went wrong. Please try again.',
       })
     } finally {
       setIsLoading(false)
     }
   }
 
-  // ─── Skip KYC (do it later from Settings) ─────────────────────
+  // === Skip KYC (do it later from Settings) ========================================
   const handleSkip = () => navigate('/dashboard')
 
-  // ─── Render Steps ─────────────────────────────────────────────
+  // === Render Steps ========================================
   const renderStep = () => {
     switch (currentStep) {
       case 1: return <StepBusinessInfo data={businessData} onChange={handleBusinessChange} errors={errors} />
@@ -171,7 +169,7 @@ function KycFlow() {
               <div className="kyc-left-text">
                 <h2 className="kyc-left-title">Become a Verified Agent</h2>
                 <p className="kyc-left-subtitle">
-                  Complete your KYC to unlock full agent features — create listings, receive messages, and build trust with clients.
+                  Complete your KYC to unlock full agent features - create listings, receive messages, and build trust with clients.
                 </p>
               </div>
 
@@ -196,7 +194,7 @@ function KycFlow() {
               </div>
 
               <button className="kyc-skip-btn" onClick={handleSkip}>
-                Skip for now — I'll verify later
+                Skip for now - I'll verify later
               </button>
             </div>
           </div>
@@ -265,7 +263,7 @@ function KycFlow() {
   )
 }
 
-// ─── Step 1: Business Info ─────────────────────────────────────────────────────
+// === Step 1: Business Info ========================================
 function StepBusinessInfo({ data, onChange, errors }) {
   return (
     <div className="kyc-step">
@@ -320,9 +318,9 @@ function StepBusinessInfo({ data, onChange, errors }) {
           >
             <option value="">Select experience</option>
             <option value="0-1">Less than 1 year</option>
-            <option value="1-3">1 – 3 years</option>
-            <option value="3-5">3 – 5 years</option>
-            <option value="5-10">5 – 10 years</option>
+            <option value="1-3">1 - 3 years</option>
+            <option value="3-5">3 - 5 years</option>
+            <option value="5-10">5 - 10 years</option>
             <option value="10+">10+ years</option>
           </select>
           {errors.yearsExperience && <span className="error-message">{errors.yearsExperience}</span>}
@@ -332,7 +330,7 @@ function StepBusinessInfo({ data, onChange, errors }) {
   )
 }
 
-// ─── Step 2: Document Upload ───────────────────────────────────────────────────
+// === Step 2: Document Upload ========================================
 function StepDocuments({ documents, previews, onFileChange, errors }) {
   return (
     <div className="kyc-step">
@@ -340,12 +338,12 @@ function StepDocuments({ documents, previews, onFileChange, errors }) {
         <div className="kyc-step-icon"><MdOutlineUploadFile /></div>
         <div>
           <h3 className="kyc-step-title">Upload Documents</h3>
-          <p className="kyc-step-desc">JPG, PNG or PDF · Max 5MB per file</p>
+          <p className="kyc-step-desc">JPG, PNG or PDF - Max 5MB per file</p>
         </div>
       </div>
 
       <div className="kyc-fields">
-        <DocumentUpload
+        {/* <DocumentUpload
           label="Government-issued ID"
           hint="Driver's License, National ID, or International Passport"
           docType="idDocument"
@@ -353,7 +351,7 @@ function StepDocuments({ documents, previews, onFileChange, errors }) {
           preview={previews.idDocument}
           onChange={onFileChange}
           error={errors.idDocument}
-        />
+        /> */}
 
         <DocumentUpload
           label="Proof of business"
@@ -407,7 +405,7 @@ function DocumentUpload({ label, hint, docType, file, preview, onChange, error }
   )
 }
 
-// ─── Step 3: Identity Check Summary ───────────────────────────────────────────
+// === Step 3: Identity Check Summary ========================================
 function StepIdentityCheck({ businessData, documents, isLoading, errors }) {
   return (
     <div className="kyc-step">
@@ -415,7 +413,7 @@ function StepIdentityCheck({ businessData, documents, isLoading, errors }) {
         <div className="kyc-step-icon"><HiOutlineIdentification /></div>
         <div>
           <h3 className="kyc-step-title">Identity Verification</h3>
-          <p className="kyc-step-desc">Final step — verify your identity with Didit</p>
+          <p className="kyc-step-desc">Final step - verify your identity with Didit</p>
         </div>
       </div>
 
@@ -434,12 +432,12 @@ function StepIdentityCheck({ businessData, documents, isLoading, errors }) {
           <span className="kyc-review-label">Experience</span>
           <span className="kyc-review-value">{businessData.yearsExperience} years</span>
         </div>
-        <div className="kyc-review-item">
+        {/* <div className="kyc-review-item">
           <span className="kyc-review-label">Government ID</span>
           <span className="kyc-review-value kyc-review-file">
             <IoCheckmarkCircle className="kyc-review-check" /> {documents.idDocument?.name}
           </span>
-        </div>
+        </div> */}
         <div className="kyc-review-item">
           <span className="kyc-review-label">Business proof</span>
           <span className="kyc-review-value kyc-review-file">

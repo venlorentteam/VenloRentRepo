@@ -34,7 +34,6 @@
     position: relative;
     overflow: hidden;
 }
-
 .login-hero::before {
     content: '';
     position: absolute;
@@ -49,12 +48,10 @@
     );
     animation: pulse 8s ease-in-out infinite;
 }
-
 @keyframes pulse {
     0%, 100% { transform: scale(1); opacity: 0.5; }
     50% { transform: scale(1.1); opacity: 0.8; }
 }
-
 .login-hero-content {
     max-width: 600px;
     width: 100%;
@@ -62,7 +59,6 @@
     position: relative;
     z-index: 1;
 }
-
 .login-hero-image {
     width: 100%;
     max-width: 450px;
@@ -72,16 +68,13 @@
     filter: drop-shadow(0 20px 40px rgba(16, 185, 129, 0.2));
     animation: float 6s ease-in-out infinite;
 }
-
 @keyframes float {
     0%, 100% { transform: translateY(0px); }
     50% { transform: translateY(-20px); }
 }
-
 .login-hero-text {
     animation: slideUp 0.8s ease-out;
 }
-
 .login-hero-title {
     font-size: var(--font-3xl);
     font-weight: 800;
@@ -90,7 +83,6 @@
     line-height: 1.2;
     letter-spacing: -0.02em;
 }
-
 .login-hero-subtitle {
     font-size: var(--font-lg);
     color: var(--text-secondary);
@@ -494,8 +486,9 @@
 
 @media (max-width: 500px) {
     .login-hero {
-        min-height: 30vh;
-        padding: var(--spacing-md);
+        /* min-height: 30vh;
+        padding: var(--spacing-md); */
+        display: none;
     }
 
     .login-hero-image {
@@ -513,6 +506,7 @@
     }
 
     .login-form-section {
+        min-height: 100vh;
         padding: var(--spacing-md);
     }
 

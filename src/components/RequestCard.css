@@ -1,0 +1,374 @@
+/* ============================================================
+   RequestCard.css
+   
+   IMPORTANT: This file only contains styles that are NEW and
+   specific to RequestCard. It intentionally does NOT redeclare
+   anything already in PropertyCard.css for the card structure.
+
+   Shared styles used from PropertyCard.css for the card layout
+   ============================================================ */
+
+
+/* ── CARD BASE ─────────────────────────────────────────────────────────────
+   Extends PropertyCard.css .property-card — same layout, different hover
+   shadow tint (cyan instead of green) and expired modifier.
+── */
+.request-card {
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto var(--spacing-2xl);
+  background: var(--box-bg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-base);
+}
+
+.request-card:hover {
+  /* Cyan-tinted hover shadow — distinguishes from PropertyCard's green tint */
+  box-shadow: 0 10px 25px -5px rgba(6, 182, 212, 0.12),
+              0 8px 10px -6px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
+}
+/* .request-card--expired .request-card-stripe {
+  background: var(--border-color);
+} */
+/* .request-card--expired {
+  opacity: 0.72;
+} */
+/* 
+.request-card--expired:hover {
+  transform: none;
+  box-shadow: var(--shadow-md);
+} */
+
+
+/* ── ACCENT STRIPE ─────────────────────────────────────────────────────────
+   Cyan-to-green gradient — visually separates RequestCard from PropertyCard
+   in a mixed feed at a single glance without needing to read the badge.
+── */
+.request-card-stripe {
+  height: 3px;
+  background: linear-gradient(90deg, #06b6d4 0%, var(--primary-color) 100%);
+  transition: var(--transition-base);
+}
+
+/* ── HEADER RIGHT ──────────────────────────────────────────────────────────
+   Wraps the Request type badge + options button.
+   .property-options-btn is reused from PropertyCard.css.
+── */
+.request-header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-shrink: 0;
+}
+
+/* "Request" badge — cyan to mirror the stripe and signal card type.
+   Sits in the same position as PropertyCard's category badge. */
+.request-type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: var(--font-xs);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  background-color: rgba(6, 182, 212, 0.10);
+  color: #06b6d4;
+  border: 1px solid rgba(6, 182, 212, 0.20);
+  white-space: nowrap;
+  transition: all var(--transition-base);
+}
+
+.request-type-badge svg {
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+.request-card--expired .request-type-badge {
+  background-color: var(--bg-secondary);
+  color: var(--text-tertiary);
+  border-color: var(--border-color);
+}
+
+
+/* ── BODY ──────────────────────────────────────────────────────────────────
+   Padding wrapper. .property-description is reused from PropertyCard.css
+   for the text itself — only the container padding is declared here.
+── */
+.request-card-body {
+  padding: 0 var(--spacing-md) var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+
+/* ── CHIPS ─────────────────────────────────────────────────────────────────
+   No equivalent exists in PropertyCard — entirely new to RequestCard.
+   Maps to the three optional fields in CreateRequest:
+     category, location → green chip   (.request-chip--category)
+     budget → grey chip    (.request-chip--budget)
+── */
+.request-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.request-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: var(--font-xs);
+  font-weight: 600;
+  border: 1px solid transparent;
+  transition: all var(--transition-base);
+  line-height: 1;
+}
+
+.request-chip svg {
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+.request-chip--category {
+  background-color: var(--primary-opacity);
+  color: var(--primary-color);
+  border-color: rgba(16, 185, 129, 0.18);
+}
+
+.request-chip--budget {
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+  border-color: var(--border-color);
+}
+
+/* All chips desaturate uniformly when expired */
+.request-card--expired .request-chip,
+.request-card--expired .request-chip--category,
+.request-card--expired .request-chip--budget {
+  background-color: var(--bg-secondary);
+  color: var(--text-tertiary);
+  border-color: var(--border-color);
+}
+
+
+/* ── ACTIVITY BAR — RIGHT SIDE ─────────────────────────────────────────────
+   Left side reuses .property-activity-left and .property-activity-item
+   from PropertyCard.css entirely. Only the right side grouping is new.
+── */
+.request-activity-right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+
+/* ── SEE RESPONSES BUTTON ──────────────────────────────────────────────────
+   Extends .property-activity-item (PropertyCard.css) with an accent state.
+   This is the primary CTA for seekers — opens the public thread of agent
+   replies so anyone with the same housing need can see what was offered.
+── */
+.request-see-responses {
+  /* No base overrides — inherits all layout from property-activity-item */
+  transition: all var(--transition-fast);
+}
+
+/* Accent state when responses exist — draws the eye without being loud */
+.request-see-responses--has-responses {
+  color: #06b6d4;
+  background-color: rgba(6, 182, 212, 0.08);
+}
+
+.request-see-responses--has-responses:hover {
+  background-color: rgba(6, 182, 212, 0.14);
+  color: #06b6d4;
+}
+
+
+/* ── RESPOND BUTTON ────────────────────────────────────────────────────────
+   Agent-facing CTA. Mirrors .property-order-btn (PropertyCard.css) in
+   position and weight — same visual role, different label and action.
+── */
+.request-respond-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: var(--font-sm);
+  font-weight: 700;
+  font-family: inherit;
+  color: var(--button-primary-text);
+  background: linear-gradient(
+    135deg,
+    var(--primary-color) 0%,
+    var(--primary-color-accent) 100%
+  );
+  border: none;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-base);
+  white-space: nowrap;
+}
+
+.request-respond-btn:hover:not(:disabled) {
+  background: linear-gradient(
+    135deg,
+    var(--primary-color-accent) 0%,
+    var(--primary-color) 100%
+  );
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.request-respond-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.request-respond-btn:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+.request-respond-btn:disabled {
+  background: var(--border-color);
+  color: var(--text-tertiary);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+
+/* ── EXPIRY FOOTER ─────────────────────────────────────────────────────────
+   No equivalent in PropertyCard — entirely RequestCard-specific.
+   Communicates the 30-day request lifespan from the PRD.
+── */
+.request-expiry {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+  font-size: var(--font-xs);
+  font-weight: 600;
+  color: var(--text-tertiary);
+  transition: all var(--transition-base);
+}
+
+.request-expiry-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--warning-color);
+  flex-shrink: 0;
+  animation: expiry-pulse 2s infinite;
+}
+
+.request-expiry-dot--expired {
+  background-color: var(--danger-color);
+  animation: none;
+}
+
+@keyframes expiry-pulse {
+  0%, 100% { opacity: 1;   transform: scale(1);    }
+  50%       { opacity: 0.4; transform: scale(0.8);  }
+}
+
+.request-card--expired .request-expiry {
+  color: var(--danger-color);
+  background-color: var(--danger-pale);
+  border-top-color: rgba(239, 68, 68, 0.15);
+}
+
+
+/* ── DARK MODE ─────────────────────────────────────────────────────────────
+   Only overrides for RequestCard-specific classes.
+   PropertyCard.css dark mode handles all shared classes.
+── */
+@media (prefers-color-scheme: dark) {
+  .request-card {
+    background: var(--box-bg-dark);
+    border-color: var(--border-dark);
+  }
+
+  .request-card--expired .request-type-badge {
+    background-color: var(--bg-secondary-dark);
+    border-color: var(--border-dark);
+  }
+
+  .request-chip--budget {
+    background-color: var(--bg-secondary-dark);
+    color: var(--text-secondary-dark);
+    border-color: var(--border-dark);
+  }
+
+  .request-card--expired .request-chip,
+  .request-card--expired .request-chip--category,
+  .request-card--expired .request-chip--budget {
+    background-color: var(--bg-secondary-dark);
+    color: var(--text-tertiary-dark);
+    border-color: var(--border-dark);
+  }
+
+  .request-expiry {
+    background-color: var(--bg-secondary-dark);
+    border-top-color: var(--border-dark);
+  }
+
+  .request-respond-btn {
+    background: linear-gradient(
+      135deg,
+      var(--primary-color) 0%,
+      var(--primary-color-light) 100%
+    );
+  }
+
+  .request-respond-btn:hover:not(:disabled) {
+    background: linear-gradient(
+      135deg,
+      var(--primary-color-light) 0%,
+      var(--primary-color) 100%
+    );
+  }
+}
+
+/* ── RESPONSIVE ────────────────────────────────────────────────────────────
+   Mirrors PropertyCard.css breakpoints exactly.
+── */
+@media (max-width: 768px) {
+  .request-card {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .request-respond-btn {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-xs);
+  }
+}
+
+@media (max-width: 500px) {
+  .request-card-body {
+    padding: 0 var(--spacing-sm) var(--spacing-sm);
+  }
+
+  .request-expiry {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 10px;
+  }
+
+  /* Hidden on very small screens — the stripe colour is enough signal */
+  .request-type-badge {
+    display: none;
+  }
+}

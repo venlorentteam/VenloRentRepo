@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { SubmitButton } from '../exports'
 import './OtpInput.css'
 
-function OtpInput({ length = 6, onSubmit }) {
+function OtpInput({ length = 6, onSubmit, serverError = "", onClearError }) {
   const [otp, setOtp] = useState(Array(length).fill(""))
   const [errors, setErrors] = useState("")
   const inputsRef = useRef([])
@@ -21,9 +21,10 @@ function OtpInput({ length = 6, onSubmit }) {
     newOtp[index] = value
     setOtp(newOtp)
 
-    // Clear error when user starts typing
+    // Clear local and server errors when user starts typing
     if (errors) setErrors("")
-
+    if (serverError && onClearError) onClearError()
+    
     // Move to next input automatically
     if (value && index < length - 1) {
       inputsRef.current[index + 1].focus()
@@ -72,11 +73,10 @@ function OtpInput({ length = 6, onSubmit }) {
       return
     }
     setErrors("")
-    if (onSubmit) {
-      onSubmit(e, code)
-    }
+    if (onSubmit) onSubmit(e, code)
+
   }
-  
+  const displayError = errors || serverError
   return (
   <div className="otp-input-container">
     <form onSubmit={handleSubmit}>
@@ -96,7 +96,7 @@ function OtpInput({ length = 6, onSubmit }) {
         />
         ))}
       </div>
-      {errors && <span className="otp-error">{errors}</span>}
+      {displayError && <span className="submit-error">{displayError}</span>}
       <SubmitButton text="Verify Code" />
     </form>
   </div>

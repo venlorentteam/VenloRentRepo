@@ -1,0 +1,16 @@
+.agent-badge {
+  font-size: 1rem;
+  color: var(--primary-color);
+  flex-shrink: 0;
+}
+.premium-badge {
+  font-size: 1rem;
+  color: var(--warning-color);
+  flex-shrink: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .agent-badge {
+    color: var(--primary-color-light);
+  }
+}

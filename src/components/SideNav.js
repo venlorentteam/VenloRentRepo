@@ -7,13 +7,14 @@ import { MdBookmark, MdBookmarkBorder } from 'react-icons/md'
 import { FaRegSquarePlus, FaSquarePlus } from 'react-icons/fa6'
 import { FaRegUserCircle, FaUserCircle } from 'react-icons/fa'
 import './SideNav.css'
+import logo from '../assets/img/venlorent-light.png'
 
 function SideNav() {
   return (
     <nav className="side-nav" aria-label="Main navigation">
       {/* Logo */}
       <div className="nav-logo">
-        <img className="logo-img" src="https://i.pravatar.cc/100" alt="Venlorent" />
+        <img className="logo-img" src={logo} alt="Venlorent" />
         <span className="logo-text">VenloRent</span>
       </div>
 
