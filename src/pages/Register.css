@@ -118,8 +118,8 @@
 .register-form {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
-  margin-top: var(--spacing-xl);
+  gap: var(--spacing-xs);
+  /* margin-top: var(--spacing-xl); */
 }
 
 /* ========================================

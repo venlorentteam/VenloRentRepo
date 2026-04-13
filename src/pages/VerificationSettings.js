@@ -2,9 +2,22 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import { ClickButton } from '../exports'
 import { FiUpload, FiCheckCircle, FiClock, FiXCircle } from 'react-icons/fi'
+import { useAuth } from "../context/AuthProvider"
+
+const statusMap = {
+  unsubmitted: 'unverified',
+  submitted:   'pending',
+  in_review:   'pending',
+  verified:    'approved',
+  rejected:    'rejected',
+}
 
 const VerificationSettings = () => {
-  const [verificationStatus, setVerificationStatus] = useState('unverified') // unverified, pending, approved, rejected
+  const { user, updateUser } = useAuth()
+  //const [verificationStatus, setVerificationStatus] = useState('unverified') // unverified, pending, approved, rejected
+  // Define statusMap before using it
+  
+  const verificationStatus = statusMap[user?.kycStatus] || 'unverified'
   const [documents, setDocuments] = useState({
     businessProof: null,
   })
@@ -52,30 +65,30 @@ const VerificationSettings = () => {
       const token = localStorage.getItem('token')
 
       // 1. Upload business info + documents to your backend
-      const formData = new FormData()
-      formData.append('businessName', formData.businessName)
-      formData.append('officeAddress', formData.officeAddress)
-      formData.append('yearsExperience', formData.yearsExperience)
-      formData.append('addressProof', documents.businessProof)
+      const payload = new FormData()
+      payload.append('businessName', formData.businessName)
+      payload.append('officeAddress', formData.officeAddress)
+      payload.append('yearsExperience', formData.yearsExperience)
+      payload.append('addressProof', documents.businessProof)
 
       const res = await axios.post(
-        'http://localhost:4000/auth/kyc/submit-documents',
-        formData,
+        'https://newprojectbackend-5axx.onrender.com/auth/kyc/submit-documents',
+        payload,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       )
-
       if (res.data.success && res.data.diditUrl) {
         // 2. Backend returns Didit verification URL → redirect user
         window.location.href = res.data.diditUrl
+        updateUser({ kycStatus: 'submitted' }) //Update user account
       }
       
     } catch (error) {
+      setErrors(prev=>({...prev, submit: error?.response?.data?.message || error?.message || "Unable to submit"}))
       console.error('Error submitting verification:', error)
-      alert('Failed to submit application. Please try again.')
     } finally {
       setIsSubmitting(false)
     }
@@ -196,15 +209,19 @@ const VerificationSettings = () => {
 
         <div className="form-group">
           <label className="form-label">Years of Experience</label>
-          <input
-            type="number"
-            name="yearsExperience"
+          <select 
             value={formData.yearsExperience}
-            onChange={handleChange}
-            className={`profile-input ${errors.yearsExperience ? 'input-error' : ''}`}
-            placeholder="Years in real estate"
-            min="0"
-          />
+            name="yearsExperience" 
+            onChange={handleChange} 
+            className={`form-input form-select ${errors.yearsExperience ? 'input-error' : ''}`}
+          >
+            <option value="">Select experience</option>
+            <option value="0-1">Less than 1 year</option>
+            <option value="1-3">1 - 3 years</option>
+            <option value="3-5">3 - 5 years</option>
+            <option value="5-10">5 - 10 years</option>
+            <option value="10+">10+ years</option>
+          </select>
           {errors.yearsExperience && <span className="error-message">{errors.yearsExperience}</span>}
         </div>
 

@@ -1,20 +1,40 @@
 // settings/AccountSettings.js
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
 import { ClickButton } from '../exports'
 import { FiCamera, FiSave } from 'react-icons/fi'
+import { useAuth } from "../context/AuthProvider"
 
 const AccountSettings = () => {
+  const { user, updateUser } = useAuth();
   const [isEditing, setIsEditing] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
-  const [formData, setFormData] = useState({
-    fullName: 'Obinabo Walter',
-    username: '@walcode',
-    email: 'walter@venlorent.com',
-    phone: '+234 810 000 0000',
-    bio: 'Software Developer & Real Estate Enthusiast',
-    avatar: 'https://i.pravatar.cc/100?img=1'
-  })
+  const [avatarFile, setAvatarFile] = useState(null) // the actual File object
+  const [avatarPreview, setAvatarPreview] = useState(null)
   const [errors, setErrors] = useState({})
+  const [submitSuccess, setSubmitSuccess] = useState("")
+  const [formData, setFormData] = useState({
+    fullName: '',
+    username: '',
+    email: '',
+    phone: '',
+    bio: '',
+    country: '',
+  })
+
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        fullName: user.fullName || '',
+        username: user.username || '',
+        email: user.email || '',
+        phone: user.phone || '',
+        bio: user.bio || '',
+        country: user.country || '',
+      })
+      setAvatarPreview(user.avatar)
+    }
+  }, [user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -25,19 +45,57 @@ const AccountSettings = () => {
     }
   }
 
-  const handleAvatarChange = (e) => {
-    const file = e.target.files[0]
-    if (file) {
-      // TODO: Upload to Cloudinary
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setFormData(prev => ({ ...prev, avatar: reader.result }))
-      }
-      reader.readAsDataURL(file)
+  // Check if user exists on blur of email and username fields
+  const checkUserAvailability = async () => {
+    const email = formData.email.trim()
+    const username = formData.username.trim()
+   
+    // Only check email availability if it's a valid format
+    const emailValid = email && /^\S+@\S+\.\S+$/.test(email)
+    // Only check username availability if it's a valid format  
+    const usernameValid = username && /^[a-zA-Z0-9_]+$/.test(username) && username.length >= 3
+
+    // Nothing valid to check, cancel
+    if (!emailValid && !usernameValid) return
+
+    try {
+      const payload = {}
+      if (emailValid) payload.email = email
+      if (usernameValid) payload.username = username
+      
+      const res = await axios.post("https://newprojectbackend-5axx.onrender.com/auth/check-user", payload)
+      setErrors((prev) => ({
+        ...prev,
+        email: res.data.emailExists ? "Email already in use" : "",
+        username: res.data.usernameExists ? "Username already in use" : "",
+      }))
+    } catch {
+      setErrors((prev) => ({
+        ...prev,
+        email: "Error checking Email availability",
+        username: "Error checking Username availability",
+      }))
     }
   }
 
-  const validateForm = () => {
+  const handleAvatarChange = (e) => {
+    const file = e.target.files[0]
+    if (!file) return;
+
+    // Basic client-side size check (2MB)
+    if (file.size > 2 * 1024 * 1024) {
+      setErrors(prev => ({ ...prev, avatar: "Image must be under 2MB" }))
+      return;
+    }
+
+    setAvatarFile(file)
+    // Show a local preview immediately — the real URL comes back from the server
+    setAvatarPreview(URL.createObjectURL(file))
+    if (errors.avatar) setErrors(prev => ({ ...prev, avatar: '' }))
+  }
+
+  const handleSave = async () => {
+    //Create a new error object
     const newErrors = {}
     if (!formData.fullName.trim()) {
       newErrors.fullName = 'Full name is required'
@@ -55,33 +113,68 @@ const AccountSettings = () => {
     if (!formData.phone.trim()) {
       newErrors.phone = 'Phone number is required'
     }
+    if (!formData.country.trim()) {
+      newErrors.country = 'Country is required'
+    }
+
     setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
 
-  const handleSave = async () => {
-    if (!validateForm()) return
+    if (Object.keys(newErrors).length === 0) {
+      setIsSaving(true)
+      try {
+        //API call to update profile
+        const token = localStorage.getItem('token');
 
-    setIsSaving(true)
-    try {
-      // TODO: API call to update profile
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      setIsEditing(false)
-      // Show success message
-      alert('Profile updated successfully!')
-    } catch (error) {
-      console.error('Error updating profile:', error)
-      alert('Failed to update profile. Please try again.')
-    } finally {
-      setIsSaving(false)
+        // Use FormData so the file upload works alongside text fields
+        const payload = new FormData();
+        payload.append("fullName", formData.fullName);
+        payload.append("username", formData.username);
+        payload.append("email", formData.email);
+        payload.append("phone", formData.phone);
+        payload.append("bio", formData.bio);
+        payload.append("country", formData.country);
+        if (avatarFile) {
+          payload.append("avatar", avatarFile); // must match upload.single("avatar") on the backend
+        }
+
+        const res = await axios.patch("https://newprojectbackend-5axx.onrender.com/edit-account", 
+          payload,
+          {headers: {Authorization: `Bearer ${token}`}}
+          //Allowing axios to set the correct type of ContentType/multipart
+        )
+        if (res.data.success) updateUser(res.data.user) //Update the user context
+        
+        setAvatarFile(null)
+        setIsEditing(false)
+        // Show success message
+        setSubmitSuccess(res.data.message)
+      } catch (err) {
+        setErrors(prev => ({...prev, submit: err.response?.data?.message || err.message || "Failed to update account"}))
+        //alert('Failed to update profile. Please try again.')
+      } finally {
+        setIsSaving(false)
+      }
     }
   }
 
   const handleCancel = () => {
     // Reset form data to original values
-    // TODO: Fetch from state/context
+    //Fetch from state/context
+    if (user) {
+      setFormData({
+        fullName: user.fullName || '',
+        username: user.username || '',
+        email: user.email || '',
+        phone: user.phone || '',
+        bio: user.bio || '',
+        country: user.country || '',
+      });
+      setAvatarPreview(user.avatar);
+    }
+    setAvatarFile(null)
     setIsEditing(false)
     setErrors({})
+    setSubmitSuccess("")
   }
 
   return (
@@ -92,10 +185,14 @@ const AccountSettings = () => {
       </div>
 
       <div className="settings-section">
+        {/* Success message for successful submission */}
+        {submitSuccess && (<div className="submit-success">
+          {submitSuccess}
+        </div>)}
         {/* Avatar Section */}
         <div className="avatar-section">
           <div className="avatar-wrapper">
-            <img src={formData.avatar} alt="Profile" className="settings-avatar" />
+            <img src={avatarPreview || user?.avatar} alt="Profile" className="settings-avatar" />
             {isEditing && (
               <label className="avatar-upload-btn">
                 <FiCamera />
@@ -110,7 +207,7 @@ const AccountSettings = () => {
           </div>
           <div className="avatar-info">
             <h4>{formData.fullName}</h4>
-            <p>{formData.username}</p>
+            <p>@{formData.username}</p>
           </div>
         </div>
 
@@ -125,6 +222,7 @@ const AccountSettings = () => {
             disabled={!isEditing}
             className={`profile-input ${errors.fullName ? 'input-error' : ''}`}
             placeholder="Enter your full name"
+            maxLength="50"
           />
           {errors.fullName && <span className="error-message">{errors.fullName}</span>}
         </div>
@@ -139,6 +237,8 @@ const AccountSettings = () => {
             disabled={!isEditing}
             className={`profile-input ${errors.username ? 'input-error' : ''}`}
             placeholder="@username"
+            onBlur={checkUserAvailability}
+            maxLength="30"
           />
           {errors.username && <span className="error-message">{errors.username}</span>}
         </div>
@@ -153,6 +253,8 @@ const AccountSettings = () => {
             disabled={!isEditing}
             className={`profile-input ${errors.email ? 'input-error' : ''}`}
             placeholder="email@example.com"
+            onBlur={checkUserAvailability}
+            maxLength="50"
           />
           {errors.email && <span className="error-message">{errors.email}</span>}
         </div>
@@ -167,6 +269,7 @@ const AccountSettings = () => {
             disabled={!isEditing}
             className={`profile-input ${errors.phone ? 'input-error' : ''}`}
             placeholder="+234 000 000 0000"
+            maxLength="30"
           />
           {errors.phone && <span className="error-message">{errors.phone}</span>}
         </div>
@@ -181,11 +284,25 @@ const AccountSettings = () => {
             className={`profile-input profile-textarea`}
             placeholder="Tell us about yourself..."
             rows="4"
-            maxLength="200"
+            maxLength="100"
           />
-          <span className="char-count">{formData.bio.length}/200</span>
+          <span className="char-count">{formData.bio.length}/100</span>
         </div>
 
+        <div className="form-group">
+          <label className="form-label">Country</label>
+          <input
+            type="text"
+            name="country"
+            value={formData.country}
+            onChange={handleChange}
+            disabled={!isEditing}
+            className={`profile-input ${errors.country ? 'input-error' : ''}`}
+            placeholder="Country"
+            maxLength="20"
+          />
+          {errors.country && <span className="error-message">{errors.country}</span>}
+        </div>
         {/* Action Buttons */}
         <div className="settings-actions">
           {!isEditing ? (

@@ -50,6 +50,8 @@ function Register() {
           error = "Password is required"
         } else if (value.length < 6) {
           error = "Password must be at least 6 characters"
+        }else if (!/^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$/.test(value)){
+          error = "Password must contain letters, numbers and special character"
         }
         if (formData.confirmPassword.trim()) {
           confirmPasswordError =
@@ -94,11 +96,21 @@ function Register() {
   const checkUserAvailability = async () => {
     const email = formData.email.trim()
     const username = formData.username.trim()
+   
+    // Only check email availability if it's a valid format
+    const emailValid = email && /^\S+@\S+\.\S+$/.test(email)
+    // Only check username availability if it's a valid format  
+    const usernameValid = username && /^[a-zA-Z0-9_]+$/.test(username) && username.length >= 3
 
-    if (!email && !username) return
+    // Nothing valid to check, cancel
+    if (!emailValid && !usernameValid) return
 
     try {
-      const res = await axios.post("http://localhost:4000/auth/check-user", { email, username })
+      const payload = {}
+      if (emailValid) payload.email = email
+      if (usernameValid) payload.username = username
+
+      const res = await axios.post("https://newprojectbackend-5axx.onrender.com/auth/check-user", payload)
       setErrors((prev) => ({
         ...prev,
         email: res.data.emailExists ? "Email already in use" : "",
@@ -143,12 +155,12 @@ function Register() {
           role: formData.agent ? "agent" : "regular",
         }
 
-        const res = await axios.post("http://localhost:4000/auth/register", payload)
+        const res = await axios.post("https://newprojectbackend-5axx.onrender.com/auth/register", payload)
         if (res.data.success) {
           // Always go to email-auth first for OTP verification.
           // Pass role in state so email-auth can redirect correctly after verification:
-          //   role === "agent"   → navigate('/kyc')
-          //   role === "regular" → navigate('/dashboard')
+          //   role === "agent"   => navigate('/kyc')
+          //   role === "regular" => navigate('/dashboard')
           navigate('/email-auth', {
             state: { 
               email: res.data.user.email,
@@ -325,10 +337,10 @@ function Register() {
                   )}
                 </div>
 
-                {/* ── Agent Selection Card ──────────────────────────────────
-                    Hidden checkbox keeps formData.agent in sync for the payload.
-                    The visible card below drives the toggle interaction.
-                ─────────────────────────────────────────────────────────── */}
+                {/* == Agent Selection Card ===================================
+                  Hidden checkbox keeps formData.agent in sync for the payload.
+                  The visible card below drives the toggle interaction.
+                ===============================================================*/}
                 <input
                   type="checkbox"
                   id="agent"

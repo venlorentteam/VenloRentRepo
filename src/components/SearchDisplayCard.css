@@ -1,29 +1,27 @@
-/* ========================================
-   SEARCH DISPLAY CARD
-   ======================================== */
+/* ============================================================
+   SearchDisplayCard.css
+   ============================================================ */
 .search-display-card {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  align-items: stretch;
   gap: var(--spacing-md);
-  
   padding: var(--spacing-md);
-  margin-bottom: var(--spacing-sm);
-  
   background: var(--box-bg);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  
   cursor: pointer;
   transition: all var(--transition-base);
   box-shadow: var(--shadow-sm);
+  margin-bottom: var(--spacing-sm);
+  text-decoration: none;
+  color: inherit;
+  outline: none;
 }
 
 .search-display-card:hover {
-  background: var(--box-bg-hover);
-  border-color: var(--primary-color);
-  box-shadow: var(--shadow-md);
-  transform: translateX(4px);
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-1px);
+  border-color: var(--primary-color-lightest);
 }
 
 .search-display-card:focus-visible {
@@ -31,77 +29,331 @@
   outline-offset: 2px;
 }
 
-/* Left Section */
+/* ============================================================
+   REQUEST VARIANT
+   Cyan left border stripe to mirror RequestCard in the feed.
+   No structural changes — just a visual identifier.
+============================================================ */
+.search-display-card--request {
+  border-left: 3px solid #06b6d4;
+}
+
+/* ============================================================
+   EXPIRED STATE
+   Mutes the card when a request has passed its 30-day window.
+============================================================ */
+.search-display-card--expired {
+  opacity: 0.6;
+}
+
+.search-display-card--expired:hover {
+  transform: none;
+  box-shadow: var(--shadow-sm);
+}
+
+/* ============================================================
+   LEFT SECTION
+   Flex column — contains all text content.
+============================================================ */
 .search-card-left {
-  flex: 1;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xs);
-  min-width: 0;
+  flex: 1;
+  min-width: 0; /* prevents text overflow breaking flex layout */
 }
 
+/* ============================================================
+   AGENT / REQUESTER ROW
+   Avatar + name + handle + optional badges.
+============================================================ */
 .search-user-row {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
+  flex-wrap: wrap;
 }
 
-.search-username {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-  
-  font-size: var(--font-sm);
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.search-verified {
-  font-size: 0.9rem;
-  color: var(--primary-color);
+/* ============================================================
+   AVATAR
+   Small circle — agent photo or initials fallback.
+   The verified badge overlays the bottom-right corner.
+============================================================ */
+.search-avatar-wrap {
+  position: relative;
   flex-shrink: 0;
 }
 
-.search-ad-badge {
-  padding: 2px var(--spacing-xs);
-  
-  font-size: var(--font-xs);
-  font-weight: 600;
-  color: var(--text-tertiary);
-  
+.search-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid var(--primary-color);
+  display: block;
   background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
+}
+
+/* Initials fallback — same size, centred letter */
+.search-avatar--initials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-xs);
+  font-weight: 700;
+  color: var(--primary-color);
+  background: var(--primary-opacity);
+  border-color: var(--primary-color-lightest);
+}
+
+/* Verified badge overlaid on avatar bottom-right */
+.search-verified-overlay {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  font-size: 0.8rem;
+  color: var(--primary-color);
+  background: var(--box-bg);
+  border-radius: 50%;
+}
+
+.search-user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  flex: 1;
+}
+
+.search-agent-name {
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.search-username {
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* ============================================================
+   AD BADGE
+   Small "Ad" pill — top-right of user row.
+============================================================ */
+.search-ad-badge {
+  font-size: var(--font-xs);
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: var(--radius-full);
+  background: rgba(245, 158, 11, 0.12);
+  color: #d97706;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   REQUEST TYPE BADGE
+   Cyan pill — mirrors RequestCard's .request-type-badge exactly.
+============================================================ */
+.search-request-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: var(--radius-full);
+  font-size: var(--font-xs);
+  font-weight: 700;
+  background: rgba(6, 182, 212, 0.10);
+  color: #06b6d4;
+  border: 1px solid rgba(6, 182, 212, 0.20);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.search-request-badge svg {
+  font-size: 0.7rem;
+}
+
+/* ============================================================
+   LISTING BODY
+============================================================ */
+.search-title {
+  font-size: var(--font-sm);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.search-price-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
 }
 
 .search-price {
   font-size: var(--font-xl);
   font-weight: 800;
   color: var(--primary-color);
-  margin: 0;
-  line-height: 1.2;
+  line-height: 1;
+}
+
+/* ============================================================
+   LISTING TYPE PILL
+   Mirrors .property-type-pill from PropertyCard.additions.css.
+   Green for rent, blue for sale, amber for shortlet.
+============================================================ */
+.search-listing-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 9px;
+  border-radius: var(--radius-full);
+  font-size: var(--font-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: rgba(5, 150, 105, 0.12);
+  color: var(--primary-color-dark);
+  border: 1px solid var(--primary-color-lightest);
+}
+
+.search-listing-pill--sale {
+  background: rgba(59, 130, 246, 0.10);
+  color: #2563eb;
+  border-color: rgba(59, 130, 246, 0.20);
+}
+
+.search-listing-pill--shortlet {
+  background: rgba(245, 158, 11, 0.10);
+  color: #d97706;
+  border-color: rgba(245, 158, 11, 0.22);
 }
 
 .search-meta {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
 }
 
-.search-location,
-.search-stats,
-.search-type {
-  font-size: var(--font-sm);
+.search-location {
+  font-size: var(--font-xs);
   color: var(--text-secondary);
   margin: 0;
-  line-height: 1.4;
+  font-weight: 500;
 }
 
 .search-stats {
-  font-weight: 600;
+  font-size: var(--font-xs);
+  color: var(--text-tertiary);
+  margin: 0;
 }
 
-/* Right Section */
+/* ============================================================
+   META CHIPS
+   Bedrooms + property type for listings.
+   Budget + category + location for requests.
+   Identical pill shape to .property-meta-chip and .request-chip
+   for visual consistency across the whole app.
+============================================================ */
+.search-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  margin-top: 2px;
+}
+
+.search-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: var(--font-xs);
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.search-chip svg {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+}
+
+/* Budget chip — matches .request-chip--budget from RequestCard.css */
+.search-chip--budget {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border-color: var(--border-color);
+}
+
+/* ============================================================
+   REQUEST BODY
+============================================================ */
+.search-request-desc {
+  font-size: var(--font-sm);
+  color: var(--text-primary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ============================================================
+   REQUEST FOOTER ROW
+   Response count + expiry status in a single line.
+============================================================ */
+.search-request-footer {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-xs);
+}
+
+.search-response-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--font-xs);
+  font-weight: 600;
+  color: #06b6d4;
+}
+
+.search-response-count svg {
+  font-size: 0.8rem;
+}
+
+.search-expiry {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: var(--font-xs);
+  font-weight: 600;
+  color: var(--warning-color);
+}
+
+.search-expiry svg {
+  font-size: 0.75rem;
+}
+
+.search-expiry--expired {
+  color: var(--danger-color);
+}
+
+/* ============================================================
+   RIGHT SECTION
+   Listings: thumbnail image + chevron.
+   Requests: chevron only (image wrap not rendered in JSX).
+============================================================ */
 .search-card-right {
   display: flex;
   align-items: center;
@@ -109,39 +361,49 @@
   flex-shrink: 0;
 }
 
-.search-image,
-.search-image-placeholder {
+/* ============================================================
+   COVER IMAGE WRAP
+   Fixed-size square — contains the property thumbnail.
+   Only rendered for listings.
+============================================================ */
+.search-image-wrap {
   width: 80px;
   height: 80px;
-  border-radius: var(--radius-lg);
-  object-fit: cover;
+  border-radius: var(--radius-md);
+  overflow: hidden;
   flex-shrink: 0;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
 }
 
+.search-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Placeholder shown when no coverImage prop or URL is broken */
 .search-image-placeholder {
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  
+  font-size: 1.5rem;
+  color: var(--border-color);
   background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  color: var(--text-tertiary);
-  font-size: 2rem;
 }
 
 .search-arrow {
-  font-size: 1rem;
+  font-size: 0.75rem;
   color: var(--text-tertiary);
   flex-shrink: 0;
-  transition: transform var(--transition-fast);
 }
 
-.search-display-card:hover .search-arrow {
-  transform: translateX(4px);
-  color: var(--primary-color);
-}
-
-/* Dark Mode */
+/* ============================================================
+   DARK MODE
+============================================================ */
 @media (prefers-color-scheme: dark) {
   .search-display-card {
     background: var(--box-bg-dark);
@@ -149,72 +411,50 @@
   }
 
   .search-display-card:hover {
-    background: var(--box-bg-hover-dark);
-    border-color: var(--primary-color-light);
+    border-color: rgba(16, 185, 129, 0.3);
   }
 
-  .search-username {
-    color: var(--text-primary-dark);
-  }
-
-  .search-verified {
-    color: var(--primary-color-light);
-  }
-
-  .search-ad-badge {
-    color: var(--text-tertiary-dark);
-    background: var(--bg-secondary-dark);
-    border-color: var(--border-dark);
-  }
-
-  .search-price {
-    color: var(--primary-color-light);
-  }
-
+  .search-agent-name { color: var(--text-primary-dark); }
+  .search-username   { color: var(--text-secondary-dark); }
+  .search-price      { color: var(--primary-color-light); }
   .search-location,
-  .search-stats,
-  .search-type {
+  .search-stats      { color: var(--text-secondary-dark); }
+
+  .search-chip {
+    background: var(--box-bg-hover-dark);
+    border-color: var(--border-dark);
     color: var(--text-secondary-dark);
+  }
+
+  .search-chip svg { color: var(--text-tertiary-dark); }
+
+  .search-image-wrap {
+    border-color: var(--border-dark);
+    background: var(--bg-secondary-dark);
   }
 
   .search-image-placeholder {
     background: var(--bg-secondary-dark);
-    border-color: var(--border-dark);
-    color: var(--text-tertiary-dark);
+    color: var(--border-dark);
   }
 
-  .search-arrow {
-    color: var(--text-tertiary-dark);
-  }
-
-  .search-display-card:hover .search-arrow {
-    color: var(--primary-color-light);
-  }
+  .search-request-desc { color: var(--text-primary-dark); }
 }
 
-/* Responsive */
-@media (max-width: 500px) {
-  .search-display-card {
-    padding: var(--spacing-sm);
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+@media (max-width: 480px) {
+  .search-image-wrap {
+    width: 64px;
+    height: 64px;
   }
 
   .search-price {
     font-size: var(--font-lg);
   }
 
-  .search-image,
-  .search-image-placeholder {
-    width: 60px;
-    height: 60px;
+  .search-title {
+    font-size: var(--font-xs);
   }
-
-  .search-image-placeholder {
-    font-size: 1.5rem;
-  }
-
-  .search-location,
-.search-stats,
-.search-type {
-font-size: var(--font-xs);
-}
 }

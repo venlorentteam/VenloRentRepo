@@ -1,141 +1,192 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { MessageListItem, SearchBar, ChatScreen, PageSetup, Header } from "../exports";
-import { FaRegBell } from 'react-icons/fa';
-import { RiSearchLine } from 'react-icons/ri';
-import "./Inbox.css";
+import React, { useState, useEffect } from "react"
+import { useNavigate, useLocation } from "react-router-dom"  // ← useLocation added
+import axios from "axios"                                      // ← added
+import { MessageListItem, SearchBar, ChatScreen, PageSetup, Header } from "../exports"
+import { FaRegBell } from "react-icons/fa"
+import { timeAgo } from "../components/Time"                  // ← added
+import "./Inbox.css"
 
-const dummyMessages = [
-  {
-    id: 1,
-    avatar: "https://i.pravatar.cc/100?img=5",
-    name: "Obinabo Williams",
-    verified: true,
-    lastMessage: "Hey, are you still coming today?",
-    timeAgo: "10m",
-    unread: true,
-  },
-  {
-    id: 2,
-    avatar: "https://i.pravatar.cc/100?img=8",
-    name: "Jay Carlos",
-    verified: false,
-    lastMessage: "Howfa na",
-    timeAgo: "1h",
-    unread: false,
-  },
-  {
-    id: 3,
-    avatar: "https://i.pravatar.cc/100?img=12",
-    name: "Wally White",
-    verified: true,
-    lastMessage: "Got it, see you soon!",
-    timeAgo: "3h",
-    unread: true,
-  },
-  {
-    id: 4,
-    avatar: "https://i.pravatar.cc/100?img=14",
-    name: "David King",
-    verified: true,
-    lastMessage: "Let's meet later",
-    timeAgo: "1d",
-    unread: false,
-  },
-  {
-    id: 5,
-    avatar: "https://i.pravatar.cc/100?img=15",
-    name: "Zara Femi",
-    verified: false,
-    lastMessage: "Got your update!",
-    timeAgo: "2d",
-    unread: true,
-  },
-];
+// ========================================================
+// Shape mapper — lives outside the component so it's stable.
+// Transforms the raw API conversation into what MessageListItem
+// and ChatScreen expect. Needs the JWT to identify "the other person".
+// ========================================================
+const mapConversations = (convos, token) => {
+  let myId = null
+  try {
+    myId = JSON.parse(atob(token.split(".")[1]))?.id
+  } catch (_) {}
+
+  return convos.map((c) => {
+    const other =
+      (c.participants || []).find((p) => String(p._id) !== String(myId)) ||
+      c.participants?.[0] ||
+      {}
+
+    return {
+      id: c._id,
+      conversationId: c._id,
+      avatar: other.avatar || "",
+      name: other.fullName || other.username || "User",
+      verified: other.kycStatus === "verified",
+      lastMessage: c.lastMessage?.text || "",
+      timeAgo: c.lastMessageAt ? timeAgo(c.lastMessageAt) : "",
+      unread: false,
+    }
+  })
+}
 
 const Inbox = () => {
-  const navigate = useNavigate();
-  const [selectedChat, setSelectedChat] = useState(null);
-  const [messages, setMessages] = useState(dummyMessages);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filteredMessages, setFilteredMessages] = useState(dummyMessages);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const navigate = useNavigate()
+  const location = useLocation() // hook, not window.location
 
-  // Handle window resizing to adapt mobile/desktop layout
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  // conversations = source of truth
+  // filteredConversations = search-derived view of it
+  const [conversations, setConversations] = useState([])
+  const [filteredConversations, setFilteredConversations] = useState([])
+  const [selectedChat, setSelectedChat] = useState(null)
+  const [searchQuery, setSearchQuery] = useState("")
+  const [isLoading, setIsLoading] = useState(true) // declared properly
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
 
-  // Filter messages based on search query
+  // Fetch all conversations for the logged-in user
   useEffect(() => {
-    if (searchQuery.trim()) {
-      const filtered = messages.filter((msg) =>
-        msg.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        msg.lastMessage.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      setFilteredMessages(filtered);
-    } else {
-      setFilteredMessages(messages);
+    const fetchConversations = async () => {
+      const token = localStorage.getItem("token")
+      if (!token) { setIsLoading(false); return }
+      try {
+        const res = await axios.get("https://newprojectbackend-5axx.onrender.com/conversations", {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        // Map raw API shape before storing — never store unmapped data
+        const mapped = mapConversations(res.data.conversations || [], token)
+        setConversations((prev) => {
+        const fetchedIds = new Set(mapped.map((c) => c.id))
+        
+        // Keep any conversations Effect B added that the server didn't return yet
+        const justAdded = prev.filter((c) => !fetchedIds.has(c.id))
+        
+        // justAdded goes first so the agent conversation stays at the top
+        return [...justAdded, ...mapped]
+      })
+
+      setFilteredConversations((prev) => {
+        const fetchedIds = new Set(mapped.map((c) => c.id))
+        const justAdded = prev.filter((c) => !fetchedIds.has(c.id))
+        return [...justAdded, ...mapped]
+      })
+      } catch (err) {
+        console.error("Failed to fetch conversations:", err)
+      } finally {
+        setIsLoading(false)
+      }
     }
-  }, [searchQuery, messages]);
+    fetchConversations()
+  }, [])
 
-  // Handle chat selection
-  const handleSelectChat = (chat) => {
-    setSelectedChat(chat);
-    
-    // Mark as read
-    setMessages(prev => 
-      prev.map(msg => 
-        msg.id === chat.id ? { ...msg, unread: false } : msg
+  // Auto-open a conversation when ?agentId= is in the URL
+  // Triggered by the "Contact Agent" button on OrderPreview.
+  useEffect(() => {
+    const agentId = new URLSearchParams(location.search).get("agentId")
+    if (!agentId) return
+
+    const token = localStorage.getItem("token")
+    if (!token) return
+
+    const open = async () => {
+      try {
+        const res = await axios.post(
+          "https://newprojectbackend-5axx.onrender.com/conversations",
+          { recipientId: agentId },
+          { headers: { Authorization: `Bearer ${token}` } }
+        )
+        // mapConversations always returns an array — destructure the first item
+        const [chat] = mapConversations([res.data.conversation], token) // ← fixed
+
+        // Prepend only if not already in the list, then select it
+        setConversations((prev) => {
+          const exists = prev.find((c) => c.id === chat.id)
+          return exists ? prev : [chat, ...prev]
+        })
+        setSelectedChat(chat)
+
+        // On mobile, navigate into the chat screen directly
+        if (isMobile) {
+          navigate(`/chat/${chat.id}`, { state: { chat } })  // pass the chat data to avoid refetching in ChatScreen
+        }
+      } catch (err) {
+        console.error("Failed to open agent conversation:", err)
+      }
+    }
+    open()
+  }, [location.search])
+
+  // Respond to window resizing
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768)
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
+
+  // Search filters against conversations
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setFilteredConversations(conversations)
+      return
+    }
+    const q = searchQuery.toLowerCase()
+    setFilteredConversations(
+      conversations.filter(
+        (c) =>
+          c.name.toLowerCase().includes(q) ||
+          c.lastMessage.toLowerCase().includes(q)
       )
-    );
+    )
+  }, [searchQuery, conversations])
 
-    // On mobile, navigate to chat screen
-    if (isMobile) {
-      navigate(`/chat/${chat.id}`, { state: { chat } });
-    }
-  };
-
-  // Handle search
-  const handleSearch = (query) => {
-    setSearchQuery(query);
-  };
-
-  // If mobile and a chat is selected → show chat only (handled by navigation)
-  // This component now only shows the inbox list on mobile
+  // Select a chat and mark it read 
+  const handleSelectChat = (chat) => {
+    setSelectedChat(chat)
+    // Mark as read in the source array — filtered view re-derives automatically
+    setConversations((prev) =>
+      prev.map((c) => (c.id === chat.id ? { ...c, unread: false } : c))
+    )
+    if (isMobile) navigate(`/chat/${chat.id}`, { state: { chat } })
+  }
 
   return (
     <PageSetup>
       <Header
         pageTitle={<h2>Messages</h2>}
-        icons={[
-          { link: "/notifications", element: <FaRegBell /> }
-        ]}
+        icons={[{ link: "/notifications", element: <FaRegBell /> }]}
       />
-      
+
       <div className="main-content">
         <div className="content">
           <div className="inbox-layout">
-            {/* Left Panel: Message List */}
-            <div className={`inbox-sidebar ${selectedChat && !isMobile ? 'has-selection' : ''}`}>
-              {/* Search Bar */}
+
+            {/* ── Left panel: conversation list ── */}
+            <div className={`inbox-sidebar ${selectedChat && !isMobile ? "has-selection" : ""}`}>
               <div className="inbox-search">
-                <SearchBar 
-                  placeholder="Search messages..." 
-                  onSearch={handleSearch}
+                <SearchBar
+                  placeholder="Search messages..."
+                  onSearch={(q) => setSearchQuery(q)}
                 />
               </div>
 
-              {/* Message List */}
               <div className="inbox-message-list">
-                {filteredMessages.length > 0 ? (
-                  filteredMessages.map((msg) => (
+                {isLoading ? (
+                  <div className="inbox-loading">
+                    {[0, 1, 2].map((i) => (
+                      <div key={i} className="skeleton skeleton-message-item" />
+                    ))}
+                  </div>
+                ) : filteredConversations.length > 0 ? (  // ← filteredConversations
+                  filteredConversations.map((convo) => (
                     <MessageListItem
-                      key={msg.id}
-                      {...msg}
-                      onClick={() => handleSelectChat(msg)}
+                      key={convo.id}
+                      {...convo}
+                      onClick={() => handleSelectChat(convo)}
                     />
                   ))
                 ) : (
@@ -146,12 +197,12 @@ const Inbox = () => {
               </div>
             </div>
 
-            {/* Right Panel: Chat Screen / Placeholder */}
+            {/* ── Right panel: active chat or placeholder ── */}
             {!isMobile && (
               <div className="inbox-chat-panel">
                 {selectedChat ? (
-                  <ChatScreen 
-                    chat={selectedChat} 
+                  <ChatScreen
+                    chat={selectedChat}
                     onBack={() => setSelectedChat(null)}
                   />
                 ) : (
@@ -167,7 +218,7 @@ const Inbox = () => {
         </div>
       </div>
     </PageSetup>
-  );
-};
+  )
+}
 
-export default Inbox;
+export default Inbox

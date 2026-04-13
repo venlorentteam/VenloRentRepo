@@ -13,11 +13,11 @@ function Create() {
           (CreatList & CreateRequest), Nested routes to serve both pages as outlets in here.
         */}
         <Header //Top page header
-          pageTitle= {<h2>Create</h2>}
-          icons={
+          pageTitle = {<h2>Create</h2>}
+          icons = {
             [
-              {link: "/inbox", element: < RiMessageLine />},
-              {link: "/notifications", element: < FaRegBell />}
+              {link: "/inbox", element: <RiMessageLine />},
+              {link: "/notifications", element: <FaRegBell />}
             ]
           }
           //button={<ClickButton text="Hello" onClick={() => alert('Clicked!')} />} 
@@ -28,6 +28,14 @@ function Create() {
         </div>
         <div className="sidebar">
           {/*Optional for follows and all*/}
+          <div className="search-tips">{/* Reused from search.css */}
+            <h3>Posting Tips</h3>
+            <ul>
+              <li>Ensure all required fields are filled</li>
+              <li>Enter locations that exist</li>
+              <li>Confirm all entered data before submission</li>
+            </ul>
+          </div>
         </div>
       </div>
     </PageSetup>

@@ -28,12 +28,6 @@
   min-height: 400px;
 }
 
-.empty-icon {
-  font-size: 4rem;
-  margin-bottom: var(--spacing-lg);
-  opacity: 0.5;
-}
-
 .feed-empty h3 {
   font-size: var(--font-xl);
   font-weight: 700;

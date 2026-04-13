@@ -4,9 +4,11 @@
 
 import { ClickButton, UpgradeWidget } from '../exports'
 import { FiCheck } from 'react-icons/fi'
+import { useAuth } from '../context/AuthProvider'
 
 const SubscriptionSettings = () => {
-  const currentPlan = 'Free' // Free, Pro, Premium
+const { user } = useAuth()
+  const currentPlan = user.plan.charAt(0).toUpperCase() + user.plan.slice(1) // Free, Pro, Premium
 
   const plans = [
     {

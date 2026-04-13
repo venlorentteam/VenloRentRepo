@@ -2,7 +2,6 @@
    CREATE PAGE STYLES (Request & Listing)
    Modern Design Theme - Emerald Green
    ======================================== */
-
 /* Main Container */
 .post-main-container {
   width: 100%;
@@ -39,7 +38,7 @@
   font-size: var(--font-base);
   background: var(--input-bg);
   color: var(--text-primary);
-  height: 120px;
+  width: 100%;
   align-self: stretch;
   flex: 1;
   resize: none;
@@ -165,6 +164,14 @@ hr {
   color: var(--text-primary);
   cursor: pointer;
   margin: 0;
+}
+
+/* Then update both children to take full width of parent */
+.post-main-container,
+.post-features-container {
+  width: 100%;
+  max-width: 100%; /* let the parent wrapper control the max-width */
+  margin: var(--spacing-md) 0; /* vertical margin only — horizontal handled by parent */
 }
 
 /* Feature Icon */
@@ -293,8 +300,7 @@ hr {
 @media (max-width: 768px) {
   .post-main-container,
   .post-features-container {
-    max-width: 100%;
-    margin: var(--spacing-md);
+    margin: var(--spacing-sm) 0;
   }
 
   .caption-input-container {

@@ -1,5 +1,14 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import axios from 'axios'
+import defaultAvatar from "../assets/img/avatar.png"
+
+// Avatar single helper — normalize once, use everywhere
+const normalizeUser = (user) => ({
+  ...user,
+  avatar: user.avatar || defaultAvatar,
+})
+
+//Create Context Provider
 const AuthContext = createContext()
 
 //Define Context Coomponent
@@ -12,46 +21,51 @@ const AuthProvider = ({children}) => {
         const token = localStorage.getItem("token");
 
         if (!token) {
-            setIsLoading(false);
+            setIsLoading(false)
             return
         }
         //Verify token and fetch user profile
         const verifyUser = async () => {
             try {
-                const res = await axios.get("http://localhost:4000/profile", {
+                const res = await axios.get("https://newprojectbackend-5axx.onrender.com/profile", {
                     headers: { Authorization: `Bearer ${token}` }
-                });
-                setUser(res.data.user);
+                })
+                setUser(normalizeUser(res.data.user))
             } catch(err){
-                localStorage.removeItem("token");
-                setUser(null);
+                localStorage.removeItem("token")
+                setUser(null)
             } finally {
-                setIsLoading(false);
+                setIsLoading(false)
             }
         };
-        verifyUser();
+        verifyUser()
     }, [])
 
     //Login Function
     const login = async (email, password) => {
-        const res = await axios.post("http://localhost:4000/auth/login", {email, password})
+        const res = await axios.post("https://newprojectbackend-5axx.onrender.com/auth/login", {email, password})
         if (!res.data?.token || !res.data?.user) {
-            throw new Error(res.data?.message || "Login failed");
+            throw new Error(res.data?.message || "Login failed")
         }
-        localStorage.setItem("token", res.data.token);
-        setUser(res.data.user);
-        return res.data.user;
+        localStorage.setItem("token", res.data.token)
+        const normalized = normalizeUser(res.data.user)
+        setUser(normalized)  // normalize on login
+        return normalized
     }
 
     //Logout Function
     const logout = () => {
-        localStorage.removeItem("token");
-        setUser(null);
+        localStorage.removeItem("token")
+        setUser(null)
     }
 
+    //Update User Function
+    const updateUser = (updatedData) => {
+        setUser(prev => normalizeUser({ ...prev, ...updatedData }))  // normalize on update
+    }
     //Return Context Provider with user and auth functions
     return (
-        <AuthContext.Provider value={{ user, isLoading, login, logout}}>
+        <AuthContext.Provider value={{ user, isLoading, login, updateUser, logout}}>
             {children}
         </AuthContext.Provider>
     )

@@ -40,7 +40,7 @@ function EmailAuth(){
     e.preventDefault()
     
     try{
-      const res = await axios.post("http://localhost:4000/auth/email-verify", {email: state?.email, otp})
+      const res = await axios.post("https://newprojectbackend-5axx.onrender.com/auth/email-verify", {email: state?.email, otp})
       if(res.data.success){//validation successful
         localStorage.setItem("token", res.data.token);
         const nextPath = state?.role === "agent" ? "/kyc" : "/dashboard"
@@ -61,7 +61,7 @@ function EmailAuth(){
     setErrors('')
 
     try {
-      await axios.post('http://localhost:4000/auth/resend-otp', {
+      await axios.post('https://newprojectbackend-5axx.onrender.com/auth/resend-otp', {
         email: state.email,
       })
 
@@ -90,7 +90,12 @@ function EmailAuth(){
     <>
     <div className="email-cont">
       <div className="login">
-        <PrelimHeader pageSubTitle="Enter the code sent to your email"/>
+        <PrelimHeader pageTitle="Almost There!" pageSubTitle="Check your inbox"/>
+        <div className="email-is-sent">
+          <p className="email-is-sent-text">
+            A verification has been sent to <strong>{state?.email}.</strong> Please enter it below to complete your setup.
+          </p>
+        </div>
         <OtpInput onSubmit={handleSubmit} serverError={errors} onClearError={() => setErrors("")} />
         {/* 
           Three states:

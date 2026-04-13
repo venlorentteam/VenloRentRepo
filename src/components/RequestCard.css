@@ -9,10 +9,10 @@
    ============================================================ */
 
 
-/* ── CARD BASE ─────────────────────────────────────────────────────────────
+/* == CARD BASE ==============================================
    Extends PropertyCard.css .property-card — same layout, different hover
    shadow tint (cyan instead of green) and expired modifier.
-── */
+ */
 .request-card {
   max-width: 600px;
   width: 100%;
@@ -44,17 +44,17 @@
 } */
 
 
-/* ── ACCENT STRIPE ─────────────────────────────────────────────────────────
+/* ACCENT STRIPE 
    Cyan-to-green gradient — visually separates RequestCard from PropertyCard
    in a mixed feed at a single glance without needing to read the badge.
-── */
+ */
 .request-card-stripe {
   height: 3px;
   background: linear-gradient(90deg, #06b6d4 0%, var(--primary-color) 100%);
   transition: var(--transition-base);
 }
 
-/* ── HEADER RIGHT ──────────────────────────────────────────────────────────
+/* HEADER RIGHT 
    Wraps the Request type badge + options button.
    .property-options-btn is reused from PropertyCard.css.
 ── */
@@ -95,9 +95,9 @@
 }
 
 
-/* ── BODY ──────────────────────────────────────────────────────────────────
-   Padding wrapper. .property-description is reused from PropertyCard.css
-   for the text itself — only the container padding is declared here.
+/* BODY 
+  Padding wrapper. .property-description is reused from PropertyCard.css
+  for the text itself — only the container padding is declared here.
 ── */
 .request-card-body {
   padding: 0 var(--spacing-md) var(--spacing-md);
@@ -107,12 +107,12 @@
 }
 
 
-/* ── CHIPS ─────────────────────────────────────────────────────────────────
-   No equivalent exists in PropertyCard — entirely new to RequestCard.
-   Maps to the three optional fields in CreateRequest:
-     category, location → green chip   (.request-chip--category)
-     budget → grey chip    (.request-chip--budget)
-── */
+/*CHIPS 
+  No equivalent exists in PropertyCard — entirely new to RequestCard.
+  Maps to the three optional fields in CreateRequest:
+  category, location → green chip   (.request-chip--category)
+  budget → grey chip    (.request-chip--budget)
+ */
 .request-chips {
   display: flex;
   flex-wrap: wrap;
@@ -159,10 +159,10 @@
 }
 
 
-/* ── ACTIVITY BAR — RIGHT SIDE ─────────────────────────────────────────────
-   Left side reuses .property-activity-left and .property-activity-item
-   from PropertyCard.css entirely. Only the right side grouping is new.
-── */
+/* ACTIVITY BAR — RIGHT SIDE
+  Left side reuses .property-activity-left and .property-activity-item
+  from PropertyCard.css entirely.
+*/
 .request-activity-right {
   display: flex;
   align-items: center;
@@ -170,17 +170,15 @@
 }
 
 
-/* ── SEE RESPONSES BUTTON ──────────────────────────────────────────────────
-   Extends .property-activity-item (PropertyCard.css) with an accent state.
-   This is the primary CTA for seekers — opens the public thread of agent
-   replies so anyone with the same housing need can see what was offered.
-── */
+/* SEE RESPONSES BUTTON 
+  Extends .property-activity-item (PropertyCard.css) with an accent state.
+*/
 .request-see-responses {
-  /* No base overrides — inherits all layout from property-activity-item */
+  /* No base overrides - inherits all layout from property-activity-item */
   transition: all var(--transition-fast);
 }
 
-/* Accent state when responses exist — draws the eye without being loud */
+/* Accent state when responses exist - draws the eye without being loud */
 .request-see-responses--has-responses {
   color: #06b6d4;
   background-color: rgba(6, 182, 212, 0.08);
@@ -191,65 +189,10 @@
   color: #06b6d4;
 }
 
-
-/* ── RESPOND BUTTON ────────────────────────────────────────────────────────
-   Agent-facing CTA. Mirrors .property-order-btn (PropertyCard.css) in
-   position and weight — same visual role, different label and action.
-── */
-.request-respond-btn {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-  padding: var(--spacing-sm) var(--spacing-lg);
-  font-size: var(--font-sm);
-  font-weight: 700;
-  font-family: inherit;
-  color: var(--button-primary-text);
-  background: linear-gradient(
-    135deg,
-    var(--primary-color) 0%,
-    var(--primary-color-accent) 100%
-  );
-  border: none;
-  border-radius: var(--radius-lg);
-  cursor: pointer;
-  box-shadow: var(--shadow-sm);
-  transition: all var(--transition-base);
-  white-space: nowrap;
-}
-
-.request-respond-btn:hover:not(:disabled) {
-  background: linear-gradient(
-    135deg,
-    var(--primary-color-accent) 0%,
-    var(--primary-color) 100%
-  );
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-.request-respond-btn:active:not(:disabled) {
-  transform: translateY(0);
-}
-
-.request-respond-btn:focus-visible {
-  outline: 2px solid var(--primary-color);
-  outline-offset: 2px;
-}
-
-.request-respond-btn:disabled {
-  background: var(--border-color);
-  color: var(--text-tertiary);
-  box-shadow: none;
-  cursor: not-allowed;
-}
-
-
-/* ── EXPIRY FOOTER ─────────────────────────────────────────────────────────
-   No equivalent in PropertyCard — entirely RequestCard-specific.
-   Communicates the 30-day request lifespan from the PRD.
-── */
+/* EXPIRY FOOTER 
+  No equivalent in PropertyCard — entirely RequestCard-specific.
+  Communicates the 30-day request lifespan from the PRD.
+*/
 .request-expiry {
   display: flex;
   align-items: center;
@@ -288,11 +231,6 @@
   border-top-color: rgba(239, 68, 68, 0.15);
 }
 
-
-/* ── DARK MODE ─────────────────────────────────────────────────────────────
-   Only overrides for RequestCard-specific classes.
-   PropertyCard.css dark mode handles all shared classes.
-── */
 @media (prefers-color-scheme: dark) {
   .request-card {
     background: var(--box-bg-dark);
@@ -323,26 +261,11 @@
     border-top-color: var(--border-dark);
   }
 
-  .request-respond-btn {
-    background: linear-gradient(
-      135deg,
-      var(--primary-color) 0%,
-      var(--primary-color-light) 100%
-    );
-  }
-
-  .request-respond-btn:hover:not(:disabled) {
-    background: linear-gradient(
-      135deg,
-      var(--primary-color-light) 0%,
-      var(--primary-color) 100%
-    );
-  }
 }
 
-/* ── RESPONSIVE ────────────────────────────────────────────────────────────
-   Mirrors PropertyCard.css breakpoints exactly.
-── */
+/* RESPONSIVE
+  Mirrors PropertyCard.css breakpoints exactly.
+ */
 @media (max-width: 768px) {
   .request-card {
     border-radius: 0;
@@ -351,10 +274,6 @@
     margin-bottom: var(--spacing-xl);
   }
 
-  .request-respond-btn {
-    padding: var(--spacing-sm) var(--spacing-md);
-    font-size: var(--font-xs);
-  }
 }
 
 @media (max-width: 500px) {

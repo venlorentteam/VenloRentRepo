@@ -1,252 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import {
-  Header,
-  ClickButton,
-  PageSetup,
-  PropertyCard,
-  RequestCard,
-  UpgradeWidget,
+import { Header, ClickButton, PageSetup, PropertyCard, RequestCard, UpgradeWidget,
 } from '../exports'
+import axios from 'axios'
+import { useAuth } from "../context/AuthProvider"
 import { RiMessageLine, RiAddCircleLine } from 'react-icons/ri'
 import { FaRegBell } from 'react-icons/fa'
+import { timeAgo } from "../components/Time"
+import defaultAvatar from "../assets/img/avatar.png"
 import '../assets/css/global.css'
 import './Dashboard.css'
-import propertyImg1 from '../assets/img/house-isolated-field.jpg'
-import propertyImg2 from '../assets/img/3d-rendering-house-model.jpg'
-
-// ─────────────────────────────────────────────────────────────────────────────
-//  MOCK CURRENT USER
-//  Replace with your real auth context when ready, e.g: const { user } = useAuth()
-//  isAgent   → KYC completed, controls agent compose footer in RequestResponsesModal
-//  isPremium → paid plan, controls premium badge display
-// ─────────────────────────────────────────────────────────────────────────────
-const MOCK_CURRENT_USER = {
-  id:        'current-user-001',
-  name:      'Obinabo Walter',
-  handle:    '@walcode',
-  avatar:    'https://i.pravatar.cc/100?img=1',
-  isAgent:   false,   // flip to true to see agent compose footer inside modal
-  isPremium: false,
-}
-
-const MOCK_FEED = [
-  // ── LISTING 1 ────────────────────────────────────────────────────────────
-  {
-    type:        'listing',
-    isFollowing: true,         // current user follows this agent
-    id:          'lst-001',
-    avatar:      'https://i.pravatar.cc/100?img=1',
-    username:    'Obinabo Walter',
-    handle:      '@walcode',
-    verified:    true,
-    time:        '2h ago',
-    image:       [propertyImg2, propertyImg1],
-    price:       '₦700,000',
-    location:    'Gwagwalada, Abuja',
-    category:    'Apartment',
-    views:       '10k',
-    comments:    '532',
-    bookmarked:  false,
-    description: 'Self contained apartment, with steady water and light. Very secure environment with 24/7 security.',
-  },
-
-  // ── REQUEST 1 ────────────────────────────────────────────────────────────
-  {
-    type:          'request',
-    isFollowing:   false,
-    id:            'req-001',
-    avatar:        'https://i.pravatar.cc/100?img=9',
-    username:      'Amara Obi',
-    handle:        '@amaraobi',
-    isAgent:       true,
-    isPremium:     true,
-    time:          '2 hrs ago',
-    description:   'Looking for a clean 2-bedroom flat in Wuse 2 or Maitama. Preferably ground floor with steady electricity and water. Ready to move in by end of the month.',
-    category:      'Flat',
-    location:      'Wuse 2 / Maitama, Abuja',
-    budget:        '₦600k – ₦900k/yr',
-    likes:         '48',
-    liked:         false,
-    responseCount: '3',
-    bookmarked:    false,
-    expired:       false,
-    daysLeft:      27,
-    agentResponses: [
-      {
-        id:        'ar-001',
-        avatar:    'https://i.pravatar.cc/100?img=12',
-        name:      'Emeka Realty',
-        handle:    '@emekarealty',
-        isAgent:   true,
-        isPremium: true,
-        text:      'I have a 2-bed ground floor flat in Wuse 2. Fitted kitchen, 24hr security, borehole. Available immediately.',
-        listingSnapshot: {
-          price:    '₦800,000/yr',
-          location: 'Wuse 2, Abuja',
-          image:    'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=120&q=80',
-        },
-        time: '45 min ago',
-      },
-      {
-        id:        'ar-002',
-        avatar:    'https://i.pravatar.cc/100?img=33',
-        name:      'Grace Homes',
-        handle:    '@gracehomes',
-        isAgent:   true,
-        isPremium: false,
-        text:      'Maitama option — 1st floor flat, solar backup + borehole. ₦750k/yr, negotiable for a good tenant.',
-        listingSnapshot: {
-          price:    '₦750,000/yr',
-          location: 'Maitama, Abuja',
-          image:    'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=120&q=80',
-        },
-        time: '1 hr ago',
-      },
-      {
-        id:        'ar-003',
-        avatar:    'https://i.pravatar.cc/100?img=55',
-        name:      'Crown Realtors',
-        handle:    '@crownrealtors',
-        isAgent:   true,
-        isPremium: false,
-        // No listingSnapshot — text-only response, chip won't render
-        text:      'I have 2 units in Wuse 2 — ground floor ₦650k and 1st floor ₦620k. EKEDC meter. Can show you this weekend.',
-        time: '2 hrs ago',
-      },
-    ],
-    discussionItems: [
-      {
-        id:        'dc-001',
-        avatar:    'https://i.pravatar.cc/100?img=7',
-        name:      'Tunde Balogun',
-        handle:    '@tundeb',
-        isAgent:   false,
-        isPremium: false,
-        comment:   'Emeka Realty is solid — helped me find my place in Wuse 2 last year.',
-        likeCount: 12,
-        time:      '30 min ago',
-      },
-      {
-        id:        'dc-002',
-        avatar:    'https://i.pravatar.cc/100?img=18',
-        name:      'Chioma Nwachukwu',
-        handle:    '@chiomaN',
-        isAgent:   false,
-        isPremium: true,
-        comment:   'Also looking for something similar! Would love to know what you find 👀',
-        likeCount: 4,
-        time:      '1 hr ago',
-      },
-    ],
-  },
-
-  // ── LISTING 2 ────────────────────────────────────────────────────────────
-  {
-    type:        'listing',
-    isFollowing: true,
-    id:          'lst-002',
-    avatar:      'https://i.pravatar.cc/100?img=5',
-    username:    'Jay Carlos',
-    handle:      '@jaycarlx',
-    verified:    true,
-    time:        '5h ago',
-    image:       [propertyImg1],
-    price:       '₦1,200,000',
-    location:    'Lekki Phase 1, Lagos',
-    category:    'Duplex',
-    views:       '25k',
-    comments:    '1.2k',
-    bookmarked:  true,
-    description: 'Luxury 4-bedroom duplex with swimming pool, gym, and 24/7 power supply.',
-  },
-
-  // ── REQUEST 2 ────────────────────────────────────────────────────────────
-  {
-    type:          'request',
-    isFollowing:   true,
-    id:            'req-002',
-    avatar:        'https://i.pravatar.cc/100?img=21',
-    username:      'Kelechi Eze',
-    handle:        '@kelechi_e',
-    isAgent:       true,
-    isPremium:     true,
-    time:          '5 hrs ago',
-    description:   'Need a furnished shortlet studio in Victoria Island for 3 months. Fast WiFi, 24/7 power backup, and on-site security. Flexible on exact location within VI.',
-    category:      'Studio',
-    location:      'Victoria Island, Lagos',
-    budget:        '₦150k – ₦200k/mo',
-    likes:         '22',
-    liked:         false,
-    responseCount: '1',
-    bookmarked:    false,
-    expired:       false,
-    daysLeft:      14,
-    agentResponses: [
-      {
-        id:        'ar-004',
-        avatar:    'https://i.pravatar.cc/100?img=47',
-        name:      'Lagos Stays',
-        handle:    '@lagosstays',
-        isAgent:   true,
-        isPremium: true,
-        text:      'Fully furnished studio in VI — solar inverter, 200mbps WiFi, 24hr security. ₦180k/mo all inclusive.',
-        listingSnapshot: {
-          price:    '₦180,000/mo',
-          location: 'Victoria Island, Lagos',
-          image:    'https://images.unsplash.com/photo-1565182999561-18d7dc61c393?w=120&q=80',
-        },
-        time: '3 hrs ago',
-      },
-    ],
-    discussionItems: [],
-  },
-
-  // ── LISTING 3 ────────────────────────────────────────────────────────────
-  {
-    type:        'listing',
-    isFollowing: false,
-    id:          'lst-003',
-    avatar:      'https://i.pravatar.cc/100?img=8',
-    username:    'Grace Homes',
-    handle:      '@gracehomes',
-    verified:    false,
-    time:        '1d ago',
-    image:       [propertyImg2],
-    price:       '₦450,000',
-    location:    'Kubwa, Abuja',
-    category:    'Studio',
-    views:       '5k',
-    comments:    '120',
-    bookmarked:  false,
-    description: 'Affordable studio apartment perfect for young professionals.',
-  },
-
-  // ── REQUEST 3 — expired, tests expired card state ─────────────────────────
-  {
-    type:          'request',
-    isFollowing:   false,
-    id:            'req-003',
-    avatar:        'https://i.pravatar.cc/100?img=29',
-    username:      'Yusuf Musa',
-    handle:        '@yusufm',
-    isAgent:       true,
-    isPremium:     true,
-    time:          '31 days ago',
-    description:   'Was looking for a 3-bedroom apartment in Gwarinpa with a good estate. Found one — thanks to everyone who responded!',
-    category:      'Apartment',
-    location:      'Gwarinpa, Abuja',
-    budget:        '₦500k – ₦700k/yr',
-    likes:         '89',
-    liked:         true,
-    responseCount: '6',
-    bookmarked:    true,
-    expired:       true,   // tests disabled state — stripe grey, chips muted, Closed btn
-    daysLeft:      null,
-    agentResponses:  [],
-    discussionItems: [],
-  },
-]
 
 // ========================================================
 //  MAIN DASHBOARD COMPONENT
@@ -257,30 +20,145 @@ function Dashboard() {
   // === Feed state =========
   const [feed, setFeed]      = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const { user } = useAuth()
+  const isUserAgent = user?.kycStatus === 'verified'
 
-  // Replace the setTimeout + MOCK_FEED with your real API call:
-  //   const res  = await fetch(`/api/feed?tab=${activeTab}`)
-  //   const data = await res.json()
-  //   setFeed(data)
+  // === Active orders state (for disabling Preview buttons) ===
+  const [activeOrderPropertyIds, setActiveOrderPropertyIds] = useState(new Set())
+  const [isOrdersLoading, setIsOrdersLoading] = useState(true)
+  
+  // === Fetch active orders on mount ===
   useEffect(() => {
-  setIsLoading(true)
-  setTimeout(() => {
-    setFeed(MOCK_FEED)   // always the full mixed feed
-    setIsLoading(false)
-  }, 1000)
-}, [])
+    const fetchActiveOrders = async () => {
+      setIsOrdersLoading(true)
+      try {
+        const token = localStorage.getItem("token")
+        if (!token) {
+          setIsOrdersLoading(false)
+          return
+        }
+        // Fetch user's orders
+        const res = await axios.get("https://newprojectbackend-5axx.onrender.com/orders", {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+        const orders = res.data.items || []
+
+        // Filter orders that are still active (not completed/cancelled/expired)
+        const activeStatuses = ["pending", "accepted", "completed"]
+        const propertyIds = orders
+          .filter(order => activeStatuses.includes(order.status))
+          .map(order => order.property?._id)
+          .filter(id => id) // remove undefined
+       
+          setActiveOrderPropertyIds(new Set(propertyIds))
+      } catch (err) {
+        console.error("Failed to fetch active orders:", err)
+      } finally {
+        setIsOrdersLoading(false)
+      }
+    }
+    
+    fetchActiveOrders()
+  }, [])
+
+  // === Fetch feed on mount ===
+  useEffect(() => {
+    const fetchFeed = async () => {
+      setIsLoading(true)
+      try{
+        const token = localStorage.getItem("token")
+        const headers = token ? { Authorization: `Bearer ${token}` } : {}
+
+        const listingRes = await axios.get("https://newprojectbackend-5axx.onrender.com/properties?status=available", { headers })
+        const requestRes = await axios.get("https://newprojectbackend-5axx.onrender.com/requests", { headers })
+        
+        const listings = (listingRes.data.items || []).map((p) => ({
+          type: "listing",
+          id: p._id,
+          ownerId: p.owner?._id || "",
+          avatar: p.owner?.avatar || defaultAvatar,
+          username: p.owner?.fullName || p.owner?.username || "",
+          handle: p.owner?.username ? `@${p.owner.username}` : "",
+          isVerified: p.owner?.kycStatus === "verified",
+          isPremium: p.owner?.plan === "premium" || p.owner?.plan === "pro",
+          time: timeAgo(p.createdAt),
+          // Handle both string media arrays and {url} objects.
+          image: (p.media || []).map((m) => typeof m === "string"
+            ? { url: m, mimeType: "image/jpeg" }   // legacy string — assume image
+            : { url: m?.url, mimeType: m?.mimeType || "image/jpeg" }
+            ).filter((m) => m.url),
+          // Keep numeric price for accurate calculations in PropertyCard.
+          price: Number(p.amount),
+          commission: Number(p.commission) || 0,
+          priceLabel: p.listing_type === "rent" ? "/yr" : p.listing_type === "shortlet" ? "/night" : "",
+          location: [p.location?.town, p.location?.state].filter(Boolean).join(", "),
+          category: p.property_type.charAt(0).toUpperCase() + p.property_type.slice(1),
+          listingType: p.listing_type,
+          bedrooms: p.bedrooms || "",
+          features: p.features || [],
+          likes: String(p.likeCount || 0),
+          likedByMe: p.likedByMe || false,
+          comments: String(p.commentCount || 0),
+          bookmarked: p.bookmarkedByMe || false,
+          description: p.description,
+        }))
+
+        const requests = (requestRes.data.items || []).map((r) => ({
+          type: "request",
+          id: r._id,
+          requesterId: r.requester?._id || "",
+          // Owner fields — now populated
+          avatar: r.requester?.avatar   || defaultAvatar,
+          username: r.requester?.fullName || r.requester?.username || "",
+          handle: r.requester?.username ? `@${r.requester.username}` : "",
+          isAgent: r.requester?.role === "agent" || r.requester?.kycStatus === "verified",
+          isPremium: r.requester?.plan === "premium" || r.requester?.plan === "pro",
+          time: timeAgo(r.createdAt),
+          description: r.description,
+          category: r.category,
+          location: [r.location?.town, r.location?.state].filter(Boolean).join(", "),
+          budget: r.budget,
+          likes: String(r.likeCount || 0),
+          likedByMe: r.likedByMe || false,
+          responseCount: String(r.responseCount || 0),
+          discussionCount: String(r.discussionCount || 0),
+          // agentResponses and discussionItems are loaded lazily inside
+          // RequestResponsesModal when the user taps "See Responses" —
+          // they don't need to be in the feed payload
+          agentResponses:  [],
+          discussionItems: [],
+          bookmarked: r.bookmarkedByMe || false,
+          expired: r.status === "expired",
+          daysLeft: r.expiresAt ? Math.max(0, Math.ceil((new Date(r.expiresAt) - Date.now()) / 86_400_000)) : null,
+        }))
+
+      const merged = [...listings, ...requests].sort(
+        (a, b) => new Date(b.time) - new Date(a.time)
+      )
+
+      setFeed(merged)  
+      }catch(err){
+      
+      }finally{
+        setIsLoading(false)
+      }
+    }
+    fetchFeed()
+  }, [])
 
   // === Navigation handlers ===
   const handleCreatePost = () => navigate('/create/post-a-request')
-  const handleOrder      = (id) => navigate(`/listing/${id}/order`)
-  const handleRespond    = (id) => navigate(`/requests/${id}/respond`)
+  const handleOrder = (id) => navigate(`/listing/${id}/order`)
+  const handleRespond = (id) => navigate(`/requests/${id}/respond`)
 
+  // Wait for both feed and orders to load before showing "loading" skeleton
+  const isLoadingComplete = isLoading || isOrdersLoading
   return (
     <PageSetup>
       <Header
         pageTitle={<h2>Home</h2>}
         icons={[
-          { link: '/inbox',         element: <RiMessageLine /> },
+          { link: '/inbox', element: <RiMessageLine /> },
           { link: '/notifications', element: <FaRegBell />     },
         ]}
         button={
@@ -302,35 +180,32 @@ function Dashboard() {
               Both PropertyCard and RequestCard render in the same loop —
               item.type decides which component to use.
           ── */}
-          {isLoading ? (
+          {isLoadingComplete ? (
             <div className="feed-loading">
               <div className="skeleton skeleton-card"></div>
               <div className="skeleton skeleton-card"></div>
               <div className="skeleton skeleton-card"></div>
             </div>
-
           ) : feed.length > 0 ? (
-
             // Mixed feed — one loop, two card types
             feed.map(item =>
               item.type === 'listing' ? (
-
                 // PropertyCard 
                 <PropertyCard
                   key={item.id}
                   {...item}
+                  propertyId={item.id}
+                  isOrdered={activeOrderPropertyIds.has(item.id)}
                   onOrder={() => handleOrder(item.id)}
                 />
-
               ) : (
-
-                // RequestCard — mirrors PropertyCard usage above.
-                // currentUserIsAgent from MOCK_CURRENT_USER —
-                // replace with user.isAgent from your auth context when ready
+                // currentUserIsAgent 
                 <RequestCard
                   key={item.id}
                   {...item}
-                  currentUserIsAgent={MOCK_CURRENT_USER.isAgent}
+                  requestId={item.id}
+                  likedByMe={item.likedByMe}
+                  currentUserIsAgent={isUserAgent}
                   onRespond={() => handleRespond(item.id)}
                 />
 
@@ -341,7 +216,6 @@ function Dashboard() {
 
             // Empty state — tab-aware message
             <div className="feed-empty">
-              {/* <div className="empty-icon">🏠</div> */}
               <h3>No posts yet</h3>
               <p>Be the first to post a property or a request!</p>
               <ClickButton

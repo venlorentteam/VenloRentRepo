@@ -10,10 +10,12 @@ const AccountInfoCard = ({
   occupation = "Programmer, App Developer",
   followers = "10k",
   email = "walter@gmail.com",
+  bio = "",
   plan = "Pro",
   avatar = "https://i.pravatar.cc/100",
   isOwner = false,
   verified = false,
+  isFollowing = false,
   yearJoined = "2025",
   onEditProfile,
   onUpgrade,
@@ -41,7 +43,7 @@ const AccountInfoCard = ({
               </div>
               <p className="account-card-username">{username}</p>
               {occupation && (
-                <p className="account-card-occupation">{occupation}</p>
+                <p className="account-card-occupation">{bio}</p>
               )}
             </div>
           </div>
@@ -99,15 +101,15 @@ const AccountInfoCard = ({
         ) : (
           <>
             <ClickButton
-              text="Follow"
-              variant="primary"
+              text={isFollowing ? "Unfollow" : "Follow"}
+              variant={isFollowing ? "outline" : "primary"}
               onClick={onFollow}
             />
-            <ClickButton
+            {/* <ClickButton
               text="Message"
               variant="outline"
               onClick={onMessage}
-            />
+            /> */}
           </>
         )}
       </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import { Modal } from '../exports'
@@ -14,53 +14,31 @@ import { BsThreeDots } from 'react-icons/bs'
 import { GrLocation } from 'react-icons/gr'
 import { TbHomeSearch } from 'react-icons/tb'
 import { LuBanknote, LuClock } from 'react-icons/lu'
+import { LuBuilding2 } from 'react-icons/lu'
 
-import { RiVerifiedBadgeFill } from 'react-icons/ri'
-
-// ===========================================================
-//  MAIN COMPONENT
-//
-//  Props:
-//    avatar             string   — poster's avatar URL
-//    username           string   — poster's display name
-//    handle             string   — poster's @handle
-//    isAgent            boolean  — poster completed KYC → shows AgentBadge
-//    isPremium          boolean  — poster on paid plan → shows PremiumBadge
-//    time               string   — relative post time e.g. "2 hrs ago"
-//    description        string   — the request body text
-//    category           string   — optional, from CreateRequest category field
-//    location           string   — optional, from CreateRequest location field
-//    budget             string   — optional, from CreateRequest budget field
-//    Likes              string   — Like count, rendered as "0" if not provided for consistent UI
-//    responseCount      string   — total agent + discussion responses (drives tab counts)
-//    agentResponses     array    — passed directly into RequestResponsesModal
-//    discussionItems    array    — passed directly into RequestResponsesModal
-//    bookmarked         boolean  — initial bookmark state
-//    requestId          string   — request id for respond and API routes
-//    expired            boolean  — true when 30-day window has passed
-//    daysLeft           number   — countdown shown in expiry footer; null = no countdown
-//    currentUserIsAgent boolean  — controls agent compose footer inside modal
-//    onRespond          fn       — agent CTA handler (opens respond flow)
-// ─────────────────────────────────────────────────────────────────────────────
 function RequestCard({
-  avatar             = 'https://i.pravatar.cc/100',
-  username           = 'Amara Obi',
-  handle             = '@amaraobi',
-  isAgent            = true,
-  isPremium          = false,
-  time               = '2 hrs ago',
-  description        = 'Looking for a clean 2-bedroom flat in Wuse 2 or Maitama...',
-  category           = '',
-  location           = '',
-  budget             = '',
-  likes              = '0',
-  responseCount      = '0',
-  agentResponses     = [],
-  discussionItems    = [],
-  bookmarked         = false,
-  requestId          = '',
-  expired            = false,
-  daysLeft           = null,
+  id = '',
+  requesterId = '',
+  avatar = 'https://i.pravatar.cc/100',
+  username = 'Amara Obi',
+  handle = '@amaraobi',
+  isAgent = true,
+  isPremium = false,
+  time = '2 hrs ago',
+  description = 'Looking for a clean 2-bedroom flat in Wuse 2 or Maitama...',
+  category = '',
+  location = '',
+  budget = '',
+  likes = '0',
+  likedByMe = null,
+  liked = null,
+  responseCount = '0',
+  agentResponses = [],
+  discussionItems = [],
+  bookmarked = false,
+  requestId = '',
+  expired = false,
+  daysLeft = null,
   currentUserIsAgent = false,
 }) {
   const navigate = useNavigate()
@@ -68,11 +46,43 @@ function RequestCard({
   const [isOptionsOpen,   setIsOptionsOpen]   = useState(false)
   const [isResponsesOpen, setIsResponsesOpen] = useState(false)
   const [isBookmarked,    setIsBookmarked]    = useState(bookmarked)
-  const [isLiked, setIsLiked] = useState(false)
 
-  const toggleLike = () => {
-    setIsLiked(p => !p)
-    // TODO: POST /listings/:id/like
+  // Resolve id/liked defaults once so the card can accept either requestId or id.
+  const resolvedRequestId = requestId || id
+  const initialLiked = likedByMe !== null && likedByMe !== undefined ? likedByMe : !!liked
+  const [isLiked, setIsLiked] = useState(initialLiked)
+  const [likeCount, setLikeCount] = useState(Number(likes) || 0)
+  const [isLiking, setIsLiking] = useState(false)
+
+  // Keep bookmark state in sync when the parent updates.
+  useEffect(() => {
+    setIsBookmarked(!!bookmarked)
+  }, [bookmarked])
+
+  const toggleLike = async () => {
+    if (!resolvedRequestId || isLiking) return
+    // Auth header is required for the protected like route.
+    const token = localStorage.getItem("token")
+    if (!token) return
+    const next = !isLiked
+    // Optimistic UI update
+    setIsLiked(next)
+    setLikeCount((prev) => Math.max(0, prev + (next ? 1 : -1)))
+    setIsLiking(true)
+    try {
+      await axios.post(
+        `https://newprojectbackend-5axx.onrender.com/requests/${resolvedRequestId}/like`,
+        { liked: next },
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+    } catch (err) {
+      console.error('Failed to update request like:', err)
+      // Rollback if API fails
+      setIsLiked(!next)
+      setLikeCount((prev) => Math.max(0, prev + (next ? -1 : 1)))
+    } finally {
+      setIsLiking(false)
+    }
   }
   // == Options modal handlers — mirror PropertyCard.jsx exactly ========
   const openOptions  = () => setIsOptionsOpen(true)
@@ -87,8 +97,15 @@ function RequestCard({
   const toggleBookmark = () => {
     const next = !isBookmarked
     setIsBookmarked(next)
-    if (!requestId) return
-    axios.post(`/api/requests/${requestId}/bookmark`, { bookmarked: next }).catch((err) => {
+    if (!resolvedRequestId) return
+    // Auth header is required for the protected bookmark route.
+    const token = localStorage.getItem("token")
+    if (!token) return
+    axios.post(
+      `https://newprojectbackend-5axx.onrender.com/requests/${resolvedRequestId}/bookmark`,
+      { bookmarked: next },
+      { headers: { Authorization: `Bearer ${token}` } }
+    ).catch((err) => {
       console.error('Failed to update request bookmark:', err)
     })
   }
@@ -104,10 +121,10 @@ function RequestCard({
         <div className="request-card-stripe" aria-hidden="true" />
 
         {/* ====== HEADER ===========================================
-            Layout classes reused directly from PropertyCard.css
+          Layout classes reused directly from PropertyCard.css
          */}
         <header className="property-card-header">
-          <div className="property-card-user">
+          <Link to={`/profile/${requesterId || resolvedRequestId}`} className="property-card-user">
             <img
               className="property-avatar"
               src={avatar}
@@ -115,17 +132,13 @@ function RequestCard({
             />
             <div className="property-user-info">
               <div className="property-username-row">
-                <h4 className="property-username">{username}</h4>
-
-                {/* Agent badge — KYC verified only */}
+                <h4 className="property-username">{username}</h4>                
                 {isAgent && <AgentBadge />}
-
-                {/* Premium badge — paid plan, independent of agent status */}
                 {isPremium && <PremiumBadge />}
               </div>
               <p className="property-handle">{handle} · {time}</p>
             </div>
-          </div>
+          </Link>
 
           <div className="request-header-right">
             {/* "Request" type badge — cyan pill, RequestCard.css
@@ -155,16 +168,13 @@ function RequestCard({
           <p className="property-description">{description}</p>
 
           {/* ==== Request Points ================================
-              Entirely RequestCard-specific.
-              category, location → green chip  (property type, mirrors primary theme)
-              budget → grey chip   (neutral)
-              → .request-chips, .request-chip--* (RequestCard.css)
-          ── */}
+            Entirely RequestCard-specific.
+          == */}
           {(category || location || budget) && (
             <div className="request-chips">
               {category && (
                 <span className="request-chip request-chip--category">
-                  <TbHomeSearch aria-hidden="true" />
+                  <LuBuilding2 aria-hidden="true" />
                   {category}
                 </span>
               )}
@@ -184,33 +194,27 @@ function RequestCard({
           )}
         </div>
 
-        {/* ── ACTIVITY BAR ─────────────────────────────────────────────────
-            Layout classes reused from PropertyCard.css
-        ── */}
+        {/* Activity Bar - Reused most styles from PropertyCard.css */}
         <div className="property-activity">
           <div className="property-activity-left">
 
             {/* View count — passive, not tappable
                 Rendered as <span> not <button> — no interaction intended.
                 .property-activity-item from PropertyCard.css for consistent sizing */}
-            <span
+            <button
               className="property-activity-item"
               onClick={toggleLike}
               aria-label={isLiked ? 'Unlike request' : 'Like request'}
+              disabled={isLiking}
             >
               {isLiked
                 ? <IoMdHeart className="liked" aria-hidden="true" />
                 : <IoMdHeartEmpty aria-hidden="true" />
               }
-              <span>{likes}</span>
-            </span>
+              <span>{likeCount}</span>
+            </button>
 
-            {/* 
-              Opens RequestResponsesModal showing both agent offers
-              and the discussion lane, so any user with the same
-              housing need can browse what agents have offered.
-              Base layout: .property-activity-item (PropertyCard.css)
-              Accent state: .request-see-responses (RequestCard.css) */}
+            {/* Opens RequestResponsesModal showing both agent offers and the discussion lane*/}
             <button
               className={`property-activity-item request-see-responses
                 ${responseCount !== '0' ? 'request-see-responses--has-responses' : ''}
@@ -220,13 +224,11 @@ function RequestCard({
             >
               <FaRegComment aria-hidden="true" />
               <span>
-                {currentUserIsAgent && !expired
+                {currentUserIsAgent && !expired 
                   ? responseCount === '0'
-                    ? 'Be the first to respond'
-                    : `Respond · ${responseCount} responses`
-                  : responseCount === '0'
-                    ? 'No responses yet'
-                    : `See Responses (${responseCount})`
+                    ? 'Add 1st'
+                    : `${responseCount}`
+                    : null
                 }
               </span>
             </button>
@@ -238,12 +240,10 @@ function RequestCard({
             >
               <MdIosShare aria-hidden="true" />
             </button>
-
           </div>
 
-          {/* Right group — bookmark + respond */}
+          {/* Right group — bookmark */}
           <div className="request-activity-right">
-
             {/* Bookmark — .property-bookmark-btn + .bookmarked from PropertyCard.css */}
             <button
               className="property-bookmark-btn"
@@ -258,13 +258,7 @@ function RequestCard({
           </div>
         </div>
 
-        {/* ── EXPIRY FOOTER ─────────────────────────────────────────────────
-            No equivalent in PropertyCard — entirely RequestCard-specific.
-            Communicates the 30-day request lifespan from the PRD.
-            
-            NOTE: Reactivation feature is planned for a later sprint.
-            When built, the reactivate CTA will be injected here.
-        ── */}
+        {/* == EXPIRY FOOTER=======================*/}
         <div className="request-expiry">
           <span
             className={`request-expiry-dot ${expired ? 'request-expiry-dot--expired' : ''}`}
@@ -283,13 +277,7 @@ function RequestCard({
 
       </article>
 
-      {/* ── OPTIONS MODAL ────────────────────────────────────────────────────
-          Modal menu for the ··· button.
-          All classes reused from PropertyCard.css:
-            .property-modal-menu    — flex col container
-            .property-modal-link    — individual action link
-            .property-modal-cancel  — cancel button, bordered top
-      ── */}
+      {/* === OPTIONS MODAL ========================= */}
       <Modal isOpen={isOptionsOpen} onClose={closeOptions} cancel={false}>
         <div className="property-modal-menu">
           <Link to="#" className="property-modal-link">Report</Link>
@@ -304,29 +292,35 @@ function RequestCard({
         </div>
       </Modal>
 
-      {/* ── RESPONSES MODAL ──────────────────────────────────────────────────
-          Two-lane thread: Agent Offers + Discussion.
-          agentResponses and discussionItems are fetched by the parent
-          and passed straight through — RequestCard doesn't own that data.
-          currentUserIsAgent gates the agent compose footer inside the modal.
-          isExpired disables both input footers when the request has closed.
-      ── */}
       <RequestResponsesModal
         isOpen={isResponsesOpen}
         onClose={closeResponses}
+        requestId={resolvedRequestId}
         agentResponses={agentResponses}
         discussionItems={discussionItems}
         isExpired={expired}
         currentUserIsAgent={currentUserIsAgent}
         onAddResponse={(data) => {
-          if (!requestId) return
-          axios.post(`/api/requests/${requestId}/agent-responses`, data).catch((err) => {
+          if (!resolvedRequestId) return
+          // Keep base URL aligned with existing auth endpoints (no /api prefix).
+          const token = localStorage.getItem("token")
+          axios.post(
+            `https://newprojectbackend-5axx.onrender.com/requests/${resolvedRequestId}/agent-responses`,
+            data,
+            { headers: { Authorization: `Bearer ${token}` } }
+          ).catch((err) => {
             console.error('Failed to submit agent response:', err)
           })
         }}
         onAddComment={(text) => {
-          if (!requestId) return
-          axios.post(`/api/requests/${requestId}/comments`, { text }).catch((err) => {
+          if (!resolvedRequestId) return
+          // Keep base URL aligned with existing auth endpoints (no / api prefix).
+          const token = localStorage.getItem("token")
+          axios.post(
+            `https://newprojectbackend-5axx.onrender.com/requests/${resolvedRequestId}/discussions`,
+            { text },
+            { headers: { Authorization: `Bearer ${token}` } }
+          ).catch((err) => {
             console.error('Failed to submit discussion comment:', err)
           })
         }}

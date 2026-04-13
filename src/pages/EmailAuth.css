@@ -24,12 +24,12 @@
 }
 .email-cont .left-side h2{
     color: var(--text-color-light);
-    font-size: var(--font-size-medium);
+    font-size: var(--font-lg);
     font-weight: bold;
 }
 .email-cont .left-side p{
     color: var(--text-color-light);
-    font-size: var(--font-size-small);
+    font-size: var(--font-size-sm);
     font-weight: normal;
 }
 .email-cont .login{
@@ -41,7 +41,7 @@
 }
 .regular-texts{/*for regular texts within the prelim pages*/
     color: var(--primary-color);
-    font-size: var(--font-size-small);
+    font-size: var(--font-base);
 }
 a{/*for prelim links*/
     color: var(--primary-color);
@@ -49,18 +49,37 @@ a{/*for prelim links*/
     text-decoration: none;
     cursor: pointer;
 }
-.error{/*For printing input errors*/
+/*For printing input errors*/
+/* .error{
     font-size: var(--font-size-smallest);
     color: var(--danger-color);
     text-align: left;
     font-style: italic;
+} */
+/* ====== Email Sent Confirmation Header =======*/
+.email-is-sent{
+  background: var(--success-pale);
+  border: 1.5px solid rgba(16, 185, 129, 0.25);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.email-is-sent-text{
+  font-size: var(--font-sm);
+  color: var(--text-primary);
+  line-height: 1.6;
+  margin: 0;
+  text-align: left;
 }
 
 /* ========================================
     OTP Resend Feature Styles
    ========================================*/ 
-   .resend-section {
-  margin-top: 24px;
+.resend-section {
+  margin-top: var(--spacing-lg);
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -68,7 +87,7 @@ a{/*for prelim links*/
 }
 
 .resend-prompt {
-  font-size: var(--font-size-small);
+  font-size: var(--font-sm);
   color: var(--text-color-light);
   margin: 0;
 }
@@ -86,7 +105,7 @@ a{/*for prelim links*/
   background: none;
   border: none;
   padding: 0;
-  font-size: var(--font-size-small);
+  font-size: var(--font-sm);
   font-weight: 700;
   color: var(--primary-color);
   cursor: pointer;
@@ -106,23 +125,26 @@ a{/*for prelim links*/
 
 /* Success message after resend */
 .resend-success {
-  font-size: var(--font-size-smallest);
+  font-size: var(--font-sm);
   color: var(--primary-color);
   margin: 0;
-  font-style: italic;
 }
 
 
 @media (prefers-color-scheme: dark) {
     .email-cont .left-side h2{
         color: var(--text-color-light2);
-        font-size: var(--font-size-big);
+        font-size: var(--font-lg);
     }
     .regular-texts{
         color: var(--white-color);
     }
     a{/*for prelim links*/
         color: var(--text-color-dark2);
+    }
+    .email-is-sent{/*Email is sent header*/
+        background: rgba(16, 185, 129, 0.08);
+        border-color: rgba(16, 185, 129, 0.2);
     }
     /* Email Resend */
     .resend-prompt {
@@ -155,7 +177,7 @@ a{/*for prelim links*/
         width: 100%;
     }
     .regular-texts{
-        font-size: var(--font-size-smallest);
+        font-size: var(--font-sm);
     }
 
 }
