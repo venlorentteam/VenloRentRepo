@@ -1,75 +1,94 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { BsGearWide } from "react-icons/bs";
-import { RiMessageLine, RiUserFollowLine, RiUserUnfollowLine } from "react-icons/ri";
-import { FaRegBell } from "react-icons/fa";
-import * as Components from "../exports";
-import "./Profile.css";
+import React, { useState, useEffect } from "react"
+import { useNavigate, useParams } from "react-router-dom"
+import { BsGearWide } from "react-icons/bs"
+import { RiMessageLine, RiUserFollowLine, RiUserUnfollowLine } from "react-icons/ri"
+import { FaRegBell } from "react-icons/fa"
+import * as Components from "../exports"
+import { useAuth } from "../context/AuthProvider"
+import { timeAgo } from "../components/Time"
+import defaultAvatar from "../assets/img/avatar.png"
+import axios from "axios"
+import "./Profile.css"
 
 const Profile = () => {
+  const { user } = useAuth()
   const navigate = useNavigate();
   const { userId } = useParams(); // Get userId from URL if viewing another user
-  const queryParams = new URLSearchParams(window.location.search);
-  const viewMode = queryParams.get("view"); // Check for ?view=other query param
-  const [isOwnProfile, setIsOwnProfile] = useState(true);
-  const [isFollowing, setIsFollowing] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("listings");
-  const [profileData, setProfileData] = useState(null);
+  const [isOwnProfile, setIsOwnProfile] = useState(true)
+  const [isFollowing, setIsFollowing] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [activeTab, setActiveTab] = useState("listings")
+  const [profileData, setProfileData] = useState(null)
+  const [followersCount, setFollowersCount] = useState(0)
+  const [followingCount, setFollowingCount] = useState(0)
 
   // Fetch profile data
   useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      const mockProfile = {
-        username: "@walcode",
-        fullName: "Obinabo Walter",
-        occupation: "Software Developer & Real Estate Agent",
-        followers: "1.2k",
-        email: "walter@venlorent.com",
-        plan: "Pro",
-        avatar: "https://i.pravatar.cc/100?img=1",
-        verified: true,
-        yearJoined: "2024",
-        stats: [
-          { label: "Properties Listed", value: "24" },
-          { label: "Orders Completed", value: "156" },
-          { label: "Success Rate", value: "98%" },
-          { label: "Followers", value: "1.2k" }
-        ],
-        listings: [
-          {
-            id: 1,
-            image: ["https://via.placeholder.com/600x400"],
-            price: "₦700,000",
-            location: "Lekki, Lagos",
-            category: "Apartment"
-          },
-          {
-            id: 2,
-            image: ["https://via.placeholder.com/600x400"],
-            price: "₦1,200,000",
-            location: "Ikoyi, Lagos",
-            category: "Duplex"
-          }
-        ]
-      };
+    const loadProfile = async () => {
+      setIsLoading(true)
+      try {
+        const viewingOwn = !userId || userId === "me"
+        setIsOwnProfile(viewingOwn)
 
-      setProfileData(mockProfile);
-      // Check view query param for demo, otherwise check userId
-      setIsOwnProfile(viewMode !== "other" && (!userId || userId === "me"));
-      setIsLoading(false);
-    }, 1000);
-  }, [userId]);
+        if (viewingOwn) {
+          const token = localStorage.getItem("token")
+          if (token) {
+            const res = await axios.get("https://newprojectbackend-5axx.onrender.com/profile", {
+              headers: { Authorization: `Bearer ${token}` },
+            })
+            setProfileData(res.data.user)
+            setFollowersCount(res.data.followersCount || 0)
+            setFollowingCount(res.data.followingCount || 0)
+          } else {
+            setProfileData(user)
+            setFollowersCount(0)
+            setFollowingCount(0)
+          }
+        } else {
+          const token = localStorage.getItem("token")
+          const headers = token ? { Authorization: `Bearer ${token}` } : {}
+          const res = await axios.get(`https://newprojectbackend-5axx.onrender.com/users/${userId}`, { headers })
+          setProfileData(res.data.user || null)
+          setFollowersCount(res.data.followersCount || 0)
+          setFollowingCount(res.data.followingCount || 0)
+          setIsFollowing(!!res.data.isFollowing)
+        }
+      } catch (err) {
+        setProfileData(null)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    loadProfile()
+  }, [userId, user])
 
   const handleFollow = () => {
-    setIsFollowing(!isFollowing);
-    // TODO: API call to follow/unfollow
-  };
+    if (!userId) return
+    const token = localStorage.getItem("token")
+    if (!token) return
+    const next = !isFollowing
+    setIsFollowing(next)
+    axios
+      .post(
+        `https://newprojectbackend-5axx.onrender.com/users/${userId}/follow`,
+        { followed: next },
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      .then((res) => {
+        setIsFollowing(!!res.data.isFollowing)
+        setFollowersCount(res.data.followersCount || 0)
+        setFollowingCount(res.data.followingCount || 0)
+      })
+      .catch(() => {
+        setIsFollowing(!next)
+      })
+  }
 
+  
   const handleMessage = () => {
     navigate("/inbox");
     // TODO: Open chat with this user (not going to be implemented anymore)
+    // Walter: That's right, Pending till futher notice
   };
 
   const handleEditProfile = () => {
@@ -99,7 +118,7 @@ const Profile = () => {
           </div>
         </div>
       </Components.PageSetup>
-    );
+    )
   }
 
   if (!profileData) {
@@ -123,7 +142,7 @@ const Profile = () => {
           </div>
         </div>
       </Components.PageSetup>
-    );
+    )
   }
 
   return (
@@ -148,14 +167,16 @@ const Profile = () => {
           <Components.AccountInfoCard
             username={profileData.username}
             fullName={profileData.fullName}
-            occupation={profileData.occupation}
-            followers={profileData.followers}
+            //occupation={profileData.occupation}
+            followers={followersCount}
             email={profileData.email}
             plan={profileData.plan}
-            avatar={profileData.avatar}
-            verified={profileData.verified}
-            yearJoined={profileData.yearJoined}
+            avatar={profileData.avatar || defaultAvatar}
+            verified={profileData.kycStatus === "verified"}
+            bio={profileData.bio}
+            yearJoined={timeAgo(profileData.createdAt)}
             isOwner={isOwnProfile}
+            isFollowing={isFollowing}
             onEditProfile={handleEditProfile}
             onUpgrade={handleUpgrade}
             onFollow={handleFollow}
@@ -163,7 +184,7 @@ const Profile = () => {
           />
 
           {/* Stats */}
-          <Components.ListStats stats={profileData.stats} />
+          <Components.ListStats stats={profileData?.stats || []} />
 
           {/* Tabs Navigation */}
           <div className="profile-tabs">
@@ -171,7 +192,7 @@ const Profile = () => {
               className={`profile-tab ${activeTab === "listings" ? "active" : ""}`}
               onClick={() => setActiveTab("listings")}
             >
-              Listings ({profileData.listings.length})
+              Listings ({profileData?.listings?.length || 0})
             </button>
             <button
               className={`profile-tab ${activeTab === "reviews" ? "active" : ""}`}
@@ -191,9 +212,9 @@ const Profile = () => {
           <div className="profile-tab-content">
             {activeTab === "listings" && (
               <div className="profile-listings">
-                {profileData.listings.length > 0 ? (
+                {profileData?.listings?.length > 0 ? (
                   <div className="listings-grid">
-                    {profileData.listings.map((listing) => (
+                    {profileData?.listings?.map((listing) => (
                       <div key={listing.id} className="listing-grid-item">
                         <img src={listing.image[0]} alt="Property" />
                         <div className="listing-grid-info">
@@ -225,7 +246,7 @@ const Profile = () => {
                 <div className="about-section">
                   <h4>About {profileData.fullName}</h4>
                   <p>{profileData.occupation}</p>
-                  <p>Joined in {profileData.yearJoined}</p>
+                  <p>Joined {timeAgo(profileData.createdAt)}</p>
                 </div>
               </div>
             )}
@@ -243,13 +264,13 @@ const Profile = () => {
                 onClick={handleFollow}
                 size="large"
               />
-              <Components.ClickButton
+              {/* <Components.ClickButton
                 text="Message"
                 icon={<RiMessageLine />}
                 variant="outline"
                 onClick={handleMessage}
                 size="large"
-              />
+              /> */}
             </div>
           )}
           

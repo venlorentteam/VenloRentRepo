@@ -103,31 +103,10 @@
   color: var(--text-secondary);
 }
 
-@media (prefers-color-scheme: dark) {
-  .rrm-tab-bar {
-    background-color: var(--bg-secondary-dark);
-  }
 
-  .rrm-tab--active {
-    background: var(--box-bg-dark);
-  }
+/* == AGENT RESPONSE ITEM ============================
+   Mirrors .comment-item layout from Comments.css  */
 
-  .rrm-tab-count--discussion {
-    background-color: var(--border-dark);
-    color: var(--text-secondary-dark);
-  }
-}
-
-
-/* ── AGENT RESPONSE ITEM ───────────────────────────────────────
-   Mirrors .comment-item layout from Comments.css (flex row,
-   avatar left, content right) but with a green left border to
-   signal this is an accountable, KYC-backed response.
-
-   Uses .comment-avatar, .comment-name-row, .comment-name,
-   .comment-handle, .comment-text, .comment-actions,
-   .comment-time directly from Comments.css — no redeclaration.
-── */
 .rrm-agent-reply {
   display: flex;         /* mirrors .comment-item from Comments.css */
   gap: var(--spacing-sm);
@@ -158,21 +137,10 @@
   margin-bottom: var(--spacing-sm) !important;
 }
 
-@media (prefers-color-scheme: dark) {
-  .rrm-agent-reply {
-    border-left-color: var(--primary-color-light);
-  }
-
-  .rrm-agent-avatar {
-    border-color: var(--primary-color-light) !important;
-  }
-}
-
-
-/* ── LISTING CHIP ──────────────────────────────────────────────
+/* == LISTING CHIP ========================================
    Tappable card that shows the property snapshot attached to
    an agent response. Absent when agent responded text-only.
-── */
+== */
 .rrm-listing-chip {
   display: flex;
   align-items: center;
@@ -185,6 +153,7 @@
   transition: background-color var(--transition-fast),
               border-color var(--transition-fast);
   margin-bottom: var(--spacing-xs);
+  
 }
 
 .rrm-listing-chip:hover {
@@ -213,6 +182,7 @@
   font-weight: 800;
   color: var(--primary-color);
   line-height: 1.2;
+  text-align: left;
 }
 
 .rrm-listing-loc {
@@ -238,26 +208,10 @@
   line-height: 1;
 }
 
-@media (prefers-color-scheme: dark) {
-  .rrm-listing-chip {
-    background-color: var(--bg-secondary-dark);
-    border-color: var(--border-dark);
-  }
-
-  .rrm-listing-chip:hover {
-    background-color: var(--primary-opacity);
-    border-color: rgba(16, 185, 129, 0.3);
-  }
-
-  .rrm-listing-price { color: var(--primary-color-light); }
-  .rrm-listing-loc   { color: var(--text-secondary-dark); }
-}
-
-
-/* ── DISCUSSION NOTE ───────────────────────────────────────────
+/* == DISCUSSION NOTE ========================
    Context banner at the top of the discussion lane.
    Styled like a soft info callout.
-── */
+== */
 .rrm-discussion-note {
   margin: var(--spacing-sm) var(--spacing-md) 0;
   padding: var(--spacing-sm) var(--spacing-md);
@@ -270,20 +224,6 @@
   flex-shrink: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  .rrm-discussion-note {
-    background-color: var(--bg-secondary-dark);
-    border-color: var(--border-dark);
-    color: var(--text-secondary-dark);
-  }
-}
-
-
-/* ── AGENT FOOTER ──────────────────────────────────────────────
-   Extends .comments-input-section (Comments.css) with an extra
-   row layout to accommodate the attach-listing button alongside
-   the SearchBar.
-── */
 .rrm-agent-footer {
   /* No layout overrides — .comments-input-section handles padding/border */
   display: flex;
@@ -326,19 +266,7 @@
   outline-offset: 2px;
 }
 
-@media (prefers-color-scheme: dark) {
-  .rrm-attach-btn {
-    background-color: var(--bg-secondary-dark);
-    border-color: var(--border-dark);
-    color: var(--text-secondary-dark);
-  }
-}
-
-
-/* ── FOOTER NOTES ──────────────────────────────────────────────
-   Contextual messages shown in the footer instead of the input.
-   Three variants: default info, read-only (non-agent), expired.
-── */
+/* Footer Notes*/
 .rrm-footer-note {
   display: flex;
   align-items: center;
@@ -363,8 +291,270 @@
   border-radius: var(--radius-md);
   font-style: normal;
 }
-
-@media (prefers-color-scheme: dark) {
-  .rrm-footer-note          { color: var(--text-secondary-dark); }
-  .rrm-footer-note--readonly { color: var(--text-tertiary-dark); }
+/* Inner wrapper rendered inside your <Modal> shell */
+.rrm-picker-modal {
+  display: flex;
+  flex-direction: column;
+  max-height: 70vh;
+  background: var(--box-bg);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
 }
+ 
+.rrm-picker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md) var(--spacing-lg) var(--spacing-sm);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+ 
+.rrm-picker-title {
+  font-size: var(--font-base);
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-primary);
+}
+ 
+.rrm-picker-body {
+  overflow-y: auto;
+  padding: var(--spacing-sm) var(--spacing-md) var(--spacing-lg);
+  flex: 1;
+}
+ 
+.rrm-picker-empty {
+  text-align: center;
+  padding: var(--spacing-2xl) 0;
+}
+ 
+/* === PICKER LIST =============================================== */
+.rrm-picker-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+ 
+/* Individual listing row — rendered as a <button> for a11y */
+.rrm-picker-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  background: var(--box-bg);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+ 
+.rrm-picker-item:hover {
+  background: var(--primary-opacity-hover);
+  border-color: var(--primary-color-light);
+}
+ 
+.rrm-picker-item--selected {
+  background: var(--primary-opacity);
+  border-color: var(--primary-color);
+}
+
+/* === PICKER THUMBNAIL ========================================= */
+.rrm-picker-thumb {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+ 
+/* Shown when a listing has no image */
+.rrm-picker-thumb--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-secondary);
+  color: var(--text-tertiary);
+  font-size: var(--font-xl);
+}
+/* === PICKER INFO BLOCK ======================================== */
+.rrm-picker-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+ 
+/* Listing title — tertiary, truncated to one line */
+.rrm-picker-item-title {
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Checkmark shown on the currently selected item */
+.rrm-picker-check {
+  font-size: var(--font-lg);
+  font-weight: 700;
+  color: var(--primary-color);
+  flex-shrink: 0;
+}
+ 
+/* === SELECTED LISTING PREVIEW ================================= */
+/* Rendered above the compose row when a listing is attached.    */
+ 
+.rrm-selected-listing-preview {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+  border: 1.5px solid var(--primary-color);
+  border-radius: var(--radius-lg);
+  background: var(--primary-opacity);
+  transition: background var(--transition-fast);
+}
+
+/* === DESELECT BUTTON ========================================== */
+/* The x inside .rrm-selected-listing-preview                    */
+.rrm-deselect-btn {
+  margin-left: auto;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: var(--radius-full);
+  background: var(--border-color);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: var(--font-xs);
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+.rrm-deselect-btn:hover {
+  background: var(--danger-pale);
+  color: var(--danger-color);
+} 
+.rrm-deselect-btn:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+ 
+/* === ATTACH BUTTON ACTIVE STATE =============================== */
+.rrm-attach-btn--active {
+  background: var(--primary-opacity);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+ 
+.rrm-attach-btn--active:hover {
+  background: var(--primary-opacity-hover);
+  border-color: var(--primary-color-dark);
+  color: var(--primary-color-dark);
+}
+ 
+@media (prefers-color-scheme: dark) {
+  .rrm-discussion-note {
+    background-color: var(--bg-secondary-dark);
+    border-color: var(--border-dark);
+    color: var(--text-secondary-dark);
+  }
+  .rrm-listing-chip {
+    background-color: var(--bg-secondary-dark);
+    border-color: var(--border-dark);
+  }
+  .rrm-listing-chip:hover {
+    background-color: var(--primary-opacity);
+    border-color: rgba(16, 185, 129, 0.3);
+  }
+  .rrm-listing-price { 
+    color: var(--primary-color-light); 
+  }
+  .rrm-listing-loc { 
+    color: var(--text-secondary-dark); 
+  }
+  .rrm-agent-reply {
+    border-left-color: var(--primary-color-light);
+  }
+  .rrm-agent-avatar {
+    border-color: var(--primary-color-light) !important;
+  }
+  .rrm-tab-bar {
+    background-color: var(--bg-secondary-dark);
+  }
+  .rrm-tab--active {
+    background: var(--box-bg-dark);
+  }
+  .rrm-tab-count--discussion {
+    background-color: var(--border-dark);
+    color: var(--text-secondary-dark);
+  }
+  .rrm-attach-btn--active {
+    background: var(--primary-opacity);
+    border-color: var(--primary-color-light);
+    color: var(--primary-color-light);
+  }
+  .rrm-picker-modal {
+    background: var(--box-bg-dark);
+  }
+  .rrm-picker-item {
+    background: var(--box-bg-dark);
+    border-color: var(--border-dark);
+  }
+  .rrm-picker-item:hover {
+    background: var(--primary-opacity);
+    border-color: var(--primary-color-light);
+  }
+  .rrm-picker-item--selected {
+    background: var(--primary-opacity);
+    border-color: var(--primary-color-light);
+  }
+  .rrm-picker-header {
+    border-bottom-color: var(--border-dark);
+  }
+  .rrm-picker-title {
+    color: var(--text-primary-dark);
+  }
+  .rrm-picker-item-title { 
+    color: var(--text-secondary-dark); 
+  }
+  .rrm-picker-thumb--placeholder {
+    background: var(--bg-secondary-dark);
+    color: var(--text-tertiary-dark);
+  }
+  .rrm-picker-check { 
+    color: var(--primary-color-light); 
+  }
+  .rrm-selected-listing-preview {
+    border-color: var(--primary-color-light);
+    background: var(--primary-opacity);
+  }
+  .rrm-attach-btn {
+    background-color: var(--bg-secondary-dark);
+    border-color: var(--border-dark);
+    color: var(--text-secondary-dark);
+  }
+  .rrm-deselect-btn {
+    background: var(--border-dark);
+    color: var(--text-primary-dark);
+  }
+  .rrm-deselect-btn:hover {
+    background: var(--danger-pale);
+    color: var(--danger-color);
+  }
+  .rrm-footer-note { 
+    color: var(--text-secondary-dark); 
+  }
+  .rrm-footer-note--readonly { 
+    color: var(--text-tertiary-dark); 
+  }
+}
+ 

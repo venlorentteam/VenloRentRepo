@@ -28,6 +28,14 @@ function Create() {
         </div>
         <div className="sidebar">
           {/*Optional for follows and all*/}
+          <div className="search-tips">{/* Reused from search.css */}
+            <h3>Posting Tips</h3>
+            <ul>
+              <li>Ensure all required fields are filled</li>
+              <li>Enter locations that exist</li>
+              <li>Confirm all entered data before submission</li>
+            </ul>
+          </div>
         </div>
       </div>
     </PageSetup>

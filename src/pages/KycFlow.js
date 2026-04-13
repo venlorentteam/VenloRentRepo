@@ -116,7 +116,7 @@ function KycFlow() {
       formData.append('addressProof', documents.businessProof)
 
       const res = await axios.post(
-        'http://localhost:4000/auth/kyc/submit-documents',
+        'https://newprojectbackend-5axx.onrender.com/auth/kyc/submit-documents',
         formData,
         {
           headers: {

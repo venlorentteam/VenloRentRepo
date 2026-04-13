@@ -41,14 +41,17 @@ function App() {
         <Route path="/password-recovery" element={<Pages.PasswordRecovery />} />
         <Route path="/password-reset" element={<Pages.PasswordReset />} />
         <Route path="/profile" element={<Pages.ProtectedRoute><Pages.Profile /></Pages.ProtectedRoute>} />
+        <Route path="/profile/:userId" element={<Pages.ProtectedRoute><Pages.Profile /></Pages.ProtectedRoute>} />
         <Route path="/search" element={<Pages.ProtectedRoute><Pages.Search /></Pages.ProtectedRoute>} />
         <Route path="/user" element={<Pages.ProtectedRoute><Pages.User /></Pages.ProtectedRoute>} />
+        <Route path="/order-preview" element={<Pages.ProtectedRoute><Pages.OrderPreview /></Pages.ProtectedRoute>} />
+        <Route path="/listing/:propertyId/order" element={<Pages.ProtectedRoute><Pages.OrderPreview /></Pages.ProtectedRoute>} />
         <Route path="/terms" element={<Pages.Terms />} />
         <Route path="/privacy-policy" element={<Pages.PrivacyPolicy />} />
         <Route path="/about" element={<Pages.AboutPage />} />
         <Route path="/help" element={<Pages.PrelimHelp />} />
-        <Route path="/kyc" element={<Pages.KycFlow />} />
-        <Route path="/kyc-completed" element={<Pages.KycCompleted />} />
+        <Route path="/kyc" element={<Pages.ProtectedRoute><Pages.KycFlow /></Pages.ProtectedRoute>} />
+        <Route path="/kyc-completed" element={<Pages.ProtectedRoute><Pages.KycCompleted /></Pages.ProtectedRoute>} />
         <Route path="*" element={<Pages.NoMatch />} />
       </Routes>
     </AuthProvider>

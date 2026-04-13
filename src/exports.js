@@ -1,4 +1,4 @@
-// 🚀 Auto-generated exports.js file
+//  Auto-generated exports.js file
 
 // ==== COMPONENTS ====
 export { default as AccountInfoCard } from "./components/AccountInfoCard";
@@ -59,6 +59,7 @@ export { default as Login } from "./pages/Login";
 export { default as NoMatch } from "./pages/NoMatch";
 export { default as Notifications } from "./pages/Notifications";
 export { default as NotificationSettings } from "./pages/NotificationSettings";
+export { default as OrderPreview } from "./pages/OrderPreview";
 export { default as Orders } from "./pages/Orders";
 export { default as PasswordRecovery } from "./pages/PasswordRecovery";
 export { default as PasswordReset } from "./pages/PasswordReset";

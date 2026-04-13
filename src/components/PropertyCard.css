@@ -13,10 +13,6 @@
   transition: all var(--transition-base);
 }
 
-/* .property-card:hover {
-  box-shadow: var(--shadow-card-hover);
-} */
-
 /* Header */
 .property-card-header {
   display: flex;
@@ -117,6 +113,23 @@
 
 .property-image-single {
   cursor: pointer;
+}
+
+.property-listing-type {
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: var(--font-xs);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  background-color: rgba(6, 181, 212, 0.324);
+  color: #fbfbfb;
+  border: 1px solid rgba(6, 182, 212, 0.20);
+  white-space: nowrap;
+  transition: all var(--transition-base);
+  z-index: 2;
 }
 
 /* Swiper Customization */
@@ -278,18 +291,14 @@
 .property-bookmark-btn {
   display: flex;
   align-items: center;
-  justify-content: center;
-  
+  justify-content: center; 
   padding: var(--spacing-xs);
-  
   font-size: 1.25rem;
   color: var(--text-secondary);
-  
   background: transparent;
   border: none;
   border-radius: 50%;
   cursor: pointer;
-  
   transition: all var(--transition-fast);
 }
 
@@ -310,12 +319,10 @@
 /* Description */
 .property-description {
   padding: 0 var(--spacing-md) var(--spacing-md);
-  
   font-size: var(--font-sm);
   line-height: 1.6;
   color: var(--text-primary);
   margin: 0;
-  
   word-wrap: break-word;
 }
 
@@ -330,26 +337,21 @@
 .property-modal-link,
 .property-modal-cancel {
   padding: var(--spacing-md);
-  
   font-size: var(--font-base);
   font-weight: 500;
   color: var(--text-primary);
   text-align: center;
   text-decoration: none;
-  
   background: transparent;
   border: none;
   border-radius: var(--radius-md);
   cursor: pointer;
-  
   transition: all var(--transition-fast);
 }
-
 .property-modal-link:hover,
 .property-modal-cancel:hover {
   background: var(--box-bg-hover);
 }
-
 .property-modal-cancel {
   color: var(--text-secondary);
   font-weight: 600;
@@ -357,7 +359,12 @@
   padding-top: var(--spacing-lg);
   margin-top: var(--spacing-sm);
 }
-
+.property-order-btn.disabled,
+.property-order-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
 /* Dark Mode */
 @media (prefers-color-scheme: dark) {
   .property-card {
@@ -392,6 +399,11 @@
 
   .property-location {
     color: var(--text-secondary-dark);
+  }
+
+  .property-listing-type{
+    background-color: var(--bg-secondary-dark);
+    border-color: var(--border-dark);
   }
 
   .property-order-btn {

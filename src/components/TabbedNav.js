@@ -1,7 +1,7 @@
 import React from 'react'
 import './TabbedNav.css'
 import { NavLink, Outlet } from 'react-router-dom'
-function TabbedNav({tabs=[], basePath}){
+function TabbedNav({ tabs = [], basePath, outletContext }){
   //for any two tabbed menu
   //tabs - [{ label: "Create a Post", path: "create" }]
   //Preceed all path links
@@ -12,7 +12,7 @@ function TabbedNav({tabs=[], basePath}){
         <NavLink to={`${basePath}${tab.path}`}>{tab.label}</NavLink>
       ))}
     </div>
-    <Outlet />
+    <Outlet context={outletContext} />
     </>
   )
 }

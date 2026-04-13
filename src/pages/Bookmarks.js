@@ -1,291 +1,211 @@
 import React, { useState, useEffect } from 'react'
-import { SideNav, Header, IconNav, PageSetup } from '../exports'
+import axios from 'axios'
+import { SideNav, Header, IconNav, PageSetup, PropertyCard, RequestCard } from '../exports'
 import { RiMessageLine } from 'react-icons/ri'
-import { FaRegBell } from 'react-icons/fa'
-import { FaBookmark } from 'react-icons/fa'
-import { GrLocation } from 'react-icons/gr'
-import { RiVerifiedBadgeFill } from 'react-icons/ri'
+import { FaRegBell, FaBookmark } from 'react-icons/fa'
+import { timeAgo } from '../components/Time'
+import { useAuth } from "../context/AuthProvider"
+import defaultAvatar from "../assets/img/avatar.png"
 import './Bookmarks.css'
-import propertyImg1 from '../assets/img/house-isolated-field.jpg'
-import propertyImg2 from '../assets/img/3d-rendering-house-model.jpg'
 
 function Bookmarks() {
-  const [bookmarkedListings, setBookmarkedListings] = useState([])
+  const [items, setItems]       = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const [selectedListing, setSelectedListing] = useState(null)
+  const { user } = useAuth()
+  const isUserAgent = user?.kycStatus === 'verified'
 
-  // Fetch bookmarked listings on mount
   useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      setBookmarkedListings([
-        {
-          id: 1,
-          avatar: "https://i.pravatar.cc/100?img=1",
-          username: "Obinabo Walter",
-          handle: "@walcode",
-          verified: true,
-          time: "2h ago",
-          image: propertyImg2,
-          price: "₦700,000",
-          location: "Gwagwalada, Abuja",
-          category: "Apartment",
-          views: "10k",
-          comments: "532",
-          savedDate: "5 days ago",
-          description: "Self contained apartment, with steady water and light.",
-        },
-        {
-          id: 2,
-          avatar: "https://i.pravatar.cc/100?img=5",
-          username: "Jay Carlos",
-          handle: "@jaycarlx",
-          verified: true,
-          time: "5h ago",
-          image: propertyImg1,
-          price: "₦1,200,000",
-          location: "Lekki Phase 1, Lagos",
-          category: "Duplex",
-          views: "25k",
-          comments: "1.2k",
-          savedDate: "1 week ago",
-          description: "Luxury 4-bedroom duplex with swimming pool.",
-        },
-        {
-          id: 3,
-          avatar: "https://i.pravatar.cc/100?img=8",
-          username: "Grace Homes",
-          handle: "@gracehomes",
-          verified: false,
-          time: "1d ago",
-          image: propertyImg2,
-          price: "₦450,000",
-          location: "Kubwa, Abuja",
-          category: "Studio",
-          views: "5k",
-          comments: "120",
-          savedDate: "2 weeks ago",
-          description: "Affordable studio apartment perfect for young professionals.",
-        },
-        {
-          id: 4,
-          avatar: "https://i.pravatar.cc/100?img=12",
-          username: "Premium Properties",
-          handle: "@premiumprops",
-          verified: true,
-          time: "3h ago",
-          image: propertyImg1,
-          price: "₦2,500,000",
-          location: "Victoria Island, Lagos",
-          category: "Penthouse",
-          views: "45k",
-          comments: "2.3k",
-          savedDate: "3 days ago",
-          description: "Exclusive penthouse with panoramic city views.",
-        },
-        {
-          id: 5,
-          avatar: "https://i.pravatar.cc/100?img=15",
-          username: "Estate Solutions",
-          handle: "@estatesolutions",
-          verified: true,
-          time: "6h ago",
-          image: propertyImg2,
-          price: "₦850,000",
-          location: "Ikoyi, Lagos",
-          category: "Townhouse",
-          views: "18k",
-          comments: "890",
-          savedDate: "1 week ago",
-          description: "Modern townhouse in a gated community.",
-        },
-        {
-          id: 6,
-          avatar: "https://i.pravatar.cc/100?img=20",
-          username: "Abuja Homes",
-          handle: "@abujahomes",
-          verified: false,
-          time: "12h ago",
-          image: propertyImg1,
-          price: "₦550,000",
-          location: "Wuse 2, Abuja",
-          category: "Apartment",
-          views: "8k",
-          comments: "340",
-          savedDate: "4 days ago",
-          description: "2-bedroom apartment in a secure estate.",
-        },
-      ])
-      setIsLoading(false)
-    }, 1000)
-  }, [])
+    const fetchBookmarks = async () => {
+      setIsLoading(true)
+      const token = localStorage.getItem("token")
+      if (!token) {
+        setItems([])
+        setIsLoading(false)
+        return
+      }
 
-  const handleRemoveBookmark = (id) => {
-    setBookmarkedListings(bookmarkedListings.filter(listing => listing.id !== id))
-  }
+      try {
+        const res = await axios.get("https://newprojectbackend-5axx.onrender.com/bookmarks", {
+          headers: { Authorization: `Bearer ${token}` },
+        })
 
-  const openListing = (listing) => {
-    setSelectedListing(listing)
-  }
+        const mapped = (res.data.bookmarks || [])
+          .map((bookmark) => {
+            const target = bookmark.target || bookmark.targetId
+            if (!target) return null
 
-  const closeListing = () => {
-    setSelectedListing(null)
-  }
+            const type = (bookmark.targetType || "").toLowerCase()
+
+            if (type === "property" || type === "listing") {
+              return {
+                type: "listing",
+                // Preserve bookmark date so we can sort the unified feed chronologically.
+                bookmarkedAt: bookmark.createdAt,
+                id: target._id,
+                ownerId: target.owner?._id || "",
+                avatar: target.owner?.avatar || defaultAvatar,
+                username: target.owner?.fullName || target.owner?.username || "",
+                handle: target.owner?.username ? `@${target.owner.username}` : "",
+                isVerified: target.owner?.kycStatus === "verified",
+                isPremium: target.owner?.plan === "premium" || target.owner?.plan === "pro",
+                time: timeAgo(target.createdAt),
+                // image: (target.media || [])
+                //   .map((m) => (typeof m === "string" ? m : m?.url))
+                //   .filter(Boolean),
+                image: (target.media || []).map((m) => typeof m === "string"
+                  ? { url: m, mimeType: "image/jpeg" }   // legacy string — assume image
+                  : { url: m?.url, mimeType: m?.mimeType || "image/jpeg" }
+                  ).filter((m) => m.url),
+                price: Number(target.amount),
+                commission: Number(target.commission) || 0,
+                priceLabel: target.listing_type === "rent"
+                  ? "/yr"
+                  : target.listing_type === "shortlet"
+                    ? "/night"
+                    : "",
+                location: [target.location?.town, target.location?.state]
+                  .filter(Boolean).join(", "),
+                category: target.property_type
+                  ? target.property_type.charAt(0).toUpperCase() + target.property_type.slice(1)
+                  : "",
+                listingType: target.listing_type,
+                bedrooms: target.bedrooms || "",
+                features: target.features || [],
+                likes: String(target.likeCount || 0),
+                likedByMe: user?.id
+                  ? (target.likes || []).some((id) => String(id) === String(user.id))
+                  : false,
+                comments: String(target.commentCount || 0),
+                bookmarked: true,
+                isUnavailable: target.status !== "available",
+                description: target.description,
+              }
+            }
+
+            if (type === "request") {
+              return {
+                type: "request",
+                // Preserve bookmark date so we can sort the unified feed chronologically.
+                bookmarkedAt: bookmark.createdAt,
+                id: target._id,
+                requesterId: target.requester?._id || "",
+                avatar: target.requester?.avatar || defaultAvatar,
+                username: target.requester?.fullName || target.requester?.username || "",
+                handle: target.requester?.username ? `@${target.requester.username}` : "",
+                isAgent: target.requester?.role === "agent" || target.requester?.kycStatus === "verified",
+                isPremium: target.requester?.plan === "premium" || target.requester?.plan === "pro",
+                time: timeAgo(target.createdAt),
+                description: target.description,
+                category: target.category,
+                location: [target.location?.town, target.location?.state]
+                  .filter(Boolean).join(", "),
+                budget: target.budget,
+                likes: String(target.likeCount || 0),
+                likedByMe: user?.id
+                  ? (target.likes || []).some((id) => String(id) === String(user.id))
+                  : false,
+                responseCount: String(target.responseCount || 0),
+                discussionCount: String(target.discussionCount || 0),
+                agentResponses: [],
+                discussionItems: [],
+                bookmarked: true,
+                expired: target.status === "expired",
+                daysLeft: target.expiresAt
+                  ? Math.max(0, Math.ceil((new Date(target.expiresAt) - Date.now()) / 86_400_000))
+                  : null,
+              }
+            }
+
+            return null
+          })
+          .filter(Boolean)
+          // Sort unified feed: most recently bookmarked first.
+          .sort((a, b) => new Date(b.bookmarkedAt) - new Date(a.bookmarkedAt))
+
+        setItems(mapped)
+      } catch (err) {
+        console.error("Failed to load bookmarks:", err)
+        setItems([])
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchBookmarks()
+  }, [user?.id])
 
   return (
     <PageSetup>
-      <SideNav />{/*Desktop left-side navigation*/}
-      <Header //Top page header
+      <SideNav />
+      <Header
         pageTitle={<h2>Bookmarks</h2>}
-        icons={
-          [
-            {link: "/inbox", element: <RiMessageLine />},
-            {link: "/notifications", element: <FaRegBell />}
-          ]
-        }
+        icons={[
+          { link: "/inbox",         element: <RiMessageLine /> },
+          { link: "/notifications", element: <FaRegBell />    },
+        ]}
       />
-      <div className="content">
-        {/* Bookmarks Grid */}
-        {isLoading ? (
-          <div className="bookmarks-loading">
-            <div className="skeleton-grid"></div>
-            <div className="skeleton-grid"></div>
-            <div className="skeleton-grid"></div>
-          </div>
-        ) : bookmarkedListings.length > 0 ? (
-          <>
-            <div className="bookmarks-header">
-              <p className="bookmarks-count">{bookmarkedListings.length} saved items</p>
-            </div>
-            <div className="bookmarks-grid">
-              {bookmarkedListings.map((listing) => (
-                <div key={listing.id} className="bookmark-item">
-                  <div className="bookmark-image-container" onClick={() => openListing(listing)}>
-                    <img 
-                      src={listing.image} 
-                      alt={listing.category}
-                      className="bookmark-image"
-                    />
-                    <div className="bookmark-overlay">
-                      <div className="bookmark-overlay-content">
-                        <FaBookmark className="bookmark-overlay-icon" />
-                        <span className="bookmark-overlay-text">View Details</span>
-                      </div>
-                    </div>
-                    <div className="bookmark-price">{listing.price}</div>
-                    <div className="bookmark-category">{listing.category}</div>
-                  </div>
-                  
-                  <div className="bookmark-info">
-                    <div className="bookmark-header">
-                      <div className="bookmark-user">
-                        <img src={listing.avatar} alt={listing.username} className="bookmark-avatar" />
-                        <div className="bookmark-user-info">
-                          <div className="bookmark-username-row">
-                            <h4 className="bookmark-username">{listing.username}</h4>
-                            {listing.verified && <RiVerifiedBadgeFill className="bookmark-verified" />}
-                          </div>
-                          <p className="bookmark-handle">{listing.handle}</p>
-                        </div>
-                      </div>
-                      <button 
-                        className="bookmark-remove-btn"
-                        onClick={() => handleRemoveBookmark(listing.id)}
-                        title="Remove bookmark"
-                      >
-                        <FaBookmark />
-                      </button>
-                    </div>
 
-                    <div className="bookmark-location">
-                      <GrLocation size={14} />
-                      <span>{listing.location}</span>
-                    </div>
-
-                    <p className="bookmark-description">{listing.description}</p>
-
-                    <div className="bookmark-meta">
-                      <span className="bookmark-saved">Saved {listing.savedDate}</span>
-                      <span className="bookmark-stats">{listing.views} views</span>
-                    </div>
-                  </div>
+      <div className="main-content">
+        <div className="content">
+          {isLoading ? (
+            /* === LOADING STATE ============================= */
+            <div className="bookmarks-loading">
+              {[0, 1, 2].map((i) => (
+                <div key={i} className="bookmarks-skeleton-card">
+                  <div className="skeleton bookmarks-skeleton-header" />
+                  <div className="skeleton bookmarks-skeleton-image" />
+                  <div className="skeleton bookmarks-skeleton-line" />
+                  <div className="skeleton bookmarks-skeleton-line bookmarks-skeleton-line--short" />
                 </div>
               ))}
             </div>
-          </>
-        ) : (
-          // Empty State
-          <div className="bookmarks-empty">
-            <div className="empty-icon">
-              <FaBookmark size={64} />
-            </div>
-            <h3>No bookmarks yet</h3>
-            <p>Save properties to view them later. Explore properties on the home feed!</p>
-          </div>
-        )}
-      </div>
-
-      {/* Listing Detail Modal */}
-      {selectedListing && (
-        <div className="listing-detail-modal" onClick={closeListing}>
-          <div className="listing-detail-content" onClick={(e) => e.stopPropagation()}>
-            <button className="modal-close-btn" onClick={closeListing}>×</button>
-            
-            <div className="modal-body">
-              <img src={selectedListing.image} alt={selectedListing.category} className="modal-image" />
-              
-              <div className="modal-info">
-                <div className="modal-header">
-                  <div className="modal-user">
-                    <img src={selectedListing.avatar} alt={selectedListing.username} />
-                    <div>
-                      <div className="modal-username-row">
-                        <h3>{selectedListing.username}</h3>
-                        {selectedListing.verified && <RiVerifiedBadgeFill />}
-                      </div>
-                      <p>{selectedListing.handle}</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="modal-price-section">
-                  <span className="modal-price">{selectedListing.price}</span>
-                  <span className="modal-category">{selectedListing.category}</span>
-                </div>
-
-                <div className="modal-location">
-                  <GrLocation size={16} />
-                  <span>{selectedListing.location}</span>
-                </div>
-
-                <p className="modal-description">{selectedListing.description}</p>
-
-                <div className="modal-stats">
-                  <div className="stat">
-                    <span className="stat-label">Views</span>
-                    <span className="stat-value">{selectedListing.views}</span>
-                  </div>
-                  <div className="stat">
-                    <span className="stat-label">Comments</span>
-                    <span className="stat-value">{selectedListing.comments}</span>
-                  </div>
-                  <div className="stat">
-                    <span className="stat-label">Saved</span>
-                    <span className="stat-value">{selectedListing.savedDate}</span>
-                  </div>
-                </div>
-
-                <button className="modal-action-btn">Contact Agent</button>
+          ) : items.length > 0 ? (
+            /* === UNIFIED FEED ============================== */
+            <>
+              <div className="bookmarks-header">
+                <p className="bookmarks-count">
+                  <FaBookmark aria-hidden="true" />
+                  {items.length} saved {items.length === 1 ? 'item' : 'items'}
+                </p>
               </div>
-            </div>
-          </div>
-        </div>
-      )}
 
-      <div className="sidebar">
-        {/*Optional for follows and all*/}
+              <div className="bookmarks-feed">
+                {items.map((item) =>
+                  item.type === "listing" ? (
+                    <PropertyCard
+                      key={`listing-${item.id}`}
+                      {...item}
+                      propertyId={item.id}
+                      isUnavailable={item.isUnavailable}
+                    />
+                  ) : (
+                    <RequestCard
+                      key={`request-${item.id}`}
+                      {...item}
+                      requestId={item.id}
+                      likedByMe={item.likedByMe}
+                      currentUserIsAgent={isUserAgent}
+                    />
+                  )
+                )}
+              </div>
+            </>
+          ) : (
+            /* === EMPTY STATE =============================== */
+            <div className="bookmarks-empty">
+              <div className="empty-icon">
+                <FaBookmark size={40} />
+              </div>
+              <h3>Nothing saved yet</h3>
+              <p>Tap the bookmark icon on any listing or request to save it here.</p>
+            </div>
+          )}
+        </div>
+
+        <div className="sidebar">
+          {/* Optional sidebar content could go here */}
+        </div>
       </div>
-      <IconNav />{/*Mobile bottom navigation*/}
     </PageSetup>
   )
 }

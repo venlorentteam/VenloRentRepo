@@ -1,9 +1,12 @@
 // settings/SecuritySettings.js
 import React, { useState } from 'react'
 import { ClickButton } from '../exports'
+import axios from 'axios'
+import { useAuth } from '../context/AuthProvider'
 import { FiEye, FiEyeOff, FiShield } from 'react-icons/fi'
 
 const SecuritySettings = () => {
+  const { logout } = useAuth()
   const [showPasswords, setShowPasswords] = useState({
     current: false,
     new: false,
@@ -40,8 +43,8 @@ const SecuritySettings = () => {
       newErrors.newPassword = 'New password is required'
     } else if (passwords.newPassword.length < 8) {
       newErrors.newPassword = 'Password must be at least 8 characters'
-    } else if (!/(?=.*[A-Z])(?=.*[0-9])/.test(passwords.newPassword)) {
-      newErrors.newPassword = 'Password must contain uppercase letter and number'
+    } else if (!/^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$/.test(passwords.newPassword)){
+      newErrors.newPassword = "Password must contain letters, numbers and special character"
     }
     
     if (!passwords.confirmPassword) {
@@ -59,12 +62,18 @@ const SecuritySettings = () => {
 
     setIsChanging(true)
     try {
-      // TODO: API call to change password
-      await new Promise(resolve => setTimeout(resolve, 1500))
-      alert('Password changed successfully! Please login again.')
-      // Clear form
-      setPasswords({ currentPassword: '', newPassword: '', confirmPassword: '' })
-      // TODO: Logout user
+      const payload = {
+        oldpass:  passwords.currentPassword,
+        pass1:    passwords.newPassword,
+        pass2:    passwords.confirmPassword,
+      }
+      const res = await axios.post("https://localhost:4000/change-password", payload)
+      if (res.data.success){
+        // Clear form and logout user
+        setPasswords({ currentPassword: '', newPassword: '', confirmPassword: '' })
+        logout()
+      }
+        
     } catch (error) {
       console.error('Error changing password:', error)
       setErrors({ submit: 'Failed to change password. Please try again.' })

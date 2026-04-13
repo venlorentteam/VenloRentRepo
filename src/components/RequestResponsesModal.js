@@ -1,28 +1,26 @@
-import React, { useState } from 'react'
-import { SearchBar } from '../exports'
+﻿import React, { useState, useEffect } from 'react'
+import axios from 'axios'
+import { SearchBar, Modal } from '../exports'
 import { AgentBadge, PremiumBadge } from './Badges'
 import { FaXmark } from 'react-icons/fa6'
 import { IoMdHeartEmpty, IoMdHeart } from 'react-icons/io'
 import { GrLocation } from 'react-icons/gr'
 import { FiHome } from 'react-icons/fi'
+import { useNavigate} from 'react-router-dom'
+import defaultAvatar from "../assets/img/avatar.png"
+import { timeAgo } from './Time'
 import './RequestResponsesModal.css'
 
 // ====================================================================
 //  LISTING CHIP
-//
 //  Renders the attached property snapshot inside an agent response.
-//  Uses listingSnapshot (frozen at write time on the backend) so the
-//  card still renders correctly even if the agent later deletes the
-//  actual listing from the platform.
-//
-//  Returns null if the agent responded with text only (no attachment).
 // ======================================================================
-function ListingChip({ snapshot }) {
-  // Agent responded without attaching a listing — render nothing
+
+function ListingChip({ snapshot, onOpen }) {
   if (!snapshot?.price) return null
 
   return (
-    <div className="rrm-listing-chip">
+    <button className="rrm-listing-chip" onClick={() => onOpen?.(snapshot)}>
       {snapshot.image && (
         <img
           src={snapshot.image}
@@ -33,57 +31,124 @@ function ListingChip({ snapshot }) {
       )}
       <div className="rrm-listing-info">
         <span className="rrm-listing-price">{snapshot.price}</span>
+        <span className="rrm-listing-loc">{snapshot.title}</span>
         <span className="rrm-listing-loc">
           <GrLocation aria-hidden="true" />
           {snapshot.location}
         </span>
       </div>
-      {/* Visual affordance that the chip is tappable */}
       <span className="rrm-listing-arrow" aria-hidden="true">›</span>
-    </div>
+    </button>
   )
 }
 
-// ===========================================================================
-//  AGENT RESPONSE ITEM
-//
-//  Renders one entry in the Agent Offers lane.
-//  Avatar | content (name row + text + meta) | (no like btn — not applicable)
-//
-//  Every item in this lane is by definition from a KYC agent, so
-//  AgentBadge always renders. PremiumBadge renders only if isPremium === true.
-// ===========================================================================
-function AgentResponseItem({ item }) {
+// ====================================================================
+//  LISTING PICKER MODAL
+//  Shown when agent clicks the attach button.
+// ====================================================================
+function ListingPickerModal({ isOpen, onClose, listings, isLoading, selectedId, onSelect }) {
+  if (!isOpen) return null
   return (
-    <div className="rrm-agent-reply">
-
-      {/* Agent Avatar */}
-      <img
-        src={item.avatar}
-        alt={`${item.name}'s avatar`}
-        className="comment-avatar rrm-agent-avatar"  /* reuse comment-avatar base, add agent border */
-      />
-
-      <div className="rrm-agent-content">
-        {/* Name row */}
-        <div className="comment-name-row">
-          <span className="comment-name">{item.name}</span>   {/* reuse comment-name */}
-          {/* Agent badge always present — this lane is agents-only */}
-          <AgentBadge className="rrm-badge rrm-badge--agent"/>
-          {/* Premium badge only if this agent is on a paid plan */}
-          {item.isPremium && <PremiumBadge className="rrm-badge rrm-badge--premium"/>}
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <div className="rrm-picker-modal">
+        {/* Header */}
+        <div className="rrm-picker-header">
+          <h4 className="rrm-picker-title">Attach a Listing</h4>
+          <button
+            className="comments-close-btn"
+            onClick={onClose}
+            aria-label="Close listing picker"
+          >
+            <FaXmark />
+          </button>
         </div>
 
-        {/* Handle */}
+        {/* Body */}
+        <div className="rrm-picker-body">
+          {isLoading ? (
+            <p className="comment-time rrm-picker-empty">Loading your listings…</p>
+          ) : listings.length === 0 ? (
+            <p className="comment-time rrm-picker-empty">
+              You have no active listings to attach.
+            </p>
+          ) : (
+            <ul className="rrm-picker-list">
+              {listings.map((listing) => {
+                const isSelected = listing.id === selectedId
+                return (
+                  <li key={listing.id}>
+                    <button
+                      className={`rrm-picker-item ${isSelected ? 'rrm-picker-item--selected' : ''}`}
+                      onClick={() => {
+                        onSelect(isSelected ? null : listing) // toggle off if already selected
+                        onClose()
+                      }}
+                    >
+                      {/* Thumbnail */}
+                      {listing.image ? (
+                        <img
+                          src={listing.image}
+                          alt={listing.title}
+                          className="rrm-picker-thumb"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="rrm-picker-thumb rrm-picker-thumb--placeholder">
+                          <FiHome aria-hidden="true" />
+                        </div>
+                      )}
+
+                      {/* Info */}
+                      <div className="rrm-picker-info">
+                        <span className="rrm-listing-price">{listing.price}</span>
+                        <span className="rrm-listing-loc">
+                          <GrLocation aria-hidden="true" />
+                          {listing.location || 'Location not set'}
+                        </span>
+                        <span className="rrm-picker-item-title">{listing.title}</span>
+                      </div>
+
+                      {/* Selection indicator */}
+                      {isSelected && (
+                        <span className="rrm-picker-check" aria-label="Selected">✓</span>
+                      )}
+                    </button>
+                  </li>
+                )
+              })}
+            </ul>
+          )}
+        </div>
+      </div>
+    </Modal>
+  )
+}
+
+function AgentResponseItem({ item }) {
+  const navigate = useNavigate() 
+  
+  // == Handle listing chip open (navigate to listing details) ==
+  const openListing = (snapshot) => {
+    if (snapshot?.listingId) {
+      navigate(`/listing/${snapshot.listingId}/order`)
+    }
+  }
+  return (
+    <div className="rrm-agent-reply">
+      <img
+        src={item.avatar || defaultAvatar }
+        alt={`${item.name}'s avatar`}
+        className="comment-avatar rrm-agent-avatar"
+      />
+      <div className="rrm-agent-content">
+        <div className="comment-name-row">
+          <span className="comment-name">{item.name}</span>
+          <AgentBadge className="rrm-badge rrm-badge--agent"/>
+          {item.isPremium && <PremiumBadge className="rrm-badge rrm-badge--premium"/>}
+        </div>
         <span className="comment-handle">{item.handle}</span>
-
-        {/* Response text — mirrors comment-text from Comments.jsx */}
         <p className="comment-text rrm-reply-text">{item.text}</p>
-
-        {/* Optional listing card — absent if agent replied with text only */}
-        <ListingChip snapshot={item.listingSnapshot} />
-
-        {/* Time — mirrors comment-time from Comments.jsx */}
+        <ListingChip snapshot={item.listingSnapshot} onOpen={openListing} />
         <div className="comment-actions">
           <span className="comment-time">{item.time}</span>
         </div>
@@ -94,169 +159,45 @@ function AgentResponseItem({ item }) {
 
 // =====================================================================
 //  DISCUSSION ITEM
-//
-//  Renders one comment in the Discussion lane.
-//  This is structurally IDENTICAL to the comment-item in Comments.jsx.
-//  The only addition is PremiumBadge — Comments.jsx only checks `verified`
-//  (which in the old PRD meant email-verified). Here `isAgent` drives the
-//  agent badge and `isPremium` drives the premium badge independently.
-//  ====================================================================
+// =====================================================================
 function DiscussionItem({ item, isLiked, onToggleLike }) {
   return (
-    /* comment-item — directly from Comments.jsx, same class name */
     <div className="comment-item">
-
-      {/* comment-avatar — directly from Comments.jsx */}
       <img
-        src={item.avatar}
+        src={item.avatar || defaultAvatar}
         alt={`${item.name}'s avatar`}
         className="comment-avatar"
       />
-
-      {/* comment-content — directly from Comments.jsx */}
       <div className="comment-content">
         <div className="comment-user-info">
-
-          {/* comment-name-row — directly from Comments.jsx */}
           <div className="comment-name-row">
             <span className="comment-name">{item.name}</span>
-
-            {/* Agent badge — only if this commenter is a KYC agent.
-                Replaces the old `item.verified` check from Comments.jsx
-                since "verified" now exclusively means KYC agent. */}
             {item.isAgent && <AgentBadge />}
-
-            {/* Premium badge — independent of agent status */}
             {item.isPremium && <PremiumBadge />}
           </div>
-
-          {/* comment-handle — directly from Comments.jsx */}
           <span className="comment-handle">{item.handle}</span>
         </div>
-
-        {/* comment-text — directly from Comments.jsx */}
         <p className="comment-text">{item.comment}</p>
-
-        {/* comment-actions — directly from Comments.jsx */}
         <div className="comment-actions">
           <span className="comment-time">{item.time}</span>
           <span className="comment-likes">{item.likeCount} likes</span>
           <button className="comment-reply-btn">Reply</button>
         </div>
       </div>
-
-      {/* comment-like-btn — directly from Comments.jsx, same logic */}
       <button
         className="comment-like-btn"
         onClick={() => onToggleLike(item.id)}
         aria-label={isLiked ? 'Unlike' : 'Like'}
       >
-        {isLiked
-          ? <IoMdHeart className="liked" /> /* liked class from Comments.css */
-          : <IoMdHeartEmpty />
-        }
+        {isLiked ? <IoMdHeart className="liked" /> : <IoMdHeartEmpty />}
       </button>
     </div>
   )
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-//  SAMPLE DATA
-//  Used when no real data is passed in — mirrors Comments.jsx fallback pattern.
-// ─────────────────────────────────────────────────────────────────────────────
-const sampleAgentResponses = [
-  {
-    id: 1,
-    avatar:    'https://i.pravatar.cc/100?img=12',
-    name:      'Emeka Realty',
-    handle:    '@emekarealty',
-    isPremium: true,
-    text:      'I have a 2-bed ground floor flat in Wuse 2. Fitted kitchen, 24hr security, borehole. Available immediately.',
-    listingSnapshot: {
-      price:    '₦800,000/yr',
-      location: 'Wuse 2, Abuja',
-      image:    'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=120&q=80',
-    },
-    time: '45 min ago',
-  },
-  {
-    id: 2,
-    avatar:    'https://i.pravatar.cc/100?img=33',
-    name:      'Grace Homes',
-    handle:    '@gracehomes',
-    isPremium: false,
-    text:      'Maitama option — 1st floor flat, solar backup + borehole. ₦750k/yr, negotiable for a good tenant.',
-    listingSnapshot: {
-      price:    '₦750,000/yr',
-      location: 'Maitama, Abuja',
-      image:    'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=120&q=80',
-    },
-    time: '1 hr ago',
-  },
-  {
-    id: 3,
-    avatar:    'https://i.pravatar.cc/100?img=55',
-    name:      'Crown Realtors',
-    handle:    '@crownrealtors',
-    isPremium: false,
-    // No listingSnapshot — agent replied with text only, listing chip won't render
-    text:      'I have 2 units in Wuse 2 — ground floor ₦650k and 1st floor ₦620k. Both have EKEDC meter. Can show you this weekend.',
-    time: '2 hrs ago',
-  },
-]
-
-const sampleDiscussion = [
-  {
-    id: 1,
-    avatar:    'https://i.pravatar.cc/100?img=7',
-    name:      'Tunde Balogun',
-    handle:    '@tundeb',
-    isAgent:   false,
-    isPremium: false,
-    comment:   'Emeka Realty is solid — they helped me find my place in Wuse 2 last year. Very straightforward.',
-    likeCount: 12,
-    time:      '30 min ago',
-  },
-  {
-    id: 2,
-    avatar:    'https://i.pravatar.cc/100?img=18',
-    name:      'Chioma Nwachukwu',
-    handle:    '@chiomaN',
-    isAgent:   false,
-    isPremium: true,
-    comment:   'Also looking for something similar in that area! Would love to know what you end up finding 👀',
-    likeCount: 4,
-    time:      '1 hr ago',
-  },
-  {
-    id: 3,
-    avatar:    'https://i.pravatar.cc/100?img=29',
-    name:      'Yusuf Musa',
-    handle:    '@yusufm',
-    isAgent:   false,
-    isPremium: false,
-    comment:   'Avoid Wuse 2 near the junction — road floods badly in rainy season. Central Wuse 2 is fine though.',
-    likeCount: 31,
-    time:      '2 hrs ago',
-  },
-]
-
-// ─────────────────────────────────────────────────────────────────────────────
+// ========================================
 //  MAIN COMPONENT — RequestResponsesModal
-//
-//  Props:
-//    isOpen            boolean  — controls visibility
-//    onClose           fn       — close handler
-//    agentResponses    array    — agent offer objects (AgentResponseItem shape)
-//    discussionItems   array    — comment objects (DiscussionItem shape)
-//    onAddResponse     fn       — called when agent submits an offer
-//    onAddComment      fn       — called when any user submits a discussion comment
-//    isExpired         boolean  — when true, both input footers are hidden
-//    currentUserIsAgent boolean — controls whether agent footer renders
-//
-//  Shell structure is identical to Comments.jsx:
-//    overlay → modal → close btn → header → [scrollable body] → input section
-// ─────────────────────────────────────────────────────────────────────────────
+// ========================================
 function RequestResponsesModal({
   isOpen,
   onClose,
@@ -264,54 +205,247 @@ function RequestResponsesModal({
   discussionItems = [],
   onAddResponse,
   onAddComment,
+  requestId,
   isExpired           = false,
   currentUserIsAgent  = false,
 }) {
-  // Active tab — 'agents' or 'discussion'
   const [activeTab, setActiveTab] = useState('agents')
+  const [responses, setResponses] = useState([])
+  const [discussion, setDiscussion] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState("")
 
-  // Liked discussion comments 
+  // Listing attachment state
+  const [isAttachOpen, setIsAttachOpen] = useState(false)
+  const [listingOptions, setListingOptions] = useState([])
+  const [isListingLoading, setIsListingLoading] = useState(false)
+  const [selectedListing, setSelectedListing] = useState(null)
+
+  // Liked discussion comments
   const [likedItems, setLikedItems] = useState(new Set())
 
-  // Mirrors Comments.jsx early return pattern exactly
-  if (!isOpen) return null
+  // == Fetch responses & discussion when modal opens =============
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!isOpen || !requestId) return
+      setIsLoading(true)
+      setError("")
+      try {
+        const token = localStorage.getItem("token")
+        const headers = token ? { Authorization: `Bearer ${token}` } : {}
 
-  const toggleLike = (itemId) => {
-    setLikedItems(prev => {
+        const [resResponses, resComments] = await Promise.all([
+          axios.get(`https://newprojectbackend-5axx.onrender.com/requests/${requestId}/agent-responses`, { headers }),
+          axios.get(`https://newprojectbackend-5axx.onrender.com/requests/${requestId}/discussions`, { headers }),
+        ])
+
+        const mappedResponses = (resResponses.data.items || []).map((r) => ({
+          id: r._id,
+          avatar: r.author?.avatar,
+          name: r.author?.fullName || r.author?.username,
+          handle: r.author?.username ? `@${r.author.username}` : "",
+          isPremium: r.author?.plan === "premium",
+          text: r.text,
+          listingSnapshot: r.listingSnapshot,
+          time: new Date(r.createdAt).toLocaleString(),
+        }))
+
+        const mappedDiscussion = (resComments.data.items || []).map((d) => ({
+          id: d._id,
+          avatar: d.author?.avatar,
+          name: d.author?.fullName || d.author?.username,
+          handle: d.author?.username ? `@${d.author.username}` : "",
+          isAgent: d.author?.role === "agent" || d.author?.kycStatus === "verified",
+          isPremium: d.author?.plan === "premium",
+          comment: d.text,
+          likeCount: d.likeCount || 0,
+          likedByMe: !!d.likedByMe,
+          time: new Date(d.createdAt).toLocaleString(),
+        }))
+
+        setResponses(mappedResponses)
+        setDiscussion(mappedDiscussion)
+        setLikedItems(new Set(mappedDiscussion.filter((d) => d.likedByMe).map((d) => d.id)))
+      } catch (err) {
+        setError(err?.response?.data?.message || "Failed to load responses")
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [isOpen, requestId])
+
+  // === Fetch agent's own listings when picker opens ======================
+  useEffect(() => {
+    const myListing = async () => {
+      if (!isAttachOpen) return
+      const token = localStorage.getItem("token")
+      if (!token) return
+      setIsListingLoading(true)
+
+      try{
+        const res = await axios.get("https://newprojectbackend-5axx.onrender.com/my-listings", {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+          
+        const items = res.data.items || []
+        const mapped = items.map((p) => ({
+          id: p._id,
+          title: p.title || "Listing",
+          price: `₦${Number(p.amount || 0).toLocaleString("en-NG")}`,
+          location: [p.location?.town, p.location?.state].filter(Boolean).join(", "),
+          image: (p.media || [])
+            .map((m) => (typeof m === "string" ? m : m?.url))
+            .filter(Boolean)[0],
+        }))
+        setListingOptions(mapped)
+      }catch(err) {
+        console.error("Failed to load listings:", err)
+        setListingOptions([])
+      }finally{
+        setIsListingLoading(false)
+      }
+    }
+    myListing()
+  }, [isAttachOpen])
+
+  // === Like / unlike ====
+  const toggleLike = async (itemId) => {
+    if (!itemId) return
+    const nextLiked = !likedItems.has(itemId)
+    setLikedItems((prev) => {
       const next = new Set(prev)
       next.has(itemId) ? next.delete(itemId) : next.add(itemId)
       return next
     })
+    setDiscussion((prev) =>
+      prev.map((item) =>
+        item.id === itemId
+          ? { ...item, likeCount: Math.max(0, (item.likeCount || 0) + (nextLiked ? 1 : -1)) }
+          : item
+      )
+    )
+    const token = localStorage.getItem("token")
+    if (!token) return
+    try {
+      await axios.post(
+        `https://newprojectbackend-5axx.onrender.com/discussions/${itemId}/like`,
+        { liked: nextLiked },
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+    } catch (err) {
+      console.error("Failed to like discussion:", err)
+    }
   }
 
-  // Fall back to sample data when no real data passed in — mirrors Comments.jsx
-  const displayResponses  = agentResponses.length  > 0 ? agentResponses  : sampleAgentResponses
-  const displayDiscussion = discussionItems.length > 0 ? discussionItems : sampleDiscussion
+  // === Submit agent response ==========
+  const handleAddResponse = async (text) => {
+    if (!text?.trim()) return
+
+    if (requestId) {
+      const token = localStorage.getItem("token")
+      if (!token) return
+      try {
+        const res = await axios.post(
+          `https://newprojectbackend-5axx.onrender.com/requests/${requestId}/agent-responses`,
+          {
+            text,
+            listingSnapshot: selectedListing
+              ? {
+                  listingId: selectedListing.id,
+                  price: selectedListing.price,
+                  location: selectedListing.location,
+                  image: selectedListing.image,
+                  title: selectedListing.title,
+                }
+              : undefined,
+          },
+          { headers: { Authorization: `Bearer ${token}` } }
+        )
+        const created = res.data.response
+        if (created) {
+          const mapped = {
+            id: created._id,
+            avatar: created.author?.avatar,
+            name: created.author?.fullName || created.author?.username,
+            handle: created.author?.username ? `@${created.author.username}` : "",
+            isPremium: created.author?.plan === "premium",
+            text: created.text,
+            listingSnapshot: created.listingSnapshot,
+            time: new Date(created.createdAt).toLocaleString(),
+          }
+          setResponses((prev) => [mapped, ...prev])
+          setSelectedListing(null) // clear after posting
+        }
+      } catch (err) {
+        console.error("Failed to add response:", err)
+      }
+      return
+    }
+    onAddResponse?.({ text })
+  }
+
+  // === Submit discussion comment ======================
+  const handleAddComment = async (text) => {
+    if (!text?.trim()) return
+
+    if (requestId) {
+      const token = localStorage.getItem("token")
+      if (!token) return
+      try {
+        const res = await axios.post(
+          `https://newprojectbackend-5axx.onrender.com/requests/${requestId}/discussions`,
+          { text },
+          { headers: { Authorization: `Bearer ${token}` } }
+        )
+        const created = res.data.comment
+        if (created) {
+          const mapped = {
+            id: created._id,
+            avatar: created.author?.avatar,
+            name: created.author?.fullName || created.author?.username,
+            handle: created.author?.username ? `@${created.author.username}` : "",
+            isAgent: created.author?.role === "agent" || created.author?.kycStatus === "verified",
+            isPremium: created.author?.plan === "premium",
+            comment: created.text,
+            likeCount: created.likeCount || 0,
+            time: new Date(created.createdAt).toLocaleString(),
+          }
+          setDiscussion((prev) => [mapped, ...prev])
+        }
+      } catch (err) {
+        console.error("Failed to add discussion comment:", err)
+      }
+      return
+    }
+    onAddComment?.(text)
+  }
+
+  if (!isOpen) return null
+
+  const displayResponses  = responses.length  > 0 ? responses  : agentResponses
+  const displayDiscussion = discussion.length > 0 ? discussion : discussionItems
 
   return (
     <>
-      {/* ── OVERLAY — identical to Comments.jsx overlay ── */}
-      <div className="comments-overlay" onClick={onClose} />   {/* reuse comments-overlay */}
+      <div className="comments-overlay" onClick={onClose} />
+      <div className="comments-modal rrm-modal">
 
-      {/* ── MODAL SHELL — mirrors comments-modal from Comments.jsx exactly ── */}
-      <div className="comments-modal rrm-modal">  {/* reuse comments-modal + add rrm-modal for tab overrides */}
-
-        {/* Close button — identical to Comments.jsx */}
+        {/* Close button */}
         <button
-          className="comments-close-btn" 
+          className="comments-close-btn"
           onClick={onClose}
           aria-label="Close responses"
-        >{/* reuse comments-close-btn */}
+        >
           <FaXmark />
         </button>
 
-        {/* ── HEADER — mirrors comments-header structure ── */}
-        <div className="comments-header">   {/* reuse comments-header */}
-          <h3 className="comments-title">Responses</h3>  {/* reuse comments-title */}
+        {/* Header + tab bar */}
+        <div className="comments-header">
+          <h3 className="comments-title">Responses</h3>
 
-          {/* ── TAB BAR — replaces comments-count with two tabs ── */}
           <div className="rrm-tab-bar" role="tablist">
-
             <button
               role="tab"
               aria-selected={activeTab === 'agents'}
@@ -320,7 +454,6 @@ function RequestResponsesModal({
             >
               <AgentBadge className="rrm-tab-icon" aria-hidden="true" />
               Agent Offers
-              {/* Count badge — tells user how many agent offers exist before switching */}
               <span className="rrm-tab-count rrm-tab-count--agent">
                 {displayResponses.length}
               </span>
@@ -337,62 +470,81 @@ function RequestResponsesModal({
                 {displayDiscussion.length}
               </span>
             </button>
-
           </div>
         </div>
 
-        {/* ══════════════════════════════════════════════════════
-            LANE 1 — AGENT OFFERS
-            Only visible when activeTab === 'agents'
-        ══════════════════════════════════════════════════════ */}
+        {/* === AGENT OFFERS TAB === */}
         {activeTab === 'agents' && (
           <>
-            {/* Scrollable list — mirrors comments-list from Comments.jsx */}
-            <div className="comments-list">                    {/* reuse comments-list */}
-              {displayResponses.map(item => (
+            <div className="comments-list">
+              {isLoading ? (
+                <p className="comment-time">Loading responses…</p>
+              ) : error ? (
+                <p className="comment-time">{error}</p>
+              ) : displayResponses.length === 0 ? (
+                <p className="comment-time">No responses yet. Be the first agent to drop a response.</p>
+              ) : displayResponses.map((item) => (
                 <AgentResponseItem key={item.id} item={item} />
               ))}
             </div>
 
-            {/* ── AGENT OFFER FOOTER ──────────────────────────────
-                input-section from Comments.jsx.
-
-                Three states:
-                  1. isExpired → show expired notice, no input
-                  2. currentUserIsAgent → show compose input
-                  3. regular user → show read-only note
-            ─────────────────────────────────────────────────── */}
-            <div className="comments-input-section rrm-agent-footer">  {/* reuse comments-input-section */}
+            <div className="comments-input-section rrm-agent-footer">
               {isExpired ? (
-                /* State 1 — request is expired, no new responses accepted */
                 <p className="rrm-footer-note rrm-footer-note--expired">
                   This request has expired. New agent offers can no longer be submitted.
                 </p>
               ) : currentUserIsAgent ? (
-                /* State 2 — current user is a KYC agent, show compose row */
                 <>
                   <p className="rrm-footer-note">
                     <AgentBadge className="rrm-badge rrm-badge--agent" /> Only verified agents can post offers
                   </p>
-                  {/* SearchBar reused from Comments.jsx input pattern */}
+
+                  {/* Selected listing preview — shows which listing will be attached */}
+                  {selectedListing && (
+                    <div className="rrm-selected-listing-preview">
+                      {selectedListing.image && (
+                        <img
+                          src={selectedListing.image}
+                          alt={selectedListing.title}
+                          className="rrm-listing-thumb"
+                          loading="lazy"
+                        />
+                      )}
+                      <div className="rrm-listing-info">
+                        <span className="rrm-listing-price">{selectedListing.price}</span>
+                        <span className="rrm-listing-loc">
+                          <GrLocation aria-hidden="true" />
+                          {selectedListing.location}
+                        </span>
+                      </div>
+                      {/* Clear the selection */}
+                      <button
+                        className="rrm-deselect-btn"
+                        aria-label="Remove attached listing"
+                        onClick={() => setSelectedListing(null)}
+                      >
+                        <FaXmark />
+                      </button>
+                    </div>
+                  )}
+
                   <div className="rrm-agent-input-row">
                     <SearchBar
-                      placeholder="Describe what you have..."
+                      placeholder="Describe what you have…"
                       mode="message"
-                      onSearch={(text) => onAddResponse?.({ text })}
+                      onSearch={handleAddResponse}
                     />
-                    {/* Attach listing button — TODO: open listing picker modal */}
                     <button
-                      className="rrm-attach-btn"
+                      className={`rrm-attach-btn ${selectedListing ? 'rrm-attach-btn--active' : ''}`}
                       aria-label="Attach a listing"
-                      title="Attach one of your listings"
+                      title={selectedListing ? 'Change attached listing' : 'Attach one of your listings'}
+                      onClick={() => setIsAttachOpen(true)}
                     >
                       <FiHome aria-hidden="true" />
                     </button>
                   </div>
                 </>
               ) : (
-                /* State 3 — regular user, read-only */
                 <p className="rrm-footer-note rrm-footer-note--readonly">
                   <AgentBadge className="rrm-badge rrm-badge--agent" /> Agent offers are posted by KYC verified agents only
                 </p>
@@ -401,21 +553,21 @@ function RequestResponsesModal({
           </>
         )}
 
-        {/* ══════════════════════════════════════════════════════
-            LANE 2 — DISCUSSION
-            Only visible when activeTab === 'discussion'
-            Structurally identical to Comments.jsx body + footer.
-        ══════════════════════════════════════════════════════ */}
+        {/* === DISCUSSION TAB === */}
         {activeTab === 'discussion' && (
           <>
-            {/* Context note — sits above the comments list */}
             <div className="rrm-discussion-note">
-              Open discussion — tips, questions, and experiences from the community
+              Open discussion, tips, questions, and experiences from the community
             </div>
 
-            {/* Scrollable list — reuses comments-list and all comment-* classes */}
             <div className="comments-list">
-              {displayDiscussion.map(item => (
+              {isLoading ? (
+                <p className="comment-time">Loading discussion…</p>
+              ) : error ? (
+                <p className="comment-time">{error}</p>
+              ) : displayDiscussion.length === 0 ? (
+                <p className="comment-time">No discussion yet. Be the first to start a conversation.</p>
+              ) : displayDiscussion.map((item) => (
                 <DiscussionItem
                   key={item.id}
                   item={item}
@@ -425,29 +577,34 @@ function RequestResponsesModal({
               ))}
             </div>
 
-            {/* ── DISCUSSION FOOTER ───────────────────────────────
-                Input-section from Comments.jsx exactly.
-                All users can comment — no role gate here.
-                Only blocked when request is expired.
-            ─────────────────────────────────────────────────── */}
-            <div className="comments-input-section">           {/* reuse comments-input-section */}
+            <div className="comments-input-section">
               {isExpired ? (
                 <p className="rrm-footer-note rrm-footer-note--expired">
                   This request has expired. Discussion is now read-only.
                 </p>
               ) : (
-                /* SearchBar — identical usage to Comments.jsx */
                 <SearchBar
-                  placeholder="Add to the discussion..."
+                  placeholder="Add to the discussion…"
                   mode="message"
-                  onSearch={(text) => onAddComment?.(text)}
+                  onSearch={handleAddComment}
                 />
               )}
             </div>
           </>
         )}
-
       </div>
+
+      {/* === LISTING PICKER MODAL =============================================
+           Rendered OUTSIDE the main modal div so it stacks on top cleanly.
+      === */}
+      <ListingPickerModal
+        isOpen={isAttachOpen}
+        onClose={() => setIsAttachOpen(false)}
+        listings={listingOptions}
+        isLoading={isListingLoading}
+        selectedId={selectedListing?.id}
+        onSelect={setSelectedListing}
+      />
     </>
   )
 }

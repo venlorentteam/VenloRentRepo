@@ -6,10 +6,12 @@ import { FaRegBell, FaBell } from 'react-icons/fa'
 import { MdBookmark, MdBookmarkBorder } from 'react-icons/md'
 import { FaRegSquarePlus, FaSquarePlus } from 'react-icons/fa6'
 import { FaRegUserCircle, FaUserCircle } from 'react-icons/fa'
+import { useAuth } from '../context/AuthProvider'
 import './SideNav.css'
 import logo from '../assets/img/venlorent-light.png'
 
 function SideNav() {
+  const { user } = useAuth()
   return (
     <nav className="side-nav" aria-label="Main navigation">
       {/* Logo */}
@@ -113,7 +115,7 @@ function SideNav() {
 
         <NavLink to="/account" className="nav-link nav-link-account">
           <img 
-            src="https://i.pravatar.cc/50" 
+            src={user.avatar} 
             className="profile-avatar" 
             alt="Your account" 
           />
