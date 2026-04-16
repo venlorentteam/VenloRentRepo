@@ -53,6 +53,12 @@ const AuthProvider = ({children}) => {
         return normalized
     }
 
+    // User state updater func
+    const setAuthFromToken = (token, userData) => {
+        localStorage.setItem("token", token)
+        setUser(normalizeUser(userData))
+    }
+
     //Logout Function
     const logout = () => {
         localStorage.removeItem("token")
@@ -65,7 +71,7 @@ const AuthProvider = ({children}) => {
     }
     //Return Context Provider with user and auth functions
     return (
-        <AuthContext.Provider value={{ user, isLoading, login, updateUser, logout}}>
+        <AuthContext.Provider value={{ user, isLoading, login, updateUser, logout, setAuthFromToken }}>
             {children}
         </AuthContext.Provider>
     )

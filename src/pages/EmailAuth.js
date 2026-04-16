@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react'
 import './EmailAuth.css'
 import axios from 'axios'
 import { PrelimFooter, PrelimHeader, OtpInput } from '../exports'
-import { useLocation, useNavigate, Navigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useAuth } from "../context/AuthProvider"
 
 // Cooldown duration in seconds — matches your OTP expiry window
 const resendCoolDown = 60
@@ -13,6 +14,7 @@ function EmailAuth(){
   const [resendMsg,  setResendMsg]  = useState('')
   const [isResending, setIsResending] = useState(false)
   const [countdown, setCountdown] = useState(resendCoolDown)
+  const { setAuthFromToken } = useAuth() 
   
   //Get state from useLocation to extract state object
   const { state } = useLocation()
@@ -34,15 +36,19 @@ function EmailAuth(){
     return () => clearInterval(timer)   // cleanup on unmount
   }, [])
 
-  if (!state?.email) return <Navigate to="/login" replace/>
-  
+  useEffect(() => {
+    if (!state?.email) {
+      navigate("/login", { replace: true })
+    }
+  }, [])
+
   const handleSubmit = async (e, otp) => {
     e.preventDefault()
     
     try{
       const res = await axios.post("https://newprojectbackend-5axx.onrender.com/auth/email-verify", {email: state?.email, otp})
       if(res.data.success){//validation successful
-        localStorage.setItem("token", res.data.token);
+        setAuthFromToken(res.data.token, res.data.user) // Save token and update user state in context
         const nextPath = state?.role === "agent" ? "/kyc" : "/dashboard"
         navigate(nextPath, {replace: true})
       }
