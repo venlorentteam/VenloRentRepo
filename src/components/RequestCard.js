@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import { Link, useNavigate } from 'react-router-dom'
-import { Modal } from '../exports'
+import { Link } from 'react-router-dom'
+import { Modal, ReportModal } from '../exports'
 import { AgentBadge, PremiumBadge } from './Badges'
 import RequestResponsesModal from './RequestResponsesModal'
 import './RequestCard.css'
@@ -40,10 +40,10 @@ function RequestCard({
   expired = false,
   daysLeft = null,
   currentUserIsAgent = false,
+  onDelete,
 }) {
-  const navigate = useNavigate()
   // == Local state ====================================================
-  const [isOptionsOpen,   setIsOptionsOpen]   = useState(false)
+  const [isModalOpen,     setIsModalOpen]     = useState(false)
   const [isResponsesOpen, setIsResponsesOpen] = useState(false)
   const [isBookmarked,    setIsBookmarked]    = useState(bookmarked)
 
@@ -53,6 +53,53 @@ function RequestCard({
   const [isLiked, setIsLiked] = useState(initialLiked)
   const [likeCount, setLikeCount] = useState(Number(likes) || 0)
   const [isLiking, setIsLiking] = useState(false)
+  const [isReportOpen, setIsReportOpen] = useState(false)
+
+  const currentUserId = (() => {
+    try {
+      const token = localStorage.getItem("token")
+      if (!token) return null
+      return JSON.parse(atob(token.split(".")[1]))?.id || null
+    } catch (_) {
+      return null
+    }
+  })()
+  const isOwner = currentUserId && String(currentUserId) === String(requesterId)
+
+  // Delete handler
+  const handleDelete = async () => {
+    const confirmed = window.confirm("Delete this request? This cannot be undone.")
+    if (!confirmed) return
+    const token = localStorage.getItem("token")
+    if (!token) return
+    try {
+      await axios.delete(
+        `https://newprojectbackend-5axx.onrender.com/requests/${resolvedRequestId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      closeModal()
+      if (onDelete) onDelete(resolvedRequestId)
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to delete request.")
+    }
+  }
+
+  // Report handler
+  const handleReport = async () => {
+    const token = localStorage.getItem("token")
+    if (!token) return
+    try {
+      await axios.post(
+        `https://newprojectbackend-5axx.onrender.com/requests/${resolvedRequestId}/report`,
+        { reason: "Reported by user" },
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      closeModal()
+      alert("Report submitted.")
+    } catch (err) {
+      console.error("Failed to report:", err)
+    }
+  }
 
   // Keep bookmark state in sync when the parent updates.
   useEffect(() => {
@@ -85,8 +132,8 @@ function RequestCard({
     }
   }
   // == Options modal handlers — mirror PropertyCard.jsx exactly ========
-  const openOptions  = () => setIsOptionsOpen(true)
-  const closeOptions = (e) => { e?.preventDefault(); setIsOptionsOpen(false) }
+  const openOptions = () => setIsModalOpen(true)
+  const closeModal = (e) => { e?.preventDefault(); setIsModalOpen(false) }
 
   // == Responses modal handlers ==========================================
   //const openResponses  = () => { if (!expired) setIsResponsesOpen(true) }
@@ -276,21 +323,56 @@ function RequestCard({
         </div>
 
       </article>
-
+      {/* === REPORT MODAL ========================= */}
+      {/* Report Modal */}
+      <ReportModal
+        isOpen={isReportOpen}
+        onClose={() => setIsReportOpen(false)}
+        targetId={resolvedRequestId}
+        targetType="request"
+      />
       {/* === OPTIONS MODAL ========================= */}
-      <Modal isOpen={isOptionsOpen} onClose={closeOptions} cancel={false}>
+      <Modal isOpen={isModalOpen} onClose={closeModal} cancel={false}>
         <div className="property-modal-menu">
-          <Link to="#" className="property-modal-link">Report</Link>
-          <Link to="#" className="property-modal-link">
-            {isBookmarked ? 'Remove from saved' : 'Save request'}
-          </Link>
-          <Link to="#" className="property-modal-link">Share</Link>
-          <Link to="#" className="property-modal-link">About this account</Link>
-          <button onClick={closeOptions} className="property-modal-cancel">
+
+          {isOwner ? (
+            <>
+              <button
+                className="property-modal-link property-modal-link--danger"
+                onClick={handleDelete}
+              >
+                Delete request
+              </button>
+              <button className="property-modal-link" onClick={() => { closeModal() }}>
+                Share
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                className="property-modal-link"
+                onClick={() => { closeModal(); setIsReportOpen(true) }}
+              >
+                Report
+              </button>
+              <button className="property-modal-link" onClick={() => { toggleBookmark(); closeModal() }}>
+                {isBookmarked ? "Remove from favorites" : "Add to favorites"}
+              </button>
+              <button className="property-modal-link" onClick={closeModal}>
+                Share
+              </button>
+              <Link to={`/profile/${requesterId}`} className="property-modal-link">
+                About this account
+              </Link>
+            </>
+          )}
+
+          <button onClick={closeModal} className="property-modal-cancel">
             Cancel
           </button>
         </div>
       </Modal>
+
 
       <RequestResponsesModal
         isOpen={isResponsesOpen}

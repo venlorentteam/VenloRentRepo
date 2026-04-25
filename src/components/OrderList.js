@@ -24,8 +24,9 @@ function OrderList({
     Completed: "order-status-completed",
     Failed: "order-status-failed",
     Pending: "order-status-pending",
-    "Payment Pending": "order-status-payment",
-  };
+    Rejected: "order-status-rejected",
+    Cancelled: "order-status-cancelled",
+  }
 
   return (
     <div 

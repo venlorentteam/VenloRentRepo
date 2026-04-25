@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { useNavigate, useLocation } from "react-router-dom"  // ← useLocation added
 import axios from "axios"                                      // ← added
 import { MessageListItem, SearchBar, ChatScreen, PageSetup, Header } from "../exports"
@@ -48,6 +48,7 @@ const Inbox = () => {
   const [searchQuery, setSearchQuery] = useState("")
   const [isLoading, setIsLoading] = useState(true) // declared properly
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
+  const openedAgentIdRef = useRef(null)
 
   // Fetch all conversations for the logged-in user
   useEffect(() => {
@@ -89,6 +90,7 @@ const Inbox = () => {
   useEffect(() => {
     const agentId = new URLSearchParams(location.search).get("agentId")
     if (!agentId) return
+    if (openedAgentIdRef.current === agentId) return
 
     const token = localStorage.getItem("token")
     if (!token) return
@@ -114,12 +116,13 @@ const Inbox = () => {
         if (isMobile) {
           navigate(`/chat/${chat.id}`, { state: { chat } })  // pass the chat data to avoid refetching in ChatScreen
         }
+        openedAgentIdRef.current = agentId
       } catch (err) {
         console.error("Failed to open agent conversation:", err)
       }
     }
     open()
-  }, [location.search])
+  }, [location.search, isMobile, navigate])
 
   // Respond to window resizing
   useEffect(() => {

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import './LandingPageHeader.css'
+import { useAuth } from "../../context/AuthProvider"
 
 const LandingPageHeader = (
     {   openGateModal,
@@ -14,10 +15,10 @@ const LandingPageHeader = (
             { name: "Get Started", href: "/register", type: "primary" },
         ]
     }) => {
-
+    const { user } = useAuth()
   return (
     <>
-        {/* ── NAV ─────────────────────────────────────────────────────────── */}
+        {/* == NAV ================================= */}
         <nav className="landing-nav">
             <div className="landing-nav-inner">
                 <Link to="/" className="landing-nav-logo">
@@ -30,15 +31,29 @@ const LandingPageHeader = (
                 ))}
                 </div>
                 <div className="landing-nav-ctas">
-                {(btns) && btns.map((btn) => (
-                    <Link 
-                        key={btn.name}
-                        to={btn.href}
-                        className={`btn btn-${btn.type || 'primary'}`}
-                    >
-                        {btn.name}
-                    </Link>
-                ))} 
+                {(btns) && btns.map((btn) => {
+                    // If this is the Login button AND user is logged in → replace it
+                    if (user && btn.href === "/login") {
+                        return (
+                            <Link
+                                key="dashboard"
+                                to="/dashboard"
+                                className="btn btn-primary"
+                            >
+                            Dashboard
+                            </Link>
+                        )
+                    }
+                    return(
+                        <Link 
+                            key={btn.name}
+                            to={btn.href}
+                            className={`btn btn-${btn.type || 'primary'}`}
+                        >
+                            {btn.name}
+                        </Link>
+                    )
+                })} 
                 </div>
                 {/* Mobile hamburger placeholder */}
                 <button className="landing-nav-hamburger" onClick={openGateModal} aria-label="menu">

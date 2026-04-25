@@ -1,0 +1,64 @@
+.orders-view {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--spacing-md);
+}
+
+.orders-list {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  align-items: stretch;
+}
+
+.orders-list .order-card {
+  width: 100%;
+}
+
+.orders-state {
+  width: 100%;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--spacing-2xl) var(--spacing-md);
+}
+
+.orders-state--loading,
+.orders-state--error {
+  min-height: 200px;
+}
+
+.orders-state .empty-icon {
+  margin-bottom: var(--spacing-lg);
+  opacity: 0.6;
+}
+
+.orders-state h3 {
+  font-size: var(--font-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.orders-state p,
+.orders-state-text {
+  font-size: var(--font-base);
+  color: var(--text-secondary);
+  margin: 0;
+  max-width: 420px;
+}
+
+@media (max-width: 768px) {
+  .orders-state {
+    min-height: 260px;
+    padding: var(--spacing-xl) var(--spacing-md);
+  }
+}

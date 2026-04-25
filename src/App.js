@@ -36,6 +36,7 @@ function App() {
         <Route path="/following" element={<Pages.ProtectedRoute><Pages.Following /></Pages.ProtectedRoute>} />
         {/* <Route path="/logout" element={<Pages.Logout />} /> */}
         <Route path="/chatscreen" element={<Pages.ProtectedRoute><Pages.ChatScreen /></Pages.ProtectedRoute>} />
+        <Route path="/chat/:conversationId" element={<Pages.ProtectedRoute><Pages.ChatScreen /></Pages.ProtectedRoute>} />
         <Route path="/inbox" element={<Pages.ProtectedRoute><Pages.Inbox /></Pages.ProtectedRoute>} />
         <Route path="/notifications" element={<Pages.ProtectedRoute><Pages.Notifications /></Pages.ProtectedRoute>} />
         <Route path="/password-recovery" element={<Pages.PasswordRecovery />} />

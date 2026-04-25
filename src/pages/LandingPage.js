@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import './LandingPage.css'
 import { CtaBanner, StatCounter, PrelimFooter, LandingPageHeader } from '../exports'
+import { useAuth } from "../context/AuthProvider"
 
 // Icons (react-icons)
 import { RiVerifiedBadgeFill } from 'react-icons/ri'
@@ -11,10 +12,10 @@ import { BiBed, BiBath } from 'react-icons/bi'
 import { MdApartment } from 'react-icons/md'
 import { HiOutlineShieldCheck } from 'react-icons/hi'
 import { TbHomeSearch } from 'react-icons/tb'
-import { LuBuilding2 } from 'react-icons/lu'
+import { LuBuilding2 } from 'react-icons/lu' 
 
 // Auth gate modal
-function AuthGateModal({ onClose }) {
+function AuthGateModal({ onClose, user }) {
   return (
     <div className="authgate-overlay" onClick={onClose}>
       <div className="authgate-modal" onClick={e => e.stopPropagation()}>
@@ -42,9 +43,15 @@ function AuthGateModal({ onClose }) {
           <Link to="/register" className="btn btn-primary authgate-btn">
             Create Free Account
           </Link>
-          <Link to="/login" className="btn btn-outline authgate-btn">
-            Log In
-          </Link>
+          { user ?
+            <Link to="/dashboard" className="btn btn-outline authgate-btn">
+              Dashboard
+            </Link>
+            :
+            <Link to="/login" className="btn btn-outline authgate-btn">
+              Log In
+            </Link>
+          }
         </div>
 
         <p className="authgate-note">No credit card required · Free to browse</p>
@@ -96,7 +103,7 @@ function FeaturedCard({ property, onGate }) {
 //  Main Landing Page Component
 // ==================================
 function LandingPage() {
-  const navigate = useNavigate()
+  const { user } = useAuth()
   const [showAuthGate, setShowAuthGate] = useState(false)
   const [activeTab, setActiveTab] = useState('rent')
 
@@ -437,7 +444,7 @@ function LandingPage() {
       <PrelimFooter />
 
       {/* Auth Gate Modal */}
-      {showAuthGate && <AuthGateModal onClose={closeGate} />}
+      {showAuthGate && <AuthGateModal onClose={closeGate} user={user} />}
     </div>
   )
 }

@@ -1,96 +1,144 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
 import { ChatBubble, SearchBar } from "../exports";
 import { FaArrowLeft, FaEllipsisV } from "react-icons/fa";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
 import "./ChatScreen.css";
+
+const BASE_URL = "https://newprojectbackend-5axx.onrender.com";
 
 const ChatScreen = ({ chat: propChat, onBack }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const messagesEndRef = useRef(null);
 
-  // Get chat from props or location state (for mobile navigation)
   const chat = propChat || location.state?.chat;
 
-  const [messages, setMessages] = useState([
-    { id: 1, text: "howfa guy👋", variant: "other", time: "10:30 AM" },
-    { id: 2, text: "Hi! How's your day going?", variant: "me", time: "10:31 AM" },
-    { id: 3, text: "Pretty good, just finishing some code 😄", variant: "other", time: "10:32 AM" },
-    { id: 4, text: "I have gist oh", variant: "me", time: "10:35 AM" },
-    { id: 5, text: "oya spill?", variant: "other", time: "10:35 AM" },
-    { id: 6, text: "So you know that property I told you about?", variant: "me", time: "10:36 AM" },
-    { id: 7, text: "Yeah, the one in Lekki?", variant: "other", time: "10:36 AM" },
-    { id: 8, text: "Yes! I finally got it 🎉", variant: "me", time: "10:37 AM" },
-    { id: 9, text: "Congrats! When are you moving in?", variant: "other", time: "10:38 AM" },
-    { id: 10, text: "Next month. Can't wait!", variant: "me", time: "10:39 AM" },
-  ]);
-
+  // === Removed hardcoded demo messages ===
+  const [messages, setMessages] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Auto-scroll to bottom when messages change
+  // === Fetch real messages when the conversation is opened ===
   useEffect(() => {
-    scrollToBottom();
+    if (!chat?.conversationId) return;
+
+    const fetchMessages = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const res = await axios.get(
+          `${BASE_URL}/conversations/${chat.conversationId}/messages`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        // Determine our own userId so we can set variant correctly
+        let myId = null;
+        try {
+          myId = JSON.parse(atob(token.split(".")[1]))?.id;
+        } catch (_) {}
+
+        const mapped = (res.data.messages || []).map((msg) => ({
+          id: msg._id,
+          text: msg.text,
+          variant: String(msg.sender?._id || msg.sender) === String(myId) ? "me" : "other",
+          time: new Date(msg.createdAt).toLocaleTimeString("en-US", {
+            hour: "numeric",
+            minute: "2-digit",
+            hour12: true,
+          }),
+        }));
+
+        setMessages(mapped);
+      } catch (err) {
+        console.error("Failed to fetch messages:", err);
+        setError("Could not load messages.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchMessages();
+  }, [chat?.conversationId]);
+
+  // Auto-scroll to bottom whenever messages change
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  // Handle sending a new message
-  const handleSendMessage = (newMessage) => {
+  // === Send message: optimistic UI + persist to DB ===
+  const handleSendMessage = async (newMessage) => {
     if (!newMessage.trim()) return;
 
-    const now = new Date();
-    const timeString = now.toLocaleTimeString('en-US', { 
-      hour: 'numeric', 
-      minute: '2-digit',
-      hour12: true 
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    const timeString = new Date().toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
     });
 
-    const msg = {
-      id: Date.now(),
+    // Optimistic update — show immediately before the request resolves
+    const optimisticMsg = {
+      id: `temp-${Date.now()}`,
       text: newMessage,
       variant: "me",
       time: timeString,
     };
+    setMessages((prev) => [...prev, optimisticMsg]);
 
-    setMessages((prev) => [...prev, msg]);
+    try {
+      const res = await axios.post(
+        `${BASE_URL}/conversations/${chat.conversationId}/messages`,
+        { text: newMessage },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
-    // Simulate typing indicator
-    setIsTyping(true);
-    setTimeout(() => {
-      setIsTyping(false);
-      // Simulate response (optional)
-      // const response = {
-      //   id: Date.now() + 1,
-      //   text: "Got it!",
-      //   variant: "other",
-      //   time: timeString,
-      // };
-      // setMessages((prev) => [...prev, response]);
-    }, 2000);
+      // Replace the optimistic message with the real one from the server
+      const saved = res.data.message;
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.id === optimisticMsg.id
+            ? {
+                id: saved._id,
+                text: saved.text,
+                variant: "me",
+                time: new Date(saved.createdAt).toLocaleTimeString("en-US", {
+                  hour: "numeric",
+                  minute: "2-digit",
+                  hour12: true,
+                }),
+              }
+            : m
+        )
+      );
+    } catch (err) {
+      console.error("Failed to send message:", err);
+      // Roll back the optimistic message on failure
+      setMessages((prev) => prev.filter((m) => m.id !== optimisticMsg.id));
+    }
   };
 
   const handleBack = () => {
     if (onBack) {
       onBack();
     } else {
-      navigate('/inbox');
+      navigate("/inbox");
     }
   };
 
-  const handleMenuClick = () => {
-    // Open options menu
-    console.log('Open menu');
-  };
-
-  // If no chat data, show error
   if (!chat) {
     return (
       <div className="chat-error">
         <p>No conversation selected</p>
-        <button onClick={() => navigate('/inbox')}>Back to Inbox</button>
+        <button onClick={() => navigate("/inbox")}>Back to Inbox</button>
       </div>
     );
   }
@@ -99,76 +147,62 @@ const ChatScreen = ({ chat: propChat, onBack }) => {
     <div className="chat-screen">
       {/* Chat Header */}
       <div className="chat-header">
-        {/* Back Button */}
-        <button 
-          className="chat-back-btn" 
-          onClick={handleBack}
-          aria-label="Go back"
-        >
+        <button className="chat-back-btn" onClick={handleBack} aria-label="Go back">
           <FaArrowLeft />
         </button>
 
-        {/* User Info */}
         <div className="chat-user-info">
-          <img 
-            src={chat.avatar} 
-            alt={chat.name} 
-            className="chat-user-avatar" 
-          />
+          <img src={chat.avatar} alt={chat.name} className="chat-user-avatar" />
           <div className="chat-user-details">
             <div className="chat-user-name-row">
               <span className="chat-user-name">{chat.name}</span>
-              {chat.verified && (
-                <RiVerifiedBadgeFill className="chat-verified-badge" />
-              )}
+              {chat.verified && <RiVerifiedBadgeFill className="chat-verified-badge" />}
             </div>
             <span className="chat-user-status">Active now</span>
           </div>
         </div>
 
-        {/* Menu Button */}
-        <button 
-          className="chat-menu-btn" 
-          onClick={handleMenuClick}
-          aria-label="More options"
-        >
+        <button className="chat-menu-btn" aria-label="More options">
           <FaEllipsisV />
         </button>
       </div>
 
-      {/* Chat Messages Container */}
+      {/* Messages */}
       <div className="chat-messages-container">
-        {messages.map((msg) => (
-          <ChatBubble
-            key={msg.id}
-            text={msg.text}
-            time={msg.time}
-            variant={msg.variant}
-            avatar={chat.avatar}
-          />
-        ))}
+        {isLoading && (
+          <div className="chat-loading">
+            {[0, 1, 2].map((i) => (
+              <div key={i} className={`skeleton skeleton-bubble ${i % 2 === 0 ? "left" : "right"}`} />
+            ))}
+          </div>
+        )}
 
-        {/* Typing Indicator */}
+        {error && <p className="chat-error-text">{error}</p>}
+
+        {!isLoading &&
+          messages.map((msg) => (
+            <ChatBubble
+              key={msg.id}
+              text={msg.text}
+              time={msg.time}
+              variant={msg.variant}
+              avatar={chat.avatar}
+            />
+          ))}
+
         {isTyping && (
           <div className="chat-typing-indicator">
-            <img 
-              src={chat.avatar} 
-              alt="" 
-              className="typing-avatar" 
-            />
+            <img src={chat.avatar} alt="" className="typing-avatar" />
             <div className="typing-dots">
-              <span></span>
-              <span></span>
-              <span></span>
+              <span></span><span></span><span></span>
             </div>
           </div>
         )}
 
-        {/* Scroll anchor */}
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Message Input Bar */}
+      {/* Input */}
       <div className="chat-input-wrapper">
         <SearchBar
           placeholder="Type a message..."

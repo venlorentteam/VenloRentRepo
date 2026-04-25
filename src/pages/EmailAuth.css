@@ -7,8 +7,8 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 100vh;
-    gap: 30px
+    gap: 30px;
+    margin: var(--spacing-2xl) auto;
 }
 .email-cont .left-side{
     width: 100%;
@@ -49,13 +49,7 @@ a{/*for prelim links*/
     text-decoration: none;
     cursor: pointer;
 }
-/*For printing input errors*/
-/* .error{
-    font-size: var(--font-size-smallest);
-    color: var(--danger-color);
-    text-align: left;
-    font-style: italic;
-} */
+
 /* ====== Email Sent Confirmation Header =======*/
 .email-is-sent{
   background: var(--success-pale);
@@ -173,6 +167,9 @@ a{/*for prelim links*/
 
 @media (max-width: 500px){
   /**rules for mobile**/ 
+   .email-cont{
+        padding: 0px var(--spacing-lg);
+    }
     .email-cont .login{
         width: 100%;
     }

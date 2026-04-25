@@ -128,8 +128,11 @@ function KycFlow() {
       )
 
       if (res.data.success && res.data.diditUrl) {
-        // 2. Backend returns Didit verification URL → redirect user
-        window.location.href = res.data.diditUrl
+        window.location.href = res.data.diditUrl //take user to Didit for identity verification
+      } else {
+        setErrors({
+          submit: "Verification session was created but we couldn't get the redirect URL. Please try again.",
+        })
       }
     } catch (err) {
       setErrors({

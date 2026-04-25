@@ -114,7 +114,6 @@
 .property-image-single {
   cursor: pointer;
 }
-
 .property-listing-type {
   position: absolute;
   left: 20px;
@@ -364,6 +363,13 @@
   background-color: #ccc;
   cursor: not-allowed;
   opacity: 0.7;
+}
+.property-modal-link--danger {
+  color: var(--danger-color);
+}
+.property-modal-link--danger:hover {
+  background: var(--danger-pale);
+  color: var(--danger-color);
 }
 /* Dark Mode */
 @media (prefers-color-scheme: dark) {
