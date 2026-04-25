@@ -19,6 +19,7 @@ export { default as OtpInput } from "./components/OtpInput";
 export { default as PageSetup } from "./components/PageSetup";
 export { default as PropertyCard } from "./components/PropertyCard";
 export { default as ProtectedRoute } from "./components/ProtectedRoute";
+export { default as ReportModal } from "./components/ReportModal";
 export { default as RequestCard } from "./components/RequestCard";
 export { default as RequestResponsesModal } from "./components/RequestResponsesModal";
 export { default as SearchBar } from "./components/SearchBar";

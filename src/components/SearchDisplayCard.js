@@ -8,39 +8,6 @@ import { LuBanknote, LuClock, LuMessageSquare } from "react-icons/lu";
 import { MdOutlineBedroomParent } from "react-icons/md";
 import { LuBuilding2 } from "react-icons/lu";
 
-// ============================================================
-//  SearchDisplayCard
-//
-//  Renders one result row in the search results list.
-//  Handles two distinct layouts driven by the _type prop:
-//    "listing" → shows cover photo, price, meta chips
-//    "request" → no photo, shows description, budget, expiry
-//
-//  Props:
-//    _type         "listing" | "request"   — controls layout variant
-//    username      string    — agent/requester @handle
-//    agentName     string    — agent/requester display name
-//    imageUrl      string    — agent avatar URL (small circle)
-//    coverImage    string    — listing cover photo URL (thumbnail)
-//                             NOT passed for requests
-//    verified      boolean   — shows verified badge on avatar
-//    isAd          boolean   — shows "Ad" pill
-//    title         string    — listing title (listings only)
-//    price         string    — formatted price string e.g. "₦700,000/yr"
-//    location      string    — "Town, State"
-//    houseType     string    — property_type e.g. "apartment"
-//    listingType   string    — "rent" | "sale" | "shortlet" (listings only)
-//    bedrooms      string    — "1 Bed", "2 Bed" etc. (listings only)
-//    orders        number    — completed orders count (listings)
-//                             or response count (requests)
-//    description   string    — request body text (requests only)
-//    budget        string    — budget range (requests only)
-//    responseCount number    — agent response count (requests only)
-//    expired       boolean   — request expired state (requests only)
-//    daysLeft      number    — days until expiry (requests only)
-//    onClick       function  — card click handler
-// ============================================================
-
 const SearchDisplayCard = ({
   _type = "listing",
   username = "@username",

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import { Comments, Modal } from '../exports'
+import { Comments, Modal, ReportModal } from '../exports'
 import { AgentBadge, PremiumBadge } from './Badges'
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
@@ -47,6 +47,7 @@ function PropertyCard({
   isOrdered = false,
   isUnavailable = false,
   propertyId = "",
+  onDelete,
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isComment, setIsComment] = useState(false)
@@ -58,6 +59,19 @@ function PropertyCard({
   const [commentCount, setCommentCount] = useState(Number(comments) || 0)
   const [likeCount, setLikeCount] = useState(Number(likes) || 0)
   const [isLiking, setIsLiking] = useState(false)
+  const [isReportOpen, setIsReportOpen] = useState(false)
+
+  const currentUserId = (() => {
+    try {
+      const token = localStorage.getItem("token")
+      if (!token) return null
+      return JSON.parse(atob(token.split(".")[1]))?.id || null
+    } catch (_) {
+      return null
+    }
+  })()
+
+  const isOwner = currentUserId && String(currentUserId) === String(ownerId)
 
   // Keep comment count in sync with prop updates (e.g., after feed fetch).
   useEffect(() => {
@@ -71,7 +85,7 @@ function PropertyCard({
 
   const toggleLike = async () => {
     if (!resolvedPropertyId || isLiking) return
-    // Auth header is required for the protected like route.
+
     const token = localStorage.getItem("token")
     if (!token) return
     const next = !isLiked
@@ -123,6 +137,43 @@ function PropertyCard({
     })
   }
 
+  // Add delete handler
+  const handleDelete = async () => {
+    const token = localStorage.getItem("token")
+    if (!token) return
+    const confirmed = window.confirm("Are you sure you want to delete this listing? This cannot be undone.")
+    if (!confirmed) return
+    try {
+      await axios.delete(
+        `https://newprojectbackend-5axx.onrender.com/properties/${resolvedPropertyId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      closeModal()
+      // Notify parent to remove card from feed if callback exists
+      if (onDelete) onDelete(resolvedPropertyId)
+    } catch (err) {
+      console.error("Failed to delete property:", err)
+      alert(err.response?.data?.message || "Failed to delete listing. Please try again.")
+    }
+  }
+
+  // Add report handler
+  const handleReport = async () => {
+    const token = localStorage.getItem("token")
+    if (!token) return
+    try {
+      await axios.post(
+        `https://newprojectbackend-5axx.onrender.com/properties/${resolvedPropertyId}/report`,
+        { reason: "Reported by user" },
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      closeModal()
+      //alert("Report submitted. Thank you for keeping VenloRent safe.")
+    } catch (err) {
+      console.error("Failed to report property:", err)
+    }
+  }
+
   const handleOrder = () => {
     if (isOrdered || isUnavailable) return
     if (onOrder) onOrder()// Navigates to order page or open order modal
@@ -133,7 +184,7 @@ function PropertyCard({
       <article className="property-card">
         {/* Header: User Info */}
         <header className="property-card-header">
-          <div className="property-card-user">
+          <Link to={`/profile/${ownerId}`} className="property-card-user">
             <img className="property-avatar" src={avatar} alt={`${username}'s profile`} />
             <div className="property-user-info">
               <div className="property-username-row">
@@ -143,7 +194,7 @@ function PropertyCard({
               </div>
               <p className="property-handle">{handle} • {time}</p>
             </div>
-          </div>
+          </Link>
           <button
             className="property-options-btn"
             onClick={openModal}
@@ -301,15 +352,50 @@ function PropertyCard({
         )}
       </article>
 
+      {/* Report Modal */}
+      <ReportModal
+        isOpen={isReportOpen}
+        onClose={() => setIsReportOpen(false)}
+        targetId={resolvedPropertyId}
+        targetType="property"
+      />
+
       {/* More Options Modal */}
       <Modal isOpen={isModalOpen} onClose={closeModal} cancel={false}>
         <div className="property-modal-menu">
-          <Link to="#" className="property-modal-link">Report</Link>
-          <Link to="#" className="property-modal-link">
-            {isBookmarked ? "Remove from favorites" : "Add to favorites"}
-          </Link>
-          <Link to="#" className="property-modal-link">Share</Link>
-          <Link to="#" className="property-modal-link">About this account</Link>
+
+          {isOwner ? (
+            <>
+              <button
+                className="property-modal-link property-modal-link--danger"
+                onClick={handleDelete}
+              >
+                Delete listing
+              </button>
+              <button className="property-modal-link" onClick={() => { closeModal() }}>
+                Share
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                className="property-modal-link"
+                onClick={() => { closeModal(); setIsReportOpen(true) }}
+              >
+                Report
+              </button>
+              <button className="property-modal-link" onClick={() => { toggleBookmark(); closeModal() }}>
+                {isBookmarked ? "Remove from favorites" : "Add to favorites"}
+              </button>
+              <button className="property-modal-link" onClick={closeModal}>
+                Share
+              </button>
+              <Link to={`/profile/${ownerId}`} className="property-modal-link">
+                About this account
+              </Link>
+            </>
+          )}
+
           <button onClick={closeModal} className="property-modal-cancel">
             Cancel
           </button>
