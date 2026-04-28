@@ -25,10 +25,10 @@
         padding: 10px;
         align-self: center;
         width: 100%;
-        font-size: var(--font-size-average);        
+        font-size: var(--font-xl);         
     }
-    .icon-nav a .icon{
-        font-size: var(--font-size-big);
+    .icon-nav a .mobile-icon{
+        font-size: var(--font-xl);
     }
 }
 @media (prefers-color-scheme: dark){
@@ -43,7 +43,7 @@
     .icon-nav a.active{
         color: var(--white-color);
     }
-    .icon-nav a .icon{
+    .icon-nav a .mobileicon{
         color: var(--white-color);
     }
 }
