@@ -358,7 +358,7 @@ function StepDocuments({ documents, previews, onFileChange, errors }) {
 
         <DocumentUpload
           label="Proof of business"
-          hint="CAC registration, business card, or office address proof"
+          hint="Upload one of the following: Certificate of Incorporation (CAC), Business registration certificate, Professional license, or Business card with company details"
           docType="businessProof"
           file={documents.businessProof}
           preview={previews.businessProof}

@@ -268,7 +268,7 @@
  */
 @media (max-width: 768px) {
   .request-card {
-    border-radius: 0;
+    border-radius: var(--radius-lg);
     border-left: none;
     border-right: none;
     margin-bottom: var(--spacing-xl);

@@ -2,7 +2,7 @@
 .icon-nav{
     display: none
 }
-@media (max-width: 500px){
+@media (max-width: 768px){
     .icon-nav{
         position: fixed;
         bottom: 0px;
@@ -13,7 +13,7 @@
         align-items: center;
         flex-flow: row nowrap;
         backdrop-filter: blur(5px); 
-        background: var(--background-nav-light);
+        background: var(--bg-color);
         border-top: 1px solid var(--primary-opacity);
         gap: 20px;
         text-align: center;
@@ -25,25 +25,25 @@
         padding: 10px;
         align-self: center;
         width: 100%;
-        font-size: var(--font-size-average);        
+        font-size: var(--font-sm);        
     }
     .icon-nav a .icon{
-        font-size: var(--font-size-big);
+        font-size: 1.75rem;
     }
 }
 @media (prefers-color-scheme: dark){
     .icon-nav{
-        background: var(--background-nav-black);
-        border-top: var(--black-color);
-        box-shadow: 5px 0px 5px var(--shadowBlack-color);
+        background: var(--bg-color-dark);
+        border-top: 1px solid var(--border-dark);
+        box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
     }
     .icon-nav a{
-        color: var(--white-color);
+        color: var(--text-primary-dark);
     }
     .icon-nav a.active{
-        color: var(--white-color);
+        color: var(--primary-color-light);
     }
     .icon-nav a .icon{
-        color: var(--white-color);
+        color: var(--text-primary-dark);
     }
 }

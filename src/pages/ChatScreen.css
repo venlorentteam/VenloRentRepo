@@ -112,12 +112,22 @@
 .chat-messages-container {
   flex: 1;
   overflow-y: auto;
-  padding: var(--spacing-lg) var(--spacing-md);
+  padding: var(--spacing-lg) var(--spacing-md) calc(var(--spacing-lg) + 160px) var(--spacing-md);
   background: var(--bg-secondary);
   
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xs);
+}
+
+.chat-screen {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-color);
+  overflow: hidden;
 }
 
 /* Custom Scrollbar */
@@ -196,10 +206,18 @@
 
 /* Input Wrapper */
 .chat-input-wrapper {
+  position: absolute;
+  left: var(--spacing-md);
+  right: var(--spacing-md);
+  bottom: var(--spacing-md);
+  z-index: 2;
   padding: var(--spacing-md);
+  margin: 0;
   background: var(--box-bg);
-  border-top: 1px solid var(--border-color);
-  flex-shrink: 0;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  width: auto;
 }
 
 /* Error State */
