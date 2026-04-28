@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 import { ClickButton } from '../exports'
-import { FiUpload, FiCheckCircle, FiClock, FiXCircle } from 'react-icons/fi'
+import { FiUpload, FiCheckCircle, FiClock, FiXCircle, FiInfo, FiShield, FiFileText } from 'react-icons/fi'
+import { MdOutlineLocationOn } from 'react-icons/md'
+import { BsBuildingCheck, BsPersonBadge } from 'react-icons/bs'
 import { useAuth } from "../context/AuthProvider"
 
 const statusMap = {
@@ -14,11 +16,12 @@ const statusMap = {
 
 const VerificationSettings = () => {
   const { user, updateUser } = useAuth()
-  //const [verificationStatus, setVerificationStatus] = useState('unverified') // unverified, pending, approved, rejected
-  // Define statusMap before using it
   
   const verificationStatus = statusMap[user?.kycStatus] || 'unverified'
   const [documents, setDocuments] = useState({
+    businessProof: null,
+  })
+  const [previews, setPreviews] = useState({
     businessProof: null,
   })
   const [formData, setFormData] = useState({
@@ -30,12 +33,32 @@ const VerificationSettings = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleFileChange = (field, file) => {
-    if (file && file.size > 5 * 1024 * 1024) { // 5MB limit
-      setErrors(prev => ({ ...prev, [field]: 'File size must be less than 5MB' }))
+    if (!file) return
+
+    const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf']
+    const maxSize = 5 * 1024 * 1024 // 5MB
+
+    if (!allowedTypes.includes(file.type)) {
+      setErrors(prev => ({ ...prev, [field]: 'Only JPG, PNG, or PDF files allowed' }))
       return
     }
+    if (file.size > maxSize) {
+      setErrors(prev => ({ ...prev, [field]: 'File must be under 5MB' }))
+      return
+    }
+
     setDocuments(prev => ({ ...prev, [field]: file }))
     setErrors(prev => ({ ...prev, [field]: '' }))
+
+    // Generate preview for images
+    if (file.type.startsWith('image/')) {
+      const reader = new FileReader()
+      reader.onloadend = () => setPreviews(prev => ({ ...prev, [field]: reader.result }))
+      reader.readAsDataURL(file)
+    } else {
+      // PDF — show filename as preview
+      setPreviews(prev => ({ ...prev, [field]: 'pdf' }))
+    }
   }
 
   const handleChange = (e) => {
@@ -161,53 +184,74 @@ const VerificationSettings = () => {
 
       {renderStatusBanner()}
 
-      <div className="settings-section">
-        <h3 className="section-title">Required Documents</h3>
-        
-        <div className="upload-grid">
-          <div className="upload-item">
-            <label className="upload-label">
-              <FiUpload className="upload-icon" />
-              <span>Business Proof</span>
-              <input
-                type="file"
-                accept="image/*,.pdf"
-                onChange={(e) => handleFileChange('businessProof', e.target.files[0])}
-                style={{ display: 'none' }}
-              />
-            </label>
-            {documents.businessProof && <span className="file-name">{documents.businessProof.name}</span>}
-            {errors.businessProof && <span className="error-message">{errors.businessProof}</span>}
+      {/* Enhanced KYC Information Section */}
+      <div className="kyc-info-section">
+        <div className="kyc-info-header">
+          <BsBuildingCheck className="kyc-info-icon" />
+          <div>
+            <h3>Become a Verified Agent</h3>
+            <p>Complete your KYC to unlock full agent features - create listings, receive messages, and build trust with clients.</p>
+          </div>
+        </div>
+
+        <div className="kyc-benefits">
+          <div className="benefit-item">
+            <FiShield className="benefit-icon" />
+            <div>
+              <h4>Verified Badge</h4>
+              <p>Display a verified badge on your profile and listings</p>
+            </div>
+          </div>
+          <div className="benefit-item">
+            <FiFileText className="benefit-icon" />
+            <div>
+              <h4>Create Listings</h4>
+              <p>Post property listings for rent, sale, and shortlet</p>
+            </div>
+          </div>
+          <div className="benefit-item">
+            <MdOutlineLocationOn className="benefit-icon" />
+            <div>
+              <h4>Direct Messages</h4>
+              <p>Receive inquiries directly from interested clients</p>
+            </div>
           </div>
         </div>
       </div>
 
       <div className="settings-section">
         <h3 className="section-title">Business Information</h3>
+        <p className="section-desc">Tell us about your real estate business</p>
         
         <div className="form-group">
-          <label className="form-label">Business Name</label>
-          <input
-            type="text"
-            name="businessName"
-            value={formData.businessName}
-            onChange={handleChange}
-            className={`profile-input ${errors.businessName ? 'input-error' : ''}`}
-            placeholder="Your business or company name"
-          />
+          <label className="form-label">Business / Agency name</label>
+          <div className="input-wrapper">
+            <BsPersonBadge className="input-icon-left" />
+            <input
+              type="text"
+              name="businessName"
+              value={formData.businessName}
+              onChange={handleChange}
+              className={`form-input ${errors.businessName ? 'input-error' : ''}`}
+              placeholder="e.g. Adeyemi Properties Ltd"
+            />
+          </div>
           {errors.businessName && <span className="error-message">{errors.businessName}</span>}
         </div>
 
         <div className="form-group">
-          <label className="form-label">Office Address</label>
-          <input
-            type="text"
-            name="officeAddress"
-            value={formData.officeAddress}
-            onChange={handleChange}
-            className={`profile-input ${errors.officeAddress ? 'input-error' : ''}`}
-            placeholder="Your office address"
-          />
+          <label className="form-label">Office address</label>
+          <div className="input-wrapper">
+            <MdOutlineLocationOn className="input-icon-left" />
+            <input
+              type="text"
+              name="officeAddress"
+              value={formData.officeAddress}
+              onChange={handleChange}
+              className={`form-input ${errors.officeAddress ? 'input-error' : ''}`}
+              placeholder="Your office address"
+            />
+          </div>
           {errors.officeAddress && <span className="error-message">{errors.officeAddress}</span>}
         </div>
 
@@ -228,17 +272,96 @@ const VerificationSettings = () => {
           </select>
           {errors.yearsExperience && <span className="error-message">{errors.yearsExperience}</span>}
         </div>
+      </div>
 
-        <div className="settings-actions">
-          <ClickButton
-            text={isSubmitting ? "Submitting..." : "Submit Application"}
-            onClick={handleSubmit}
-            disabled={isSubmitting}
-            isLoading={isSubmitting}
-            variant="primary"
-            size="large"
-          />
+      <div className="settings-section">
+        <h3 className="section-title">Required Documents</h3>
+        <p className="section-desc">Upload proof of your business legitimacy</p>
+        
+        <div className="document-requirements">
+          <div className="requirement-item">
+            <FiInfo className="requirement-icon" />
+            <div>
+              <h4>Business Proof</h4>
+              <p>Upload one of the following:</p>
+              <ul>
+                <li>Certificate of Incorporation (CAC)</li>
+                <li>Business registration certificate</li>
+                <li>Professional license or certification</li>
+                <li>Business card with company details</li>
+              </ul>
+            </div>
+          </div>
         </div>
+
+        <div className="upload-grid">
+          <div className="upload-item">
+            <label className="upload-label">
+              <FiUpload className="upload-icon" />
+              <span>Business Proof Document</span>
+              <input
+                type="file"
+                accept="image/*,.pdf"
+                onChange={(e) => handleFileChange('businessProof', e.target.files[0])}
+                style={{ display: 'none' }}
+              />
+            </label>
+            {documents.businessProof && (
+              <div className="file-preview">
+                {previews.businessProof === 'pdf' ? (
+                  <FiFileText className="file-icon" />
+                ) : (
+                  <img src={previews.businessProof} alt="Preview" className="file-image" />
+                )}
+                <span className="file-name">{documents.businessProof.name}</span>
+              </div>
+            )}
+            {errors.businessProof && <span className="error-message">{errors.businessProof}</span>}
+          </div>
+        </div>
+      </div>
+
+      <div className="settings-section">
+        <h3 className="section-title">Identity Verification</h3>
+        <p className="section-desc">Complete secure identity verification with our partner</p>
+        
+        <div className="identity-info">
+          <div className="identity-benefits">
+            <div className="benefit-check">
+              <FiCheckCircle />
+              <span>AI-powered ID verification</span>
+            </div>
+            <div className="benefit-check">
+              <FiCheckCircle />
+              <span>Secure biometric checks</span>
+            </div>
+            <div className="benefit-check">
+              <FiCheckCircle />
+              <span>Instant results</span>
+            </div>
+          </div>
+          <p className="identity-desc">
+            After submitting your documents, you'll be redirected to our verification partner. 
+            You'll complete a quick liveness check and ID scan. This takes about 2-3 minutes.
+          </p>
+        </div>
+      </div>
+
+      {errors.submit && (
+        <div className="submit-error">
+          {errors.submit}
+        </div>
+      )}
+
+      <div className="settings-actions">
+        <ClickButton
+          text={isSubmitting ? "Submitting..." : "Submit Application"}
+          onClick={handleSubmit}
+          disabled={isSubmitting}
+          isLoading={isSubmitting}
+          variant="primary"
+          size="large"
+        />
       </div>
     </div>
   )
