@@ -26,6 +26,7 @@ const mapConversations = (convos, token) => {
     return {
       id: c._id,
       conversationId: c._id,
+      otherUserId: other._id || "",
       avatar: other.avatar || "",
       name: other.fullName || other.username || "User",
       verified: other.kycStatus === "verified",
@@ -207,6 +208,7 @@ const Inbox = () => {
                   <ChatScreen
                     chat={selectedChat}
                     onBack={() => setSelectedChat(null)}
+                    embedded={true}
                   />
                 ) : (
                   <div className="inbox-empty-state">

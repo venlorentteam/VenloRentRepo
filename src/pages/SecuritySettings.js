@@ -67,7 +67,7 @@ const SecuritySettings = () => {
         pass1:    passwords.newPassword,
         pass2:    passwords.confirmPassword,
       }
-      const res = await axios.post("https://localhost:4000/change-password", payload)
+      const res = await axios.post("https://newprojectbackend-5axx.onrender.com/change-password", payload)
       if (res.data.success){
         // Clear form and logout user
         setPasswords({ currentPassword: '', newPassword: '', confirmPassword: '' })

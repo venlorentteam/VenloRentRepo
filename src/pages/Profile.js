@@ -10,6 +10,20 @@ import defaultAvatar from "../assets/img/avatar.png"
 import axios from "axios"
 import "./Profile.css"
 
+const API_BASE = "https://newprojectbackend-5axx.onrender.com"
+
+const mapPropertyToListing = (property) => ({
+  id: property._id,
+  image: (property.media || [])
+    .map((m) => (typeof m === "string" ? m : m?.url))
+    .filter(Boolean),
+  price: `NGN ${Number(property.amount || 0).toLocaleString("en-NG")}`,
+  location: [property.location?.town, property.location?.state].filter(Boolean).join(", "),
+  category: property.property_type
+    ? property.property_type.charAt(0).toUpperCase() + property.property_type.slice(1)
+    : "",
+})
+
 const Profile = () => {
   const { user } = useAuth()
   const navigate = useNavigate();
@@ -19,6 +33,7 @@ const Profile = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [activeTab, setActiveTab] = useState("listings")
   const [profileData, setProfileData] = useState(null)
+  const [listings, setListings] = useState([])
   const [followersCount, setFollowersCount] = useState(0)
   const [followingCount, setFollowingCount] = useState(0)
 
@@ -30,31 +45,58 @@ const Profile = () => {
         const viewingOwn = !userId || userId === "me"
         setIsOwnProfile(viewingOwn)
 
+        let profileUser = null
         if (viewingOwn) {
           const token = localStorage.getItem("token")
           if (token) {
-            const res = await axios.get("https://newprojectbackend-5axx.onrender.com/profile", {
+            const res = await axios.get(`${API_BASE}/profile`, {
               headers: { Authorization: `Bearer ${token}` },
             })
-            setProfileData(res.data.user)
+            profileUser = res.data.user || null
+            setProfileData(profileUser)
             setFollowersCount(res.data.followersCount || 0)
             setFollowingCount(res.data.followingCount || 0)
           } else {
-            setProfileData(user)
+            profileUser = user || null
+            setProfileData(profileUser)
             setFollowersCount(0)
             setFollowingCount(0)
           }
         } else {
           const token = localStorage.getItem("token")
           const headers = token ? { Authorization: `Bearer ${token}` } : {}
-          const res = await axios.get(`https://newprojectbackend-5axx.onrender.com/users/${userId}`, { headers })
-          setProfileData(res.data.user || null)
+          const res = await axios.get(`${API_BASE}/users/${userId}`, { headers })
+          profileUser = res.data.user || null
+          setProfileData(profileUser)
           setFollowersCount(res.data.followersCount || 0)
           setFollowingCount(res.data.followingCount || 0)
           setIsFollowing(!!res.data.isFollowing)
         }
+
+        const profileOwnerId = viewingOwn
+          ? (profileUser?._id || profileUser?.id || user?._id || user?.id)
+          : (profileUser?._id || profileUser?.id || userId)
+
+        if (profileOwnerId) {
+          try {
+            const token = localStorage.getItem("token")
+            const headers = token ? { Authorization: `Bearer ${token}` } : {}
+            const res = await axios.get(`${API_BASE}/properties`, { headers })
+            const ownedListings = (res.data.items || [])
+              .filter((property) => String(property.owner?._id || property.owner || "") === String(profileOwnerId))
+              .map(mapPropertyToListing)
+
+            setListings(ownedListings)
+          } catch (listingErr) {
+            console.error("Failed to load profile listings:", listingErr)
+            setListings([])
+          }
+        } else {
+          setListings([])
+        }
       } catch (err) {
         setProfileData(null)
+        setListings([])
       } finally {
         setIsLoading(false)
       }
@@ -87,7 +129,7 @@ const Profile = () => {
   
   const handleMessage = () => {
     navigate("/inbox");
-    // TODO: Open chat with this user (not going to be implemented anymore)
+    // Jay: Open chat with this user (not going to be implemented anymore)
     // Walter: That's right, Pending till futher notice
   };
 
@@ -98,6 +140,9 @@ const Profile = () => {
   const handleUpgrade = () => {
     navigate("/account/subscription");
   };
+   const handleListClick = (listingId) => {
+    navigate(`/listing/${listingId}/order`)
+   }
 
   if (isLoading) {
     return (
@@ -184,7 +229,12 @@ const Profile = () => {
           />
 
           {/* Stats */}
-          <Components.ListStats stats={profileData?.stats || []} />
+          <Components.ListStats
+            listings={listings}
+            followers={followersCount}
+            following={followingCount}
+            joinedAt={profileData?.createdAt}
+          />
 
           {/* Tabs Navigation */}
           <div className="profile-tabs">
@@ -192,7 +242,7 @@ const Profile = () => {
               className={`profile-tab ${activeTab === "listings" ? "active" : ""}`}
               onClick={() => setActiveTab("listings")}
             >
-              Listings ({profileData?.listings?.length || 0})
+              Listings ({listings.length})
             </button>
             <button
               className={`profile-tab ${activeTab === "reviews" ? "active" : ""}`}
@@ -212,13 +262,21 @@ const Profile = () => {
           <div className="profile-tab-content">
             {activeTab === "listings" && (
               <div className="profile-listings">
-                {profileData?.listings?.length > 0 ? (
+                {listings.length > 0 ? (
                   <div className="listings-grid">
-                    {profileData?.listings?.map((listing) => (
-                      <div key={listing.id} className="listing-grid-item">
-                        <img src={listing.image[0]} alt="Property" />
+                    {listings.map((listing) => (
+                      <div key={listing.id} className="listing-grid-item" onClick={() => handleListClick(listing.id)}>
+                        <img src={listing.image[0] || (
+                          <div className="property-image-placeholder" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+                              <rect x="3" y="3" width="18" height="18" rx="2"/>
+                              <circle cx="8.5" cy="8.5" r="1.5"/>
+                              <polyline points="21 15 16 10 5 21"/>
+                            </svg>
+                          </div>
+                        )} alt="Property" />
                         <div className="listing-grid-info">
-                          <h4 className="listing-price">{listing.price}</h4>
+                          <h4 className="listing-price">{listing.price || 0}</h4>
                           <p className="listing-location">{listing.location}</p>
                           <span className="listing-category">{listing.category}</span>
                         </div>

@@ -4,7 +4,7 @@ import React from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { useAuth } from "../context/AuthProvider";
 import { FiUser, FiBell, FiShield, FiHelpCircle } from 'react-icons/fi'
-import { MdOutlineWorkspacePremium, MdVerifiedUser } from 'react-icons/md'
+import { MdOutlineWorkspacePremium, MdVerifiedUser, MdBookmarkBorder } from 'react-icons/md'
 import { HiOutlineExclamationCircle } from "react-icons/hi2"
 import { LiaAngleRightSolid } from "react-icons/lia"
 import './SettingsMenu.css'
@@ -23,6 +23,7 @@ const SettingsMenu = () => {
     { id: 'account', label: 'Account', icon: FiUser, description: 'Edit profile, change password' },
     { id: 'notifications', label: 'Notifications', icon: FiBell, description: 'Manage notification preferences' },
     { id: 'security', label: 'Security & Privacy', icon: FiShield, description: 'Password, privacy settings' },
+    { id: 'bookmarks', label: 'Bookmarks', icon: MdBookmarkBorder, description: 'View saved properties' },
     { id: 'verification', label: 'Agent Verification', icon: MdVerifiedUser, description: 'Become a verified agent' },
     { id: 'subscription', label: 'Subscription', icon: MdOutlineWorkspacePremium, description: 'View plan, upgrade' },
     { id: 'help', label: 'Help & Support', icon: FiHelpCircle, description: 'FAQs, contact support' },
@@ -45,10 +46,13 @@ const SettingsMenu = () => {
         // Check if this setting is active: either by NavLink isActive or if on base /account route with account setting
         const isAccountDefaultActive = location.pathname === '/account' && setting.id === 'account'
         
+        // Bookmarks navigate to /bookmarks instead of /account/bookmarks
+        const href = setting.id === 'bookmarks' ? '/bookmarks' : `/account/${setting.id}`
+        
         return (
           <NavLink 
             key={setting.id} 
-            to={`/account/${setting.id}`}
+            to={href}
             className={({ isActive }) => (isActive || isAccountDefaultActive) ? 'active' : ''}
           >
             <span className="left-side">

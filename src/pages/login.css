@@ -348,6 +348,92 @@
 }
 
 /* ── Dark mode ── */
+/* Floating page-level toast */
+.floating-toast,
+.floating-success,
+.floating-error {
+    position: fixed;
+    top: calc(var(--spacing-lg) + env(safe-area-inset-top, 0px));
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    width: min(92vw, 520px);
+    padding: 14px 18px 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    background: #ffffff;
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.10),
+        0 20px 50px rgba(0, 0, 0, 0.14);
+    animation:
+        toastSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both,
+        toastFadeOut 0.35s ease-in 119.65s forwards;
+    font-family: inherit;
+    line-height: 1.45;
+}
+
+.floating-toast::before,
+.floating-success::before,
+.floating-error::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 5px;
+    border-radius: 14px 0 0 14px;
+}
+
+.floating-toast::after,
+.floating-success::after,
+.floating-error::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    animation: toastCountdown 60s linear both;
+}
+
+.floating-success {
+    color: #065f46;
+}
+
+.floating-success::before {
+    background: #10b981;
+}
+
+.floating-success::after {
+    background: #10b981;
+}
+
+.floating-error {
+    color: #991b1b;
+}
+
+.floating-error::before {
+    background: #ef4444;
+}
+
+.floating-error::after {
+    background: #ef4444;
+}
+
+@keyframes toastFadeOut {
+    from {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-8px);
+    }
+}
+
 @media (prefers-color-scheme: dark) {
     .error-message,
     .submit-error,
@@ -361,6 +447,24 @@
     .error-message  { color: #fca5a5; }
     .submit-error   { color: #fca5a5; }
     .submit-success { color: #6ee7b7; }
+
+    .floating-toast,
+    .floating-success,
+    .floating-error {
+        background: #1e293b;
+        border-color: rgba(255, 255, 255, 0.06);
+        box-shadow:
+            0 8px 24px rgba(0, 0, 0, 0.28),
+            0 20px 50px rgba(0, 0, 0, 0.38);
+    }
+
+    .floating-success {
+        color: #6ee7b7;
+    }
+
+    .floating-error {
+        color: #fca5a5;
+    }
 }
 
 /* ========================================
