@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Header, ClickButton, PageSetup } from '../exports'
+import { Header, Loader, PageSetup } from '../exports'
 import { GrLocation } from 'react-icons/gr'
 import { MdOutlineBedroomParent, MdContentCopy } from 'react-icons/md'
 import { LuBuilding2 } from 'react-icons/lu'
@@ -175,9 +175,7 @@ const OrderPreview = ({
       <PageSetup>
         <Header backIcon={true} pageTitle={<h2>Preview Order</h2>} />
         <div className="main-content">
-          <div className="content">
-            <div className="op-card">Loading property...</div>
-          </div>
+          <Loader />
         </div>
       </PageSetup>
     )
@@ -189,7 +187,7 @@ const OrderPreview = ({
         <Header backIcon={true} pageTitle={<h2>Preview Order</h2>} />
         <div className="main-content">
           <div className="content">
-            <div className="op-card">{error}</div>
+            <div className="submit-error">{error}</div>
           </div>
         </div>
       </PageSetup>

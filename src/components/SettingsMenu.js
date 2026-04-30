@@ -4,7 +4,7 @@ import React from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { useAuth } from "../context/AuthProvider";
 import { FiUser, FiBell, FiShield, FiHelpCircle } from 'react-icons/fi'
-import { MdOutlineWorkspacePremium, MdVerifiedUser, MdBookmark } from 'react-icons/md'
+import { MdOutlineWorkspacePremium, MdVerifiedUser, MdBookmarkBorder } from 'react-icons/md'
 import { HiOutlineExclamationCircle } from "react-icons/hi2"
 import { LiaAngleRightSolid } from "react-icons/lia"
 import './SettingsMenu.css'
@@ -23,7 +23,7 @@ const SettingsMenu = () => {
     { id: 'account', label: 'Account', icon: FiUser, description: 'Edit profile, change password' },
     { id: 'notifications', label: 'Notifications', icon: FiBell, description: 'Manage notification preferences' },
     { id: 'security', label: 'Security & Privacy', icon: FiShield, description: 'Password, privacy settings' },
-    { id: 'bookmarks', label: 'Bookmarks', icon: MdBookmark, description: 'View saved properties' },
+    { id: 'bookmarks', label: 'Bookmarks', icon: MdBookmarkBorder, description: 'View saved properties' },
     { id: 'verification', label: 'Agent Verification', icon: MdVerifiedUser, description: 'Become a verified agent' },
     { id: 'subscription', label: 'Subscription', icon: MdOutlineWorkspacePremium, description: 'View plan, upgrade' },
     { id: 'help', label: 'Help & Support', icon: FiHelpCircle, description: 'FAQs, contact support' },

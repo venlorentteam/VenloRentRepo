@@ -38,14 +38,11 @@
 .chat-bubble {
   position: relative;
   max-width: 70%;
-  
   padding: var(--spacing-sm) var(--spacing-md);
   padding-bottom: var(--spacing-lg); /* Space for timestamp */
-  
   border-radius: var(--radius-lg);
   word-wrap: break-word;
   box-shadow: var(--shadow-sm);
-  
   transition: all var(--transition-fast);
 }
 

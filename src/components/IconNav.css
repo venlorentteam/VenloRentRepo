@@ -2,6 +2,7 @@
 .icon-nav{
     display: none
 }
+
 @media (max-width: 768px){
     .icon-nav{
         position: fixed;
@@ -27,7 +28,7 @@
         width: 100%;
         font-size: var(--font-sm);        
     }
-    .icon-nav a .icon{
+    .icon-nav a .mobile-nav-icon{
         font-size: 1.75rem;
     }
 }
@@ -43,7 +44,7 @@
     .icon-nav a.active{
         color: var(--primary-color-light);
     }
-    .icon-nav a .icon{
+    .icon-nav a .mobile-nav-icon{
         color: var(--text-primary-dark);
     }
 }

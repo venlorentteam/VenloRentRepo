@@ -75,10 +75,15 @@
 .inbox-chat-panel {
   flex: 1;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: stretch;
+  justify-content: stretch;
   background: var(--bg-secondary);
   position: relative;
+}
+
+.inbox-chat-panel > * {
+  width: 100%;
+  height: 100%;
 }
 
 /* Empty State */
@@ -88,8 +93,10 @@
   align-items: center;
   justify-content: center;
   text-align: center;
+  width: 100%;
+  height: 100%;
   padding: var(--spacing-2xl);
-  max-width: 400px;
+  max-width: none;
 }
 
 .inbox-empty-state .empty-icon {

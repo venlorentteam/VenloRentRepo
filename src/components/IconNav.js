@@ -12,7 +12,7 @@ function IconNav() {
       <NavLink to="/dashboard">
         {({ isActive }) => (
           <>
-            <span className="icon">
+            <span className="mobile-nav-icon">
               {isActive ? <GoHomeFill /> : <GoHome />}
             </span>
           </>
@@ -21,7 +21,7 @@ function IconNav() {
       <NavLink to="/search">
         {({ isActive }) => (
           <>
-            <span className="icon">
+            <span className="mobile-nav-icon">
               {isActive ? <RiSearchFill /> : <RiSearchLine />}
             </span>
           </>
@@ -30,7 +30,7 @@ function IconNav() {
       <NavLink to="/create/post-a-request">
         {({ isActive }) => (
           <>
-            <span className="icon">
+            <span className="mobile-nav-icon">
               {isActive ? <FaSquarePlus /> : <FaRegSquarePlus />}
             </span>
           </>
@@ -39,7 +39,7 @@ function IconNav() {
       <NavLink to="/orders">
         {({ isActive }) => (
           <>
-            <span className="icon">
+            <span className="mobile-nav-icon">
               {isActive ? <RiShoppingBag3Fill /> : <RiShoppingBag3Line />}
             </span>
           </>
@@ -48,7 +48,7 @@ function IconNav() {
       <NavLink to="/profile">
         {({ isActive }) => (
           <>
-            <span className="icon">
+            <span className="mobile-nav-icon">
               {isActive ? <FaUserCircle /> : <FaRegUserCircle />}
             </span>
           </>

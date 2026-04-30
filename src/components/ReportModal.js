@@ -21,6 +21,15 @@ const REQUEST_REASONS = [
   { label: "Other", value: "other" },
 ]
 
+const MESSAGE_REASONS = [
+  { label: "Spam", value: "spam" },
+  { label: "Harassment", value: "harassment" },
+  { label: "Scam or fraud", value: "fraud" },
+  { label: "Off-platform contact", value: "off_platform_contact" },
+  { label: "Abusive language", value: "abusive_language" },
+  { label: "Other", value: "other" },
+]
+
 function ReportModal({ isOpen, onClose, targetId, targetType = "property" }) {
   const [selectedReason, setSelectedReason] = useState("")
   const [details, setDetails] = useState("")
@@ -28,10 +37,18 @@ function ReportModal({ isOpen, onClose, targetId, targetType = "property" }) {
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState("")
 
-  const reasons = targetType === "property" ? PROPERTY_REASONS : REQUEST_REASONS
+  const reasons =
+    targetType === "property"
+      ? PROPERTY_REASONS
+      : targetType === "request"
+        ? REQUEST_REASONS
+        : MESSAGE_REASONS
+
   const endpoint = targetType === "property"
     ? `https://newprojectbackend-5axx.onrender.com/properties/${targetId}/report`
-    : `https://newprojectbackend-5axx.onrender.com/requests/${targetId}/report`
+    : targetType === "request"
+      ? `https://newprojectbackend-5axx.onrender.com/requests/${targetId}/report`
+      : `https://newprojectbackend-5axx.onrender.com/reports`
 
   const handleSubmit = async () => {
     if (!selectedReason) {
@@ -46,7 +63,12 @@ function ReportModal({ isOpen, onClose, targetId, targetType = "property" }) {
     try {
       await axios.post(
         endpoint,
-        { reason: selectedReason, details },
+        {
+          reason: selectedReason,
+          details,
+          targetId,
+          targetType,
+        },
         { headers: { Authorization: `Bearer ${token}` } }
       )
       setSubmitted(true)
@@ -80,7 +102,9 @@ function ReportModal({ isOpen, onClose, targetId, targetType = "property" }) {
         ) : (
           <>
             <div className="report-modal-header">
-              <h3 className="report-modal-title">Report this {targetType}</h3>
+              <h3 className="report-modal-title">
+                {targetType === "message" ? "Report this conversation" : `Report this ${targetType}`}
+              </h3>
               <p className="report-modal-subtitle">
                 Select the reason that best describes the issue
               </p>
