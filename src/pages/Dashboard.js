@@ -43,10 +43,10 @@ function Dashboard() {
         })
         const orders = res.data.items || []
 
-        // Filter orders that are still active (not completed/cancelled/expired)
-        const activeStatuses = ["pending", "accepted", "completed"]
+        // Filter orders that still block the property from new orders.
+        const activeStatuses = ["pending", "accepted"]
         const propertyIds = orders
-          .filter(order => activeStatuses.includes(order.status))
+          .filter(order => activeStatuses.includes(order.status) || order.paymentStatus === "pending_proof")
           .map(order => order.property?._id)
           .filter(id => id) // remove undefined
        
@@ -75,6 +75,7 @@ function Dashboard() {
         const listings = (listingRes.data.items || []).map((p) => ({
           type: "listing",
           id: p._id,
+          createdAt: p.createdAt,
           ownerId: p.owner?._id || "",
           avatar: p.owner?.avatar || defaultAvatar,
           username: p.owner?.fullName || p.owner?.username || "",
@@ -106,6 +107,7 @@ function Dashboard() {
         const requests = (requestRes.data.items || []).map((r) => ({
           type: "request",
           id: r._id,
+          createdAt: r.createdAt,
           requesterId: r.requester?._id || "",
           // Owner fields — now populated
           avatar: r.requester?.avatar   || defaultAvatar,
@@ -133,7 +135,7 @@ function Dashboard() {
         }))
 
       const merged = [...listings, ...requests].sort(
-        (a, b) => new Date(b.time) - new Date(a.time)
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
       )
 
       setFeed(merged)  
@@ -150,6 +152,15 @@ function Dashboard() {
   const handleCreatePost = () => navigate('/create/post-a-request')
   const handleOrder = (id) => navigate(`/listing/${id}/order`)
   const handleRespond = (id) => navigate(`/requests/${id}/respond`)
+  
+  const handleDeleteProperty = (deletedId) => {
+    // Keep the rendered list in sync with the backend delete response.
+    setFeed((prev) => prev.filter((item) => !(item.type === "listing" && item.id === deletedId)))
+  }
+  const handleDeleteRequest = (deletedId) => {
+    // Keep the rendered list in sync with the backend delete response.
+    setFeed((prev) => prev.filter((item) => !(item.type === "request" && item.id === deletedId)))
+  }
 
   // Wait for both feed and orders to load before showing "loading" skeleton
   const isLoadingComplete = isLoading || isOrdersLoading
@@ -191,23 +202,25 @@ function Dashboard() {
             feed.map(item =>
               item.type === 'listing' ? (
                 // PropertyCard 
-                <PropertyCard
-                  key={item.id}
-                  {...item}
-                  propertyId={item.id}
-                  isOrdered={activeOrderPropertyIds.has(item.id)}
-                  onOrder={() => handleOrder(item.id)}
-                />
-              ) : (
+              <PropertyCard
+                key={item.id}
+                {...item}
+                propertyId={item.id}
+                isOrdered={activeOrderPropertyIds.has(item.id)}
+                onOrder={() => handleOrder(item.id)}
+                onDelete={handleDeleteProperty}
+              />
+            ) : (
                 // currentUserIsAgent 
                 <RequestCard
                   key={item.id}
                   {...item}
-                  requestId={item.id}
-                  likedByMe={item.likedByMe}
-                  currentUserIsAgent={isUserAgent}
-                  onRespond={() => handleRespond(item.id)}
-                />
+                requestId={item.id}
+                likedByMe={item.likedByMe}
+                currentUserIsAgent={isUserAgent}
+                onRespond={() => handleRespond(item.id)}
+                onDelete={handleDeleteRequest}
+              />
 
               )
             )

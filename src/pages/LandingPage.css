@@ -384,7 +384,7 @@
   .hero-heading { font-size: 2.25rem; }
   .hero-illustration { height: 240px; }
   .hero-card-main { width: 70%; }
-  .hero-card-side { display: none; }
+  .hero-card-side { width: 65%; }
   .float-badge-1, .float-badge-2 { display: none; }
 }
 

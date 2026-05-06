@@ -22,8 +22,10 @@ function OrderList({
 }) {
   const statusClasses = {
     Completed: "order-status-completed",
+    Approved: "order-status-approved",
     Failed: "order-status-failed",
     Pending: "order-status-pending",
+    "Payment Pending": "order-status-payment",
     Rejected: "order-status-rejected",
     Cancelled: "order-status-cancelled",
   }

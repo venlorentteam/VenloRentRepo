@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 import { PageSetup, Header, SearchBar, SearchDisplayCard, ClickButton } from '../exports'
 import { FiFilter } from 'react-icons/fi'
 import { RiMessageLine } from 'react-icons/ri'
@@ -128,6 +129,7 @@ const mapItemToCardProps = (item) => {
 //  MAIN COMPONENT
 // ==================================================================
 function Search() {
+  const navigate = useNavigate()
   // Query state 
   const [searchQuery, setSearchQuery] = useState("")
   const [activeType, setActiveType] = useState("listing") // "listing" | "request" | "all"
@@ -235,15 +237,10 @@ function Search() {
     setFilters(INITIAL_FILTERS)
   }
 
-  // Navigate to listing or request detail page
+  // Open the order preview for listing results.
   const handleResultClick = (item) => {
-    // Replace with useNavigate when wiring up routing
     if (item._type === "listing") {
-      console.log("Navigate to /listing/" + item.id)
-      // navigate(`/listing/${item.id}`)
-    } else {
-      console.log("Navigate to /requests/" + item.id)
-      // navigate(`/requests/${item.id}`)
+      navigate(`/listing/${item.id}/order`)
     }
   }
 
