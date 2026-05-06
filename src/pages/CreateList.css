@@ -82,6 +82,35 @@
   box-shadow: var(--shadow-md);
 }
 
+.cl-gate--payout {
+  background: rgba(16, 185, 129, 0.08);
+  border-color: rgba(16, 185, 129, 0.22);
+}
+
+.cl-gate--payout .cl-gate__icon-wrap {
+  background: rgba(16, 185, 129, 0.15);
+}
+
+.cl-gate--payout .cl-gate__icon {
+  color: var(--primary-color);
+}
+
+.cl-gate--payout .cl-gate__title {
+  color: #065f46;
+}
+
+.cl-gate--payout .cl-gate__sub {
+  color: #047857;
+}
+
+.cl-gate--payout .cl-gate__cta {
+  background: var(--primary-color);
+}
+
+.cl-gate--payout .cl-gate__cta:hover {
+  background: #059669;
+}
+
 /* LOCKED FORM OVERLAY */
 /* When !isVerified the form renders at reduced opacity and
    all pointer events are disabled. */

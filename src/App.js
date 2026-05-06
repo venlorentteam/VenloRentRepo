@@ -28,7 +28,7 @@ function App() {
         <Route path="/bookmarks" element={<Pages.ProtectedRoute><Pages.Bookmarks /></Pages.ProtectedRoute>} />
         <Route path="/confirm-order" element={<Pages.ProtectedRoute><Pages.ConfirmOrder /></Pages.ProtectedRoute>} />
         <Route path="/create" element={<Pages.ProtectedRoute><Pages.Create /></Pages.ProtectedRoute>} >
-          <Route index element={<Pages.ProtectedRoute><Pages.CreateRequest /></Pages.ProtectedRoute>} />
+          <Route index element={<Pages.ProtectedRoute><Pages.CreateList /></Pages.ProtectedRoute>} />
           <Route path="create-list" element={<Pages.ProtectedRoute><Pages.CreateList /></Pages.ProtectedRoute>} />
           <Route path="post-a-request" element={<Pages.ProtectedRoute><Pages.CreateRequest /></Pages.ProtectedRoute>} />
         </Route>

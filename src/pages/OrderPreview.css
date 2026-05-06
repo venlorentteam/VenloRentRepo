@@ -343,7 +343,8 @@
 .op-actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm) var(--spacing-md);
 }
 
 .op-btn {

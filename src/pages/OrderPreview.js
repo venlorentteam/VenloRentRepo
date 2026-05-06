@@ -18,25 +18,26 @@ const OrderPreview = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [isPlacing, setIsPlacing] = useState(false)
   const [descExpanded, setDescExpanded] = useState(false)
-  const [error, setError] = useState('')
+  const [missingError, setMissingError] = useState('')  // Set error for missing IDs or data upfront
+  const [error, setError] = useState('') // Error for issues during order placement, separate from missing data errors
 
   useEffect(() => {
     if (!propertyId) {
       setIsLoading(false)
-      setError('Missing property id')
+      setMissingError('Missing property id')
       return
     }
 
     const fetchProperty = async () => {
       setIsLoading(true)
-      setError('')
+      setMissingError('')
 
       try {
         const res = await axios.get(`https://newprojectbackend-5axx.onrender.com/properties/${propertyId}`)
         const p = res.data?.property
 
         if (!p) {
-          setError('Property not found')
+          setMissingError('Property not found')
           setListingData(null)
           return
         }
@@ -72,7 +73,7 @@ const OrderPreview = () => {
           commission: Number(p.commission) || 0,
         })
       } catch (err) {
-        setError(err?.response?.data?.message || 'Failed to load property')
+        setMissingError(err?.response?.data?.message || 'Failed to load property')
         setListingData(null)
       } finally {
         setIsLoading(false)
@@ -91,21 +92,27 @@ const OrderPreview = () => {
     if (isPlacing || !propertyId) return
 
     const token = localStorage.getItem('token')
-    if (!token) return
+    if (!token) {
+      setError('You need to log in again before placing an order.')
+      return
+    }
 
     setIsPlacing(true)
     setError('')
 
     try {
+      console.log('Placing order for property:', propertyId)
       const res = await axios.post(
         'https://newprojectbackend-5axx.onrender.com/orders',
         { propertyId },
         { headers: { Authorization: `Bearer ${token}` } }
       )
 
+      console.log('Order create response:', res.data)
       const createdOrder = res.data?.order
       if (!createdOrder?._id) {
-        throw new Error('Order was created, but the order id was missing.')
+        setError('Order was created, but the order id was missing.')
+        return
       }
 
       // Once the order exists, hand the buyer off to the live status page.
@@ -113,6 +120,7 @@ const OrderPreview = () => {
         state: { rawOrder: createdOrder },
       })
     } catch (err) {
+      console.error('Order creation failed:', err)
       setError(err?.response?.data?.message || err.message || 'Failed to place order')
     } finally {
       setIsPlacing(false)
@@ -132,6 +140,22 @@ const OrderPreview = () => {
         <Header backIcon={true} pageTitle={<h2>Preview Order</h2>} />
         <div className="main-content">
           <Loader />
+        </div>
+      </PageSetup>
+    )
+  }
+
+  if (missingError) {
+    return (
+      <PageSetup>
+        <Header backIcon={true} pageTitle={<h2>Preview Order</h2>} />
+        <div className="main-content">
+          <div className="content">
+            <div className="order-preview">
+              <div className="submit-error">{missingError}</div>
+            </div>
+          </div>
+          <div className="sidebar" />
         </div>
       </PageSetup>
     )
@@ -267,6 +291,7 @@ const OrderPreview = () => {
               <div className="op-actions">
                 <button
                   className="op-btn op-btn-pay"
+                  type="button"
                   onClick={handlePlaceOrder}
                   disabled={isPlacing}
                 >

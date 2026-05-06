@@ -56,7 +56,7 @@
 /* Variant: Me */
 .chat-bubble--me {
   background: var(--primary-color-dark);
-  color: var(--white-color);
+  color: var(--button-primary-text);
   border-bottom-right-radius: 4px; /* Tail effect */
 }
 
@@ -102,7 +102,7 @@
 
   .chat-bubble--me {
     background: var(--primary-color-dark);
-    color: var(--white-color);
+    color: var(--button-primary-text);
   }
 
   .chat-bubble--other .chat-bubble-time {

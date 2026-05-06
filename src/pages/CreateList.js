@@ -12,7 +12,7 @@ import { TfiMenuAlt } from "react-icons/tfi"
 import { IoImageOutline } from "react-icons/io5"
 import { IoCloudUploadOutline, IoCloseCircle } from "react-icons/io5"
 import { GrLocation } from "react-icons/gr"
-import { MdOutlineVerified } from "react-icons/md"
+import { MdOutlineVerified, MdOutlineAccountBalance } from "react-icons/md"
 // import { MdOutlineBedroomParent } from "react-icons/md"
 // import { LuBuilding2 } from "react-icons/lu"
 import { TbRulerMeasure, TbHomeCheck } from "react-icons/tb"
@@ -108,10 +108,18 @@ function CreateList() {
   // === Helpers =======================================
   //User status 
   const isVerified = user?.kycStatus === "verified"
+  const payoutDetails = user?.payoutDetails || {}
+  const hasCompletePayoutDetails = ["bankName", "accountName", "accountNumber", "payoutMethod"].every(
+    (field) => payoutDetails?.[field]?.toString().trim()
+  )
+  const shouldShowPayoutNotice = isVerified && !hasCompletePayoutDetails
   // Navigate to KYC
   const navigate = useNavigate()
   const onVerifyClick = () => {
     navigate("/account/verification")
+  }
+  const onPaymentDetailsClick = () => {
+    navigate("/account/payment-details")
   }
   // Toggle a single accordion section
   const toggleSection = (key) =>
@@ -296,6 +304,28 @@ function CreateList() {
             onClick={onVerifyClick}
           >
             Complete Verification
+          </button>
+        </div>
+      )}
+
+      {shouldShowPayoutNotice && (
+        <div className="cl-gate cl-gate--payout">
+          <div className="cl-gate__icon-wrap">
+            <MdOutlineAccountBalance className="cl-gate__icon" />
+          </div>
+
+          <div className="cl-gate__body">
+            <p className="cl-gate__title">Payment Details Needed</p>
+            <p className="cl-gate__sub">
+              Your account is verified, but your payout details are incomplete. Add them to keep your listings payout-ready.
+            </p>
+          </div>
+
+          <button
+            className="cl-gate__cta"
+            onClick={onPaymentDetailsClick}
+          >
+            Update Payment Details
           </button>
         </div>
       )}

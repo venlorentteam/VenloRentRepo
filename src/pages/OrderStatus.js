@@ -564,12 +564,12 @@ const OrderStatus = () => {
       </div>
 
       <div className="op-card op-card-meta">
-        <div className="op-meta-agent-row">
+        {/* <div className="op-meta-agent-row">
           <button className="op-contact-agent-btn" onClick={handleContactAgent}>
             <RiCustomerServiceLine aria-hidden="true" />
             {counterpartyLabel}
           </button>
-        </div>
+        </div> */}
 
         {isBuyer && (
           <div className="op-actions os-actions">

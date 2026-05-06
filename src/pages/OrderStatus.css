@@ -173,9 +173,9 @@
   line-height: 1.5;
 }
 
-.os-actions {
+/* .os-actions {
   margin-top: var(--spacing-md);
-}
+} */
 
 @media (max-width: 768px) {
   .os-hero {
