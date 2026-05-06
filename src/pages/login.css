@@ -586,6 +586,11 @@
     .login-form-section {
         padding: var(--spacing-lg);
     }
+    .floating-toast,
+    .floating-success,
+    .floating-error {
+        width: 100%;
+    }
 }
 
 @media (max-width: 500px) {

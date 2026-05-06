@@ -23,6 +23,7 @@ function App() {
           <Route index element={<Pages.ProtectedRoute><Pages.AllOrders /></Pages.ProtectedRoute>} />
           <Route path="active-orders" element={<Pages.ProtectedRoute><Pages.ActiveOrders /></Pages.ProtectedRoute>} />
           <Route path="all-orders" element={<Pages.ProtectedRoute><Pages.AllOrders /></Pages.ProtectedRoute>} />
+          <Route path=":orderId/status" element={<Pages.ProtectedRoute><Pages.OrderStatus /></Pages.ProtectedRoute>} />
         </Route>
         <Route path="/bookmarks" element={<Pages.ProtectedRoute><Pages.Bookmarks /></Pages.ProtectedRoute>} />
         <Route path="/confirm-order" element={<Pages.ProtectedRoute><Pages.ConfirmOrder /></Pages.ProtectedRoute>} />

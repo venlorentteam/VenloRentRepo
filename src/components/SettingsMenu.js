@@ -5,6 +5,7 @@ import { NavLink, useLocation } from 'react-router-dom'
 import { useAuth } from "../context/AuthProvider";
 import { FiUser, FiBell, FiShield, FiHelpCircle } from 'react-icons/fi'
 import { MdOutlineWorkspacePremium, MdVerifiedUser, MdBookmarkBorder } from 'react-icons/md'
+import { MdOutlineAccountBalance } from 'react-icons/md'
 import { HiOutlineExclamationCircle } from "react-icons/hi2"
 import { LiaAngleRightSolid } from "react-icons/lia"
 import './SettingsMenu.css'
@@ -17,7 +18,7 @@ import { IoLogOutOutline } from "react-icons/io5"
 
 const SettingsMenu = () => {
   //Call useAuth to get user info and logout function
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const location = useLocation()
   const settingsMenu = [
     { id: 'account', label: 'Account', icon: FiUser, description: 'Edit profile, change password' },
@@ -25,19 +26,13 @@ const SettingsMenu = () => {
     { id: 'security', label: 'Security & Privacy', icon: FiShield, description: 'Password, privacy settings' },
     { id: 'bookmarks', label: 'Bookmarks', icon: MdBookmarkBorder, description: 'View saved properties' },
     { id: 'verification', label: 'Agent Verification', icon: MdVerifiedUser, description: 'Become a verified agent' },
+    ...(user?.kycStatus === 'verified'
+      ? [{ id: 'payment-details', label: 'Payment Details', icon: MdOutlineAccountBalance, description: 'Bank details for payouts' }]
+      : []),
     { id: 'subscription', label: 'Subscription', icon: MdOutlineWorkspacePremium, description: 'View plan, upgrade' },
     { id: 'help', label: 'Help & Support', icon: FiHelpCircle, description: 'FAQs, contact support' },
     { id: 'about', label: 'About', icon: HiOutlineExclamationCircle, description: 'Terms, privacy policy, app info' },
   ]
-
-  const handleLogout = () => {
-    // TODO: Implement logout logic
-    // Clear localStorage, redirect to login
-    if (window.confirm('Are you sure you want to logout?')) {
-      localStorage.clear()
-      window.location.href = '/login'
-    }
-  }
 
   return (
     <div className="settings-list">

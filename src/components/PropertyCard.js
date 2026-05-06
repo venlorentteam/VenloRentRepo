@@ -60,6 +60,8 @@ function PropertyCard({
   const [likeCount, setLikeCount] = useState(Number(likes) || 0)
   const [isLiking, setIsLiking] = useState(false)
   const [isReportOpen, setIsReportOpen] = useState(false)
+  const [deleteSuccess, setDeleteSuccess] = useState("")
+  const [deleteError, setDeleteError] = useState("")
 
   const currentUserId = (() => {
     try {
@@ -149,30 +151,31 @@ function PropertyCard({
         { headers: { Authorization: `Bearer ${token}` } }
       )
       closeModal()
-      // Notify parent to remove card from feed if callback exists
+      //Todo: Notify parent to remove card from feed if callback exists
+      setDeleteSuccess("Listing deleted successfully.")
       if (onDelete) onDelete(resolvedPropertyId)
     } catch (err) {
       console.error("Failed to delete property:", err)
-      alert(err.response?.data?.message || "Failed to delete listing. Please try again.")
+      setDeleteError(err.response?.data?.message || "Failed to delete listing. Please try again.")
     }
   }
 
   // Add report handler
-  const handleReport = async () => {
-    const token = localStorage.getItem("token")
-    if (!token) return
-    try {
-      await axios.post(
-        `https://newprojectbackend-5axx.onrender.com/properties/${resolvedPropertyId}/report`,
-        { reason: "Reported by user" },
-        { headers: { Authorization: `Bearer ${token}` } }
-      )
-      closeModal()
-      //alert("Report submitted. Thank you for keeping VenloRent safe.")
-    } catch (err) {
-      console.error("Failed to report property:", err)
-    }
-  }
+  // const handleReport = async () => {
+  //   const token = localStorage.getItem("token")
+  //   if (!token) return
+  //   try {
+  //     await axios.post(
+  //       `https://newprojectbackend-5axx.onrender.com/properties/${resolvedPropertyId}/report`,
+  //       { reason: "Reported by user" },
+  //       { headers: { Authorization: `Bearer ${token}` } }
+  //     )
+  //     closeModal()
+  //     //alert("Report submitted. Thank you for keeping VenloRent safe.")
+  //   } catch (err) {
+  //     console.error("Failed to report property:", err)
+  //   }
+  // }
 
   const handleOrder = () => {
     if (isOrdered || isUnavailable) return
@@ -401,7 +404,8 @@ function PropertyCard({
           </button>
         </div>
       </Modal>
-
+      {deleteSuccess && <div className="floating-success">{deleteSuccess}</div>}
+      {deleteError && <div className="floating-error">{deleteError}</div>}
       {/* Comments Modal */}
       <Comments 
         isCommentOpen={isComment} 

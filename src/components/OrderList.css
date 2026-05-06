@@ -74,6 +74,11 @@
   color: var(--primary-color);
 }
 
+.order-status-approved {
+  background: rgba(59, 130, 246, 0.1);
+  color: #2563eb;
+}
+
 .order-status-pending {
   background: rgba(156, 163, 175, 0.1);
   color: var(--text-secondary);
@@ -178,6 +183,11 @@
   .order-status-completed {
     background: rgba(16, 185, 129, 0.2);
     color: var(--primary-color-light);
+  }
+
+  .order-status-approved {
+    background: rgba(59, 130, 246, 0.2);
+    color: #60a5fa;
   }
 
   .order-status-pending {

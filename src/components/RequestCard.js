@@ -54,6 +54,9 @@ function RequestCard({
   const [likeCount, setLikeCount] = useState(Number(likes) || 0)
   const [isLiking, setIsLiking] = useState(false)
   const [isReportOpen, setIsReportOpen] = useState(false)
+  const [deleteSuccess, setDeleteSuccess] = useState("")
+  const [deleteError, setDeleteError] = useState("")
+  
 
   const currentUserId = (() => {
     try {
@@ -79,27 +82,29 @@ function RequestCard({
       )
       closeModal()
       if (onDelete) onDelete(resolvedRequestId)
+      setDeleteSuccess("Request deleted successfully.")
     } catch (err) {
-      alert(err.response?.data?.message || "Failed to delete request.")
+      setDeleteError(err.response?.data?.message || "Failed to delete request. Please try again.")
+      //alert(err.response?.data?.message || "Failed to delete request.")
     }
   }
 
   // Report handler
-  const handleReport = async () => {
-    const token = localStorage.getItem("token")
-    if (!token) return
-    try {
-      await axios.post(
-        `https://newprojectbackend-5axx.onrender.com/requests/${resolvedRequestId}/report`,
-        { reason: "Reported by user" },
-        { headers: { Authorization: `Bearer ${token}` } }
-      )
-      closeModal()
-      alert("Report submitted.")
-    } catch (err) {
-      console.error("Failed to report:", err)
-    }
-  }
+  // const handleReport = async () => {
+  //   const token = localStorage.getItem("token")
+  //   if (!token) return
+  //   try {
+  //     await axios.post(
+  //       `https://newprojectbackend-5axx.onrender.com/requests/${resolvedRequestId}/report`,
+  //       { reason: "Reported by user" },
+  //       { headers: { Authorization: `Bearer ${token}` } }
+  //     )
+  //     closeModal()
+  //     alert("Report submitted.")
+  //   } catch (err) {
+  //     console.error("Failed to report:", err)
+  //   }
+  // }
 
   // Keep bookmark state in sync when the parent updates.
   useEffect(() => {
@@ -207,7 +212,7 @@ function RequestCard({
         </header>
 
         {/* === BODY =========================================
-            .property-description reused from PropertyCard.css —
+          .property-description reused from PropertyCard.css —
         */}
         <div className="request-card-body">
 
@@ -271,7 +276,7 @@ function RequestCard({
             >
               <FaRegComment aria-hidden="true" />
               <span>
-                {currentUserIsAgent && !expired 
+                {!expired 
                   ? responseCount === '0'
                     ? 'Add 1st'
                     : `${responseCount}`
@@ -373,6 +378,8 @@ function RequestCard({
         </div>
       </Modal>
 
+      {deleteSuccess && <div className="floating-success">{deleteSuccess}</div>}
+      {deleteError && <div className="floating-error">{deleteError}</div>}
 
       <RequestResponsesModal
         isOpen={isResponsesOpen}

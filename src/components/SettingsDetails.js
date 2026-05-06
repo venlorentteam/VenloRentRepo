@@ -10,6 +10,8 @@ import VerificationSettings from '../pages/VerificationSettings'
 import SubscriptionSettings from '../pages/SubscriptionSettings'
 import HelpSettings from '../pages/HelpSettings'
 import AboutSettings from '../pages/AboutSettings'
+import PaymentDetailsSettings from '../pages/PaymentDetailsSettings'
+import AgentOnlyRoute from './AgentOnlyRoute'
 import './SettingsDetails.css'
 import { IoArrowBack } from 'react-icons/io5'
 
@@ -33,6 +35,12 @@ const SettingsDetails = () => {
         return <VerificationSettings />
       case 'subscription':
         return <SubscriptionSettings />
+      case 'payment-details':
+        return (
+          <AgentOnlyRoute>
+            <PaymentDetailsSettings />
+          </AgentOnlyRoute>
+        )
       case 'help':
         return <HelpSettings />
       case 'about':

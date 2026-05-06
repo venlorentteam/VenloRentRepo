@@ -215,7 +215,7 @@ function LandingPage() {
             <span className="hero-heading-accent">Home in Nigeria</span>
           </h1>
           <p className="hero-sub">
-            VenloRent connects you with verified real estate agents for rent, sale, and shortlet properties — transparently, securely, all in one place.
+            VenloRent connects you with verified real estate agents for rent, sale, and shortlet properties transparently, securely, all in one place.
           </p>
 
           {/* Search Bar */}

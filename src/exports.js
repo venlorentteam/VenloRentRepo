@@ -12,6 +12,7 @@ export { default as ListStats } from "./components/ListStats";
 export { default as Loader } from "./components/Loader";
 export { default as MessageInputBar } from "./components/MessageInputBar";
 export { default as MessageListItem } from "./components/MessageListItem";
+export { default as AgentOnlyRoute } from "./components/AgentOnlyRoute";
 export { default as Modal } from "./components/Modal";
 export { default as OderCountDown } from "./components/OderCountDown";
 export { default as OrderList } from "./components/OrderList";
@@ -61,10 +62,12 @@ export { default as NoMatch } from "./pages/NoMatch";
 export { default as Notifications } from "./pages/Notifications";
 export { default as NotificationSettings } from "./pages/NotificationSettings";
 export { default as OrderPreview } from "./pages/OrderPreview";
+export { default as OrderStatus } from "./pages/OrderStatus";
 export { default as Orders } from "./pages/Orders";
 export { default as PasswordRecovery } from "./pages/PasswordRecovery";
 export { default as PasswordReset } from "./pages/PasswordReset";
 export { default as PrelimHelp } from "./pages/PrelimHelp";
+export { default as PaymentDetailsSettings } from "./pages/PaymentDetailsSettings";
 export { default as PrivacyPolicy } from "./pages/PrivacyPolicy";
 export { default as Profile } from "./pages/Profile";
 export { default as Register } from "./pages/Register";
@@ -84,4 +87,3 @@ export { default as StatCounter } from "./components/Prelim/StatCounter";
 
 // ==== CONTEXT ====
 export { default as AuthProvider } from "./context/AuthProvider";
-

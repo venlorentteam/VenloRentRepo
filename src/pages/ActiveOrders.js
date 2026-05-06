@@ -7,7 +7,7 @@ import './Orders.css'
 
 function ActiveOrders() {
   const navigate = useNavigate()
-  const { orders = [], isLoading, error, userId } = useOutletContext() || {}
+  const { orders = [], isLoading, error } = useOutletContext() || {}
 
   const formatCurrency = (value, currency = "NGN") => {
     const num = Number(value)
@@ -17,8 +17,8 @@ function ActiveOrders() {
 
   const isActive = (order) => {
     if (!order) return false
-    if (order.status === "pending" || order.status === "accepted") return true
-    if (order.paymentStatus === "pending_proof") return true
+    if (order.status === "pending" || order.status === "accepted" || order.status === "approved") return true
+    if (order.status === "pending_proof" || order.paymentStatus === "pending_proof") return true
     return false
   }
 
@@ -36,10 +36,12 @@ function ActiveOrders() {
     const statusLabel =
       order.status === "completed"
         ? "Completed"
+        : order.status === "pending_proof" || order.paymentStatus === "pending_proof"
+          ? "Payment Pending"
+        : order.status === "accepted" || order.status === "approved"
+          ? "Approved"
         : order.status === "cancelled" || order.status === "rejected"
           ? "Failed"
-          : order.paymentStatus === "pending_proof"
-            ? "Payment Pending"
             : "Pending"
 
     return {
@@ -52,16 +54,20 @@ function ActiveOrders() {
       no: orderNo,
       agent: order.seller?.fullName || order.seller?.username || "Unknown",
       propertyId: order.property?._id || "",
+      orderId: order._id || "",
+      paymentStatus: order.paymentStatus || "",
       rawStatus: order.status || "",
+      rawOrder: order,
     }
   }
 
   const activeOrders = orders.filter(isActive)
 
   const handleOrderClick = (order) => {
-    const isPending = order.rawStatus === "pending"
-    if (!isPending || !order.propertyId) return
-    navigate(`/listing/${order.propertyId}/order`)
+    if (!order.orderId) return
+    navigate(`/orders/${order.orderId}/status`, {
+      state: { order, rawOrder: order.rawOrder },
+    })
   }
 
   return (
