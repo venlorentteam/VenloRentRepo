@@ -131,33 +131,76 @@
   z-index: 2;
 }
 
-/* Swiper Customization */
-.property-swiper {
-  width: 100%;
-}
+/* ─── Swiper Navigation: Frosted Glass Arrows ─── */
 
-.property-swiper .swiper-button-next,
-.property-swiper .swiper-button-prev {
-  color: var(--white-color);
-  background: rgba(0, 0, 0, 0.5);
-  width: 40px;
-  height: 40px;
+.property-swiper .swiper-button-prev,
+.property-swiper .swiper-button-next {
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
+  color: #ffffff;
+  transition: background 0.22s ease, transform 0.18s ease, box-shadow 0.22s ease;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: var(--spacing-sm);
 }
 
-.property-swiper .swiper-button-next:after,
-.property-swiper .swiper-button-prev:after {
-  font-size: 1.25rem;
+.property-swiper .swiper-button-prev {
+  left: 10px;
 }
 
+.property-swiper .swiper-button-next {
+  right: 10px;
+}
+
+/* Make the built-in arrow icon smaller & crisp */
+.property-swiper .swiper-button-prev::after,
+.property-swiper .swiper-button-next::after {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Hover state */
+.property-swiper .swiper-button-prev:hover,
+.property-swiper .swiper-button-next:hover {
+  background: rgba(255, 255, 255, 0.32);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.22);
+  transform: translateY(-50%) scale(1.08);
+}
+
+/* Active / click press */
+.property-swiper .swiper-button-prev:active,
+.property-swiper .swiper-button-next:active {
+  transform: translateY(-50%) scale(0.95);
+  background: rgba(255, 255, 255, 0.42);
+}
+
+/* Hide arrows when disabled (first/last slide without loop) */
+.property-swiper .swiper-button-disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ─── Pagination dots: slim & refined ─── */
 .property-swiper .swiper-pagination-bullet {
-  background: var(--white-color);
-  opacity: 0.6;
+  width: 5px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.55);
+  opacity: 1;
+  transition: width 0.25s ease, background 0.25s ease;
+  border-radius: 3px;
 }
 
 .property-swiper .swiper-pagination-bullet-active {
-  opacity: 1;
-  background: var(--primary-color);
+  width: 18px;
+  background: #ffffff;
 }
 
 /* Details Section */

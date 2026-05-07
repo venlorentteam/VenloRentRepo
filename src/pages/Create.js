@@ -4,8 +4,8 @@ import { RiMessageLine } from 'react-icons/ri'
 import { FaRegBell } from 'react-icons/fa'
 function Create() {
   const nav = [
-    {path: "/post-a-request", label: "Post a request"},
-    {path: "/create-list", label: "Add a listing"}
+    {path: "/create-list", label: "Add a listing"},
+    {path: "/post-a-request", label: "Post a request"}
   ]
   return (
     <PageSetup>

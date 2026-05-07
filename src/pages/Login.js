@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from "../context/AuthProvider"
 import leftImg from '../assets/img/Venlo-welcome.png'
 import { PrelimFooter, PrelimHeader, SubmitButton } from '../exports'
@@ -9,8 +8,10 @@ import { FaRegEyeSlash, FaRegEye } from 'react-icons/fa'
 import './login.css'
 
 function Login() {
-    const { login, user, isLoading } = useAuth();
-    const navigate = useNavigate();
+    const { login, user, isLoading } = useAuth()
+    const navigate = useNavigate()
+    const location = useLocation()
+    const from = location.state?.from?.pathname || "/dashboard"
     const [showPass, setShowPass] = useState(false)
     const [errors, setErrors] = useState({})
     const [Loading, setLoading] = useState(false)
@@ -22,9 +23,9 @@ function Login() {
     //Auto redirect logged in users to dashboard
     useEffect(() => {
         if (!isLoading && user) {
-            navigate("/dashboard")
+            navigate(from, { replace: true })
         }
-    }, [user, isLoading, navigate])
+    }, [user, isLoading, navigate, from])
 
     //Password visibility toggle handler
     const showPassword = () => {
@@ -64,7 +65,7 @@ function Login() {
             setLoading(true)
             try {
                 await login(formData.email, formData.password);
-                navigate("/dashboard");
+                navigate(from, { replace: true })
             } catch (err) {
                 const data = err.response?.data
 

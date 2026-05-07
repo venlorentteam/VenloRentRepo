@@ -173,10 +173,12 @@
   line-height: 1.5;
 }
 
-.os-actions {
-  margin-top: var(--spacing-md);
+/* .os-actions {
+  padding: var(--spacing-md);
 }
-
+.os-actions .op-btn {
+  width: 100%;
+} */
 @media (max-width: 768px) {
   .os-hero {
     flex-direction: column;
