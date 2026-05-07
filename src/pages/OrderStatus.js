@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
-import { MdContentCopy, MdOutlineBedroomParent } from 'react-icons/md'
+import { MdContentCopy, MdOutlineBedroomParent, MdOutlineAccountBalance } from 'react-icons/md'
 import { GrLocation } from 'react-icons/gr'
 import { LuBuilding2 } from 'react-icons/lu'
 import { RiCustomerServiceLine } from 'react-icons/ri'
@@ -310,7 +310,9 @@ const OrderStatus = () => {
   const handleSellerConfirmPayment = () => {
     updateOrder({ paymentStatus: 'paid', status: 'completed' }, 'Payment confirmed and order completed.')
   }
-
+  const onPaymentDetailsClick = () => {
+    navigate("/account/payment-details")
+  }
   const handleSellerReject = () => {
     const nextStatus = normalizeStatus(orderData?.status) === 'accepted' ? 'cancelled' : 'rejected'
     updateOrder(
@@ -562,8 +564,28 @@ const OrderStatus = () => {
           })}
         </div>
       </div>
+      {(isSeller && (!user?.payoutDetails?.bankName || user?.payoutDetails?.bankName === "")) && 
+        <div className="cl-gate cl-gate--payout">
+          <div className="cl-gate__icon-wrap">
+            <MdOutlineAccountBalance className="cl-gate__icon" />
+          </div>
 
-      <div className="op-card op-card-meta">
+          <div className="cl-gate__body">
+            <p className="cl-gate__title">Payment Details Needed</p>
+            <p className="cl-gate__sub">
+              Your payout details are incomplete. Add them to be able to receive payment.
+            </p>
+          </div>
+
+          <button
+            className="cl-gate__cta"
+            onClick={onPaymentDetailsClick}
+          >
+            Update Payment Details
+          </button>
+        </div>
+      }
+      <div className="op-card">
         {/* <div className="op-meta-agent-row">
           <button className="op-contact-agent-btn" onClick={handleContactAgent}>
             <RiCustomerServiceLine aria-hidden="true" />
@@ -587,9 +609,9 @@ const OrderStatus = () => {
             <button className="op-btn op-btn-cancel" onClick={handleSellerReject} disabled={!canSellerReject || isActionBusy}>
               {normalizeStatus(orderData?.status) === 'accepted' ? 'Cancel Order' : 'Reject Order'}
             </button>
-            <button className="op-btn op-btn-pay" onClick={handleSellerApprove} disabled={!canSellerApprove || isActionBusy}>
+            {/* <button className="op-btn op-btn-pay" onClick={handleSellerApprove} disabled={!canSellerApprove || isActionBusy}>
               Approve Order
-            </button>
+            </button> */}
             <button className="op-btn op-btn-pay" onClick={handleSellerConfirmPayment} disabled={!canSellerConfirmPayment || isActionBusy}>
               Confirm Payment
             </button>
@@ -601,7 +623,7 @@ const OrderStatus = () => {
             Review Listing
           </button>
           <button className="op-btn op-btn-pay" onClick={handleContactAgent} disabled={!counterpartyId}>
-            Message {isSeller ? 'Buyer' : 'Agent'}
+            {counterpartyLabel}
           </button>
         </div>
       </div>

@@ -174,9 +174,11 @@
 }
 
 /* .os-actions {
-  margin-top: var(--spacing-md);
+  padding: var(--spacing-md);
+}
+.os-actions .op-btn {
+  width: 100%;
 } */
-
 @media (max-width: 768px) {
   .os-hero {
     flex-direction: column;

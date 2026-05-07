@@ -168,17 +168,13 @@ const OrderPreview = () => {
       <div className="main-content">
         <div className="content">
           <div className="order-preview">
-            {error && (
-              <div className="submit-error">{error}</div>
-            )}
-
             <div className="op-card op-card-timer">
               <div className="op-timer-top">
                 <span className="op-timer-label">72-hour reservation window</span>
               </div>
               <ul className="op-timer-notes">
-                <li>The live countdown starts on the Order Status page after submission.</li>
-                <li>You can still contact the agent before placing the order.</li>
+                <li>The live countdown starts once the order is placed.</li>
+                <li>You are advised to contact the agent before placing an order.</li>
                 <li>Orders that are not completed within {PAYMENT_WINDOW_HOURS} hours are auto-cancelled.</li>
               </ul>
             </div>
@@ -286,7 +282,9 @@ const OrderPreview = () => {
                 <span className="op-meta-value">{activeListing?.title || 'Listing'}</span>
               </div>
             </div>
-
+            {error && (
+              <div className="submit-error">{error}</div>
+            )}
             <div className="op-card">
               <div className="op-actions">
                 <button

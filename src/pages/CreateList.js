@@ -13,8 +13,6 @@ import { IoImageOutline } from "react-icons/io5"
 import { IoCloudUploadOutline, IoCloseCircle } from "react-icons/io5"
 import { GrLocation } from "react-icons/gr"
 import { MdOutlineVerified, MdOutlineAccountBalance } from "react-icons/md"
-// import { MdOutlineBedroomParent } from "react-icons/md"
-// import { LuBuilding2 } from "react-icons/lu"
 import { TbRulerMeasure, TbHomeCheck } from "react-icons/tb"
 
 // CONSTANTS
