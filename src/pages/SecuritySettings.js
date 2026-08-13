@@ -4,6 +4,7 @@ import { ClickButton } from '../exports'
 import axios from 'axios'
 import { useAuth } from '../context/AuthProvider'
 import { FiEye, FiEyeOff, FiShield } from 'react-icons/fi'
+import { API_BASE } from '../config/api'
 
 const SecuritySettings = () => {
   const { logout } = useAuth()
@@ -67,7 +68,7 @@ const SecuritySettings = () => {
         pass1:    passwords.newPassword,
         pass2:    passwords.confirmPassword,
       }
-      const res = await axios.post("https://newprojectbackend-5axx.onrender.com/change-password", payload)
+      const res = await axios.post(`${API_BASE}/change-password`, payload)
       if (res.data.success){
         // Clear form and logout user
         setPasswords({ currentPassword: '', newPassword: '', confirmPassword: '' })

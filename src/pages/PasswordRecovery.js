@@ -4,6 +4,7 @@ import './passwordRecovery.css'
 import axios from 'axios'
 import { PrelimFooter, PrelimHeader, SubmitButton } from '../exports'
 import { MdOutlineMailOutline, MdOutlineMarkEmailRead } from 'react-icons/md'
+import { API_BASE } from '../config/api'
 
 function PasswordRecovery () {
     const [errors, setErrors] = useState({})
@@ -37,7 +38,7 @@ function PasswordRecovery () {
         if (Object.keys(formErrors).length === 0) {
             setIsLoading(true)
             try {
-                const res = await axios.post("https://newprojectbackend-5axx.onrender.com/auth/password-recovery", formData)
+                const res = await axios.post(`${API_BASE}/auth/password-recovery`, formData)
                 if (res.data.success) {
                    setSubmitted(true)
                 }

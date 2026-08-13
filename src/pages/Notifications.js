@@ -7,6 +7,7 @@ import { RiVerifiedBadgeFill } from 'react-icons/ri'
 import { BsHeartFill, BsChat, BsBookmark } from 'react-icons/bs'
 import { timeAgo } from '../components/Time'
 import defaultAvatar from '../assets/img/avatar.png'
+import { API_BASE } from '../config/api' 
 import './Notifications.css'
 import '../assets/css/global.css'
 
@@ -40,7 +41,7 @@ function Notifications() {
       const token = localStorage.getItem("token")
       if (!token) { setIsLoading(false); return }
       try {
-        const res = await axios.get("https://newprojectbackend-5axx.onrender.com/notifications", {
+        const res = await axios.get(`${API_BASE}/notifications`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         setNotifications(res.data.items || [])
@@ -62,7 +63,7 @@ function Notifications() {
     try {
       const token = localStorage.getItem("token")
       await axios.patch(
-        `https://newprojectbackend-5axx.onrender.com/notifications/${id}/read`,
+        `${API_BASE}/notifications/${id}/read`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       )
@@ -81,7 +82,7 @@ function Notifications() {
     try {
       const token = localStorage.getItem("token")
       await axios.patch(
-        "https://newprojectbackend-5axx.onrender.com/notifications/read-all",
+        `${API_BASE}/notifications/read-all`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       )
@@ -97,7 +98,7 @@ function Notifications() {
     try {
       const token = localStorage.getItem("token")
       await axios.delete(
-        `https://newprojectbackend-5axx.onrender.com/notifications/${id}`,
+        `${API_BASE}/notifications/${id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       )
     } catch (err) {

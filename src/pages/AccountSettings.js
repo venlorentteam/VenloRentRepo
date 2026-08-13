@@ -4,6 +4,7 @@ import axios from 'axios'
 import { ClickButton } from '../exports'
 import { FiCamera, FiSave } from 'react-icons/fi'
 import { useAuth } from "../context/AuthProvider"
+import { API_BASE } from '../config/api'
 
 const AccountSettings = () => {
   const { user, updateUser } = useAuth();
@@ -63,7 +64,7 @@ const AccountSettings = () => {
       if (emailValid) payload.email = email
       if (usernameValid) payload.username = username
       
-      const res = await axios.post("https://newprojectbackend-5axx.onrender.com/auth/check-user", payload)
+      const res = await axios.post(`${API_BASE}/auth/check-user`, payload)
       setErrors((prev) => ({
         ...prev,
         email: res.data.emailExists ? "Email already in use" : "",
@@ -137,7 +138,7 @@ const AccountSettings = () => {
           payload.append("avatar", avatarFile); // must match upload.single("avatar") on the backend
         }
 
-        const res = await axios.patch("https://newprojectbackend-5axx.onrender.com/edit-account", 
+        const res = await axios.patch(`${API_BASE}/edit-account`, 
           payload,
           {headers: {Authorization: `Bearer ${token}`}}
           //Allowing axios to set the correct type of ContentType/multipart

@@ -6,11 +6,14 @@ import { FiFilter } from 'react-icons/fi'
 import { RiMessageLine } from 'react-icons/ri'
 import { FaRegBell } from 'react-icons/fa'
 import { FiSearch } from "react-icons/fi";
+import { API_BASE } from '../config/api'
 import './Search.css'
 
-// === API BASE ==============================================================
-// Centralise the base URL so it only needs changing once when moving to prod.
-const API_BASE = "https://newprojectbackend-5axx.onrender.com"
+// Treat a request as expired when either backend status says so or the
+// expiry timestamp has already passed.
+const isRequestExpired = (item) =>
+  item.status === "expired" ||
+  (item.expiresAt && new Date(item.expiresAt) <= Date.now())
 
 // Debounce delay in ms — prevents firing a request on every keystroke
 const SEARCH_DEBOUNCE_MS = 400
@@ -112,7 +115,7 @@ const mapItemToCardProps = (item) => {
     budget: item.budget,
     location: [item.location?.town, item.location?.state].filter(Boolean).join(", "),
     responseCount: item.responseCount || 0,
-    expired: item.status === "expired",
+    expired: isRequestExpired(item),
     daysLeft: item.expiresAt
       ? Math.max(0, Math.ceil((new Date(item.expiresAt) - Date.now()) / 86_400_000))
       : null,
@@ -146,7 +149,8 @@ function Search() {
 
   // Debounce ref - holds the pending setTimeout id 
   const debounceRef = useRef(null)
-
+  const abortRef = useRef(null)
+  
   // Active filter count for the Filters button badge 
   const activeFilterCount = [
     filters.priceRange,
@@ -157,11 +161,14 @@ function Search() {
 
   // Core fetch function
   const fetchResults = useCallback(async (query, currentFilters, currentSort, currentType) => {
+    abortRef.current?.abort()
+    const controller = new AbortController()
+    abortRef.current = controller
+
     setIsLoading(true)
     setError(null)
 
     try {
-      // Build query params — only include params that have values
       const params = new URLSearchParams()
 
       if (query.trim()) params.set("q", query.trim())
@@ -171,27 +178,31 @@ function Search() {
       if (currentFilters.location)        params.set("location",     currentFilters.location)
       if (currentFilters.propertyType)    params.set("propertyType", currentFilters.propertyType)
       if (currentFilters.listingType)     params.set("listingType",  currentFilters.listingType)
-      if (currentFilters.priceRange?.min) params.set("minPrice",     currentFilters.priceRange.min)
+      if (currentFilters.priceRange?.min != null) params.set("minPrice", currentFilters.priceRange.min)
       if (currentFilters.priceRange?.max) params.set("maxPrice",     currentFilters.priceRange.max)
 
       const token = localStorage.getItem("token")
       const headers = token ? { Authorization: `Bearer ${token}` } : {}
 
-      const res = await axios.get(`${API_BASE}/search?${params.toString()}`, { headers })
+      const res = await axios.get(`${API_BASE}/search?${params.toString()}`, {
+        headers,
+        signal: controller.signal,
+      })
 
       if (res.data.success) {
-        // Map raw API items to the shape SearchDisplayCard expects
         setResults((res.data.items || []).map(mapItemToCardProps))
         setTotal(res.data.total || 0)
       }
     } catch (err) {
-      console.error("Search failed:", err)
+      if (axios.isCancel(err) || err.code === 'ERR_CANCELED') return
       setError("Something went wrong. Please try again.")
       setResults([])
       setTotal(0)
     } finally {
-      setIsLoading(false)
-      setHasSearched(true)
+      if (!controller.signal.aborted) {
+        setIsLoading(false)
+        setHasSearched(true)
+      }
     }
   }, [])
 

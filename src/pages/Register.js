@@ -8,6 +8,7 @@ import { PrelimFooter, PrelimHeader, SubmitButton } from '../exports'
 import { MdOutlineMailOutline, MdLockOutline, MdOutlineBusinessCenter } from 'react-icons/md'
 import { RiAccountPinBoxLine } from 'react-icons/ri'
 import { PiIdentificationBadge } from 'react-icons/pi'
+import { API_BASE } from '../config/api'
 
 function Register() {
   const navigate = useNavigate()
@@ -110,7 +111,7 @@ function Register() {
       if (emailValid) payload.email = email
       if (usernameValid) payload.username = username
 
-      const res = await axios.post("https://newprojectbackend-5axx.onrender.com/auth/check-user", payload)
+      const res = await axios.post(`${API_BASE}/auth/check-user`, payload)
       setErrors((prev) => ({
         ...prev,
         email: res.data.emailExists ? "Email already in use" : "",
@@ -155,7 +156,7 @@ function Register() {
           role: formData.agent ? "agent" : "regular",
         }
 
-        const res = await axios.post("https://newprojectbackend-5axx.onrender.com/auth/register", payload)
+        const res = await axios.post(`${API_BASE}/auth/register`, payload)
         if (res.data.success) {
           // Always go to email-auth first for OTP verification.
           // Pass role in state so email-auth can redirect correctly after verification:

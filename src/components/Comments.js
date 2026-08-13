@@ -6,6 +6,7 @@ import { IoMdHeartEmpty, IoMdHeart } from "react-icons/io"
 import { AgentBadge, PremiumBadge } from './Badges'
 import { timeAgo } from './Time'
 import defaultAvatar from "../assets/img/avatar.png"
+import { API_BASE } from '../config/api'
 import "./Comments.css"
 
 function Comments({
@@ -30,7 +31,7 @@ function Comments({
         const token = localStorage.getItem("token")
         const headers = token ? { Authorization: `Bearer ${token}` } : {}
         const res = await axios.get(
-          `https://newprojectbackend-5axx.onrender.com/properties/${propertyId}/comments`,
+          `${API_BASE}/properties/${propertyId}/comments`,
           { headers }
         )
         const fetched = res.data.items || []
@@ -70,7 +71,7 @@ function Comments({
 
     try {
       await axios.post(
-        `https://newprojectbackend-5axx.onrender.com/comments/${commentId}/like`,
+      `${API_BASE}/comments/${commentId}/like`,
         { liked: next },
         { headers: { Authorization: `Bearer ${token}` } }
       )
@@ -91,7 +92,7 @@ function Comments({
       const token = localStorage.getItem("token")
       if (!token) return
 
-      const res =  await axios.post(`https://newprojectbackend-5axx.onrender.com/properties/${propertyId}/comments`,
+      const res =  await axios.post(`${API_BASE}/properties/${propertyId}/comments`,
         { text: commentText },
         { headers: { Authorization: `Bearer ${token}` } }
       )

@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import axios from 'axios'
 import defaultAvatar from "../assets/img/avatar.png"
+import { API_BASE } from '../config/api'
 
 // Avatar single helper — normalize once, use everywhere
 const normalizeUser = (user) => ({
@@ -27,7 +28,7 @@ const AuthProvider = ({children}) => {
         //Verify token and fetch user profile
         const verifyUser = async () => {
             try {
-                const res = await axios.get("https://newprojectbackend-5axx.onrender.com/profile", {
+                const res = await axios.get(`${API_BASE}/profile`, {
                     headers: { Authorization: `Bearer ${token}` }
                 })
                 setUser(normalizeUser(res.data.user))
@@ -41,9 +42,25 @@ const AuthProvider = ({children}) => {
         verifyUser()
     }, [])
 
+    const refetchUser = useCallback( async () => {
+        const token = localStorage.getItem("token")
+        if (!token) return null
+
+        try {
+            const res = await axios.get(`${API_BASE}/profile`, {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+            const normalized = normalizeUser(res.data.user)
+            setUser(normalized)
+            return normalized.plan
+        } catch (err) {
+            return null
+        }
+    }, [])
+
     //Login Function
     const login = async (email, password) => {
-        const res = await axios.post("https://newprojectbackend-5axx.onrender.com/auth/login", {email, password})
+        const res = await axios.post(`${API_BASE}/auth/login`, {email, password})
         if (!res.data?.token || !res.data?.user) {
             throw new Error(res.data?.message || "Login failed")
         }
@@ -71,7 +88,7 @@ const AuthProvider = ({children}) => {
     }
     //Return Context Provider with user and auth functions
     return (
-        <AuthContext.Provider value={{ user, isLoading, login, updateUser, logout, setAuthFromToken }}>
+        <AuthContext.Provider value={{ user, isLoading, login, updateUser, logout, refetchUser, setAuthFromToken }}>
             {children}
         </AuthContext.Provider>
     )

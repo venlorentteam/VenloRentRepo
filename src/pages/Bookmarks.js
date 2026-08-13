@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import { SideNav, Header, IconNav, PageSetup, PropertyCard, RequestCard } from '../exports'
+import { Header, PageSetup, PropertyCard, RequestCard } from '../exports'
 import { RiMessageLine } from 'react-icons/ri'
 import { FaRegBell, FaBookmark } from 'react-icons/fa'
 import { timeAgo } from '../components/Time'
 import { useAuth } from "../context/AuthProvider"
 import defaultAvatar from "../assets/img/avatar.png"
+import { API_BASE } from '../config/api'
 import './Bookmarks.css'
+
+// Keep bookmarked request cards aligned with the same expiry rule used in the
+// feed views, so old requests do not appear active here either.
+const isRequestExpired = (item) =>
+  item.status === "expired" ||
+  (item.expiresAt && new Date(item.expiresAt) <= Date.now())
 
 function Bookmarks() {
   const [items, setItems]       = useState([])
@@ -25,7 +32,7 @@ function Bookmarks() {
       }
 
       try {
-        const res = await axios.get("https://newprojectbackend-5axx.onrender.com/bookmarks", {
+        const res = await axios.get(`${API_BASE}/bookmarks`, {
           headers: { Authorization: `Bearer ${token}` },
         })
 
@@ -109,7 +116,7 @@ function Bookmarks() {
                 agentResponses: [],
                 discussionItems: [],
                 bookmarked: true,
-                expired: target.status === "expired",
+                expired: isRequestExpired(target),
                 daysLeft: target.expiresAt
                   ? Math.max(0, Math.ceil((new Date(target.expiresAt) - Date.now()) / 86_400_000))
                   : null,
@@ -136,7 +143,6 @@ function Bookmarks() {
 
   return (
     <PageSetup>
-      <SideNav />
       <Header
         pageTitle={<h2>Bookmarks</h2>}
         icons={[

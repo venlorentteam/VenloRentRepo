@@ -2,8 +2,9 @@ import React, { useState, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 import axios from 'axios'
 import { useAuth } from '../context/AuthProvider'
+import { API_BASE } from '../config/api'
 import "./CreateRequest.css" // Reuse shared stylesheet
-import "./CreateList.css"    // NEW: CreateList-specific styles (see CreateList.css)
+import "./CreateList.css"   
 
 // Icon imports (existing pattern) 
 import { FaRegEdit } from "react-icons/fa"
@@ -13,7 +14,7 @@ import { IoImageOutline } from "react-icons/io5"
 import { IoCloudUploadOutline, IoCloseCircle } from "react-icons/io5"
 import { GrLocation } from "react-icons/gr"
 import { MdOutlineVerified, MdOutlineAccountBalance } from "react-icons/md"
-import { TbRulerMeasure, TbHomeCheck } from "react-icons/tb"
+import { TbHomeCheck } from "react-icons/tb"
 
 // CONSTANTS
 const CATEGORY_OPTIONS = [
@@ -111,6 +112,7 @@ function CreateList() {
     (field) => payoutDetails?.[field]?.toString().trim()
   )
   const shouldShowPayoutNotice = isVerified && !hasCompletePayoutDetails
+  const isSubmitDisabled = submitting || !isVerified || shouldShowPayoutNotice
   // Navigate to KYC
   const navigate = useNavigate()
   const onVerifyClick = () => {
@@ -231,10 +233,7 @@ function CreateList() {
 
     try {
       // === Build multipart FormData for BE =================
-      // The BE expects:
-      //   - Text fields as regular FormData fields
-      //   - Media files under the key "media" (multiple)
-      //   - features as a JSON string (array)
+
       const token = localStorage.getItem("token")
       const payload = new FormData()
 
@@ -253,7 +252,7 @@ function CreateList() {
       // Append each media file under the same key so BE receives an array
       form.mediaFiles.forEach((file) => payload.append("media", file))
  
-      await axios.post("https://newprojectbackend-5axx.onrender.com/create-listing", payload, {headers: { Authorization: `Bearer ${token}` }})
+      await axios.post(`${API_BASE}/create-listing`, payload, {headers: { Authorization: `Bearer ${token}` }})
 
       // Success
       setSubmitStatus("success")
@@ -286,19 +285,19 @@ function CreateList() {
       {!isVerified && (
         <div className="cl-gate">
           {/* Lock icon + headline */}
-          <div className="cl-gate__icon-wrap">
-            <MdOutlineVerified className="cl-gate__icon" />
+          <div className="cl-gate-icon-wrap">
+            <MdOutlineVerified className="cl-gate-icon" />
           </div>
 
-          <div className="cl-gate__body">
-            <p className="cl-gate__title">Verified Agents Only</p>
-            <p className="cl-gate__sub">
+          <div className="cl-gate-body">
+            <p className="cl-gate-title">Verified Agents Only</p>
+            <p className="cl-gate-sub">
               Complete KYC verification to publish property listings on VenloRent
             </p>
           </div>
 
           <button
-            className="cl-gate__cta"
+            className="cl-gate-cta"
             onClick={onVerifyClick}
           >
             Complete Verification
@@ -308,19 +307,19 @@ function CreateList() {
 
       {shouldShowPayoutNotice && (
         <div className="cl-gate cl-gate--payout">
-          <div className="cl-gate__icon-wrap">
-            <MdOutlineAccountBalance className="cl-gate__icon" />
+          <div className="cl-gate-icon-wrap">
+            <MdOutlineAccountBalance className="cl-gate-icon" />
           </div>
 
-          <div className="cl-gate__body">
-            <p className="cl-gate__title">Payment Details Needed</p>
-            <p className="cl-gate__sub">
+          <div className="cl-gate-body">
+            <p className="cl-gate-title">Payment Details Needed</p>
+            <p className="cl-gate-sub">
               Your account is verified, but your payout details are incomplete. Add them to keep your listings payout-ready.
             </p>
           </div>
 
           <button
-            className="cl-gate__cta"
+            className="cl-gate-cta"
             onClick={onPaymentDetailsClick}
           >
             Update Payment Details
@@ -790,18 +789,18 @@ function CreateList() {
           <button
             className="btn btn-secondary"
             onClick={() => handleSubmit(true)}
-            disabled={submitting || !isVerified}
+            disabled={isSubmitDisabled}
           >
             {submitting ? "Saving…" : "Save draft"}
           </button>
 
           {/* Publish: full validation before sending */}
           <button
-            className="btn btn-primary"
+            className={`btn btn-primary ${isSubmitDisabled ? "cl-disabled-btn" : ""}`}
             onClick={() => handleSubmit(false)}
-            disabled={submitting || !isVerified}
+            disabled={isSubmitDisabled}
           >
-            {submitting ? "Publishing…" : "Publish Listing"}
+            {submitting ? "Publishing…" : shouldShowPayoutNotice ? "Complete payout details" : "Publish Listing"}
           </button>
         </div>
 

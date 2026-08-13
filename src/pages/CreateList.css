@@ -2,7 +2,6 @@
    CreateList.css
    Component-specific styles for CreateList.
    Extends / layers on top of CreateRequest.css
-   and the global VenloRent design system.
    ======================================== */
 
 /* ROOT WRAPPER */
@@ -28,7 +27,7 @@
   animation: slideUp var(--transition-base);
 }
 
-.cl-gate__icon-wrap {
+.cl-gate-icon-wrap {
   flex-shrink: 0;
   width: 36px;
   height: 36px;
@@ -39,30 +38,30 @@
   justify-content: center;
 }
 
-.cl-gate__icon {
+.cl-gate-icon {
   font-size: 1.1rem;
   color: var(--warning-color);
 }
 
-.cl-gate__body {
+.cl-gate-body {
   flex: 1;
   min-width: 180px;
 }
 
-.cl-gate__title {
+.cl-gate-title {
   font-size: var(--font-sm);
   font-weight: 700;
   color: #92400e;
   margin-bottom: 2px;
 }
 
-.cl-gate__sub {
+.cl-gate-sub {
   font-size: var(--font-xs);
   color: #a16207;
   line-height: 1.5;
 }
 
-.cl-gate__cta {
+.cl-gate-cta {
   flex-shrink: 0;
   background: var(--warning-color);
   color: #fff;
@@ -76,7 +75,7 @@
   transition: all var(--transition-fast);
 }
 
-.cl-gate__cta:hover {
+.cl-gate-cta:hover {
   background: #d97706;
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
@@ -87,27 +86,27 @@
   border-color: rgba(16, 185, 129, 0.22);
 }
 
-.cl-gate--payout .cl-gate__icon-wrap {
+.cl-gate--payout .cl-gate-icon-wrap {
   background: rgba(16, 185, 129, 0.15);
 }
 
-.cl-gate--payout .cl-gate__icon {
+.cl-gate--payout .cl-gate-icon {
   color: var(--primary-color);
 }
 
-.cl-gate--payout .cl-gate__title {
+.cl-gate--payout .cl-gate-title {
   color: #065f46;
 }
 
-.cl-gate--payout .cl-gate__sub {
+.cl-gate--payout .cl-gate-sub {
   color: #047857;
 }
 
-.cl-gate--payout .cl-gate__cta {
+.cl-gate--payout .cl-gate-cta {
   background: var(--primary-color);
 }
 
-.cl-gate--payout .cl-gate__cta:hover {
+.cl-gate--payout .cl-gate-cta:hover {
   background: #059669;
 }
 
@@ -228,11 +227,7 @@
   transition: background var(--transition-fast);
   padding: 0;
 }
-.cl-agency-commission{
-  font-size: 0.5em;
-  color: var(--text-secondary);
-  margin: 0 auto
-}
+
 .cl-media-thumb-remove:hover {
   background: var(--danger-color);
 }
@@ -268,7 +263,23 @@
 .cl-upload-btn {
   margin-top: var(--spacing-md) !important;
 }
+.cl-publish-btn:disabled,
+.cl-publish-btn.cl-disabled-btn {
+  background: var(--bg-secondary) !important;
+  color: var(--text-tertiary) !important;
+  cursor: not-allowed !important;
+  pointer-events: none;
+  box-shadow: none !important;
+  transform: none !important;
+}
 
+.cl-publish-btn:disabled:hover,
+.cl-publish-btn.cl-disabled-btn:hover {
+  background: var(--bg-secondary) !important;
+  color: var(--text-tertiary) !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
 /* Cover photo note */
 .cl-cover-note {
   font-size: var(--font-xs) !important;
@@ -332,16 +343,6 @@
   padding-left: calc(var(--spacing-md) + 1.1rem) !important;
 }
 
-/* SUBMIT TOAST */
-/* Inline success / error feedback below the form */
-.cl-submit-toast {
-  padding: var(--spacing-md) var(--spacing-lg);
-  border-radius: var(--radius-lg);
-  font-size: var(--font-sm);
-  font-weight: 500;
-  animation: slideUp var(--transition-base);
-}
-
 /* ACTION ROW */
 .cl-actions {
   display: flex;
@@ -358,15 +359,15 @@
     border-color: rgba(245, 159, 11, 0.2);
   }
 
-  .cl-gate__title {
+  .cl-gate-title {
     color: #fbbf24;
   }
 
-  .cl-gate__sub {
+  .cl-gate-sub {
     color: #d97706;
   }
 
-  .cl-gate__cta:hover {
+  .cl-gate-cta:hover {
     background: #b45309;
   }
 
@@ -383,7 +384,7 @@
     gap: var(--spacing-sm);
   }
 
-  .cl-gate__cta {
+  .cl-gate-cta {
     width: 100%;
     text-align: center;
   }
@@ -404,12 +405,7 @@
 
 /* ACCESSIBILITY  */
 @media (prefers-reduced-motion: reduce) {
-  .cl-gate,
-  .cl-submit-toast {
-    animation: none;
-  }
-
-  .cl-gate__cta:hover {
+  .cl-gate-cta:hover {
     transform: none;
   }
 }

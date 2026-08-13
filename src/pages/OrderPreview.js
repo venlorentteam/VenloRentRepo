@@ -6,6 +6,7 @@ import { GrLocation } from 'react-icons/gr'
 import { MdOutlineBedroomParent } from 'react-icons/md'
 import { LuBuilding2 } from 'react-icons/lu'
 import { RiCustomerServiceLine } from 'react-icons/ri'
+import { API_BASE } from '../config/api' 
 import './OrderPreview.css'
 
 const PAYMENT_WINDOW_HOURS = 72
@@ -33,7 +34,7 @@ const OrderPreview = () => {
       setMissingError('')
 
       try {
-        const res = await axios.get(`https://newprojectbackend-5axx.onrender.com/properties/${propertyId}`)
+        const res = await axios.get(`${API_BASE}/properties/${propertyId}`)
         const p = res.data?.property
 
         if (!p) {
@@ -101,14 +102,12 @@ const OrderPreview = () => {
     setError('')
 
     try {
-      console.log('Placing order for property:', propertyId)
       const res = await axios.post(
-        'https://newprojectbackend-5axx.onrender.com/orders',
+        `${API_BASE}/orders`,
         { propertyId },
         { headers: { Authorization: `Bearer ${token}` } }
       )
 
-      console.log('Order create response:', res.data)
       const createdOrder = res.data?.order
       if (!createdOrder?._id) {
         setError('Order was created, but the order id was missing.')
@@ -120,7 +119,6 @@ const OrderPreview = () => {
         state: { rawOrder: createdOrder },
       })
     } catch (err) {
-      console.error('Order creation failed:', err)
       setError(err?.response?.data?.message || err.message || 'Failed to place order')
     } finally {
       setIsPlacing(false)
@@ -183,7 +181,7 @@ const OrderPreview = () => {
               {activeListing?.images?.[0] ? (
                 <img
                   src={activeListing.images[0]}
-                  alt={activeListing.title}
+                  alt={activeListing.title || 'Property Image'}
                   className="op-snapshot-image"
                 />
               ) : (

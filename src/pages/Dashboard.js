@@ -4,12 +4,19 @@ import { Header, ClickButton, PageSetup, PropertyCard, RequestCard, UpgradeWidge
 } from '../exports'
 import axios from 'axios'
 import { useAuth } from "../context/AuthProvider"
+import { API_BASE } from "../config/api"
 import { RiMessageLine, RiAddCircleLine } from 'react-icons/ri'
 import { FaRegBell } from 'react-icons/fa'
 import { timeAgo } from "../components/Time"
 import defaultAvatar from "../assets/img/avatar.png"
 import '../assets/css/global.css'
 import './Dashboard.css'
+
+// Treat a request as expired when either the backend says so or the
+// expiry timestamp has already passed.
+const isRequestExpired = (item) =>
+  item.status === "expired" ||
+  (item.expiresAt && new Date(item.expiresAt) <= Date.now())
 
 // ========================================================
 //  MAIN DASHBOARD COMPONENT
@@ -38,7 +45,7 @@ function Dashboard() {
           return
         }
         // Fetch user's orders
-        const res = await axios.get("https://newprojectbackend-5axx.onrender.com/orders", {
+        const res = await axios.get(`${API_BASE}/orders`, {
           headers: { Authorization: `Bearer ${token}` }
         })
         const orders = res.data.items || []
@@ -69,8 +76,8 @@ function Dashboard() {
         const token = localStorage.getItem("token")
         const headers = token ? { Authorization: `Bearer ${token}` } : {}
 
-        const listingRes = await axios.get("https://newprojectbackend-5axx.onrender.com/properties?status=available", { headers })
-        const requestRes = await axios.get("https://newprojectbackend-5axx.onrender.com/requests", { headers })
+        const listingRes = await axios.get(`${API_BASE}/properties?status=available`, { headers })
+        const requestRes = await axios.get(`${API_BASE}/requests`, { headers })
         
         const listings = (listingRes.data.items || []).map((p) => ({
           type: "listing",
@@ -124,13 +131,12 @@ function Dashboard() {
           likedByMe: r.likedByMe || false,
           responseCount: String(r.responseCount || 0),
           discussionCount: String(r.discussionCount || 0),
-          // agentResponses and discussionItems are loaded lazily inside
-          // RequestResponsesModal when the user taps "See Responses" —
+          // agentResponses and discussionItems are loaded lazily inside RequestResponsesModal when the user taps "See Responses"
           // they don't need to be in the feed payload
           agentResponses:  [],
           discussionItems: [],
           bookmarked: r.bookmarkedByMe || false,
-          expired: r.status === "expired",
+          expired: isRequestExpired(r),
           daysLeft: r.expiresAt ? Math.max(0, Math.ceil((new Date(r.expiresAt) - Date.now()) / 86_400_000)) : null,
         }))
 

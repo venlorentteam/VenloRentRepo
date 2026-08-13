@@ -90,13 +90,13 @@
 }
 
 /* Horizontal Rule */
-hr {
+/* hr {
   border: none;
   width: 100%;
   height: 1px;
   margin: var(--spacing-md) auto;
   background: var(--border-color);
-}
+} */
 
 /* Features Container */
 .post-features-container {

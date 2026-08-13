@@ -29,21 +29,17 @@
 .landing-nav-logo {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: var(--primary-color);
-  text-decoration: none;
-  letter-spacing: -0.02em;
-  flex-shrink: 0;
+  width: 100%;
+  max-width: 150px;
+  /* height: 40px; */
 }
-.landing-logo-dot {
+/* .landing-logo-dot {
   width: 10px;
   height: 10px;
   border-radius: 50%;
   background: var(--primary-color);
   flex-shrink: 0;
-}
+} */
 .landing-nav-links {
   display: flex;
   gap: 0.25rem;

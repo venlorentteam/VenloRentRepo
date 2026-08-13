@@ -5,6 +5,7 @@ import axios from 'axios'
 import { PrelimFooter, PrelimHeader, SubmitButton, Loader } from '../exports'
 import { MdLockOutline } from 'react-icons/md'
 import { FaRegEyeSlash, FaRegEye} from 'react-icons/fa'
+import { API_BASE } from '../config/api'
 
 function PasswordReset () {
     const [showPass1, setShowPass1] = useState(false)
@@ -33,7 +34,7 @@ useEffect(() => {
 
         try {
             setIsCheckingToken(true)
-            const res = await axios.get(`https://newprojectbackend-5axx.onrender.com/auth/reset-password/${token}`)
+            const res = await axios.get(`${API_BASE}/auth/reset-password/${token}`)
             if (res.data?.valid) {
                 setIsTokenValid(true)
                 setErrors({})
@@ -71,7 +72,7 @@ const handleSubmit = async (e) => {
     if(Object.keys(formErrors).length === 0){
         setIsLoading(true)
         try{
-            const res = await axios.post("https://newprojectbackend-5axx.onrender.com/auth/password-reset", {
+            const res = await axios.post(`${API_BASE}/auth/password-reset`, {
                 token,
                 password: formData.pass1,
                 confirmPassword: formData.pass2,

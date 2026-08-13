@@ -1,19 +1,17 @@
 // ========================================
 // Settings/SubscriptionSettings.js
 // ========================================
-
-import { ClickButton, UpgradeWidget } from '../exports'
+import React, { useEffect, useState} from 'react'
+import { ClickButton } from '../exports'
 import { FiCheck } from 'react-icons/fi'
 import { useAuth } from '../context/AuthProvider'
+import axios from 'axios'
+import { API_BASE } from '../config/api'
 
-const SubscriptionSettings = () => {
-const { user } = useAuth()
-  const currentPlan = user.plan.charAt(0).toUpperCase() + user.plan.slice(1) // Free, Pro, Premium
-
-  const plans = [
+const plans = [
     {
       name: 'Free',
-      price: '0$',
+      price: '₦0',
       period: 'forever',
       features: [
         'Browse all listings',
@@ -24,7 +22,7 @@ const { user } = useAuth()
     },
     {
       name: 'Pro',
-      price: '$50',
+      price: '₦2,000',
       period: 'per month',
       features: [
         'All Free features',
@@ -37,7 +35,7 @@ const { user } = useAuth()
     },
     {
       name: 'Premium',
-      price: '$150',
+      price: '₦5,000',
       period: 'per month',
       features: [
         'All Pro features',
@@ -50,8 +48,55 @@ const { user } = useAuth()
     }
   ]
 
-  const handleUpgrade = (planName) => {
-    alert(`Upgrade to ${planName} - Payment integration coming soon!`)
+// Main Component
+const SubscriptionSettings = () => {
+
+  const { user, refetchUser } = useAuth()
+  const currentPlan = user.plan.charAt(0).toUpperCase() + user.plan.slice(1) // Free, Pro, Premium
+
+  const [error, setError] = useState('')
+  const [confirmStatus, setConfirmStatus] = useState(null) // null | 'confirming' | 'success' | 'timeout' | 'cancelled'
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const status = params.get('status')
+
+    if (status === 'cancelled') {
+      setConfirmStatus('cancelled')
+      return
+    }
+    if (status !== 'success') return
+
+    setConfirmStatus('confirming')
+    let attempts = 0
+    const interval = setInterval(async () => {
+        attempts += 1
+        const updatedPlan = await refetchUser()
+
+        if (updatedPlan && updatedPlan !== 'free') {
+            clearInterval(interval)
+            setConfirmStatus('success')
+        } else if (attempts >= 8) {
+            clearInterval(interval)
+            setConfirmStatus('timeout')
+        }
+    }, 2500)
+
+    return () => clearInterval(interval)
+  }, [refetchUser])
+
+  const handleUpgrade = async (planName) => {
+    try {
+      const token = localStorage.getItem('token')
+      const res = await axios.post(
+        `${API_BASE}/billing/checkout-session`,
+        { plan: planName.toLowerCase() },
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      window.location.href = res.data.checkoutUrl
+    } catch (err) {
+      setError(err?.response?.data?.message || err?.message || 'Failed to start upgrade')
+    }
   }
 
   return (
@@ -60,6 +105,21 @@ const { user } = useAuth()
         <h2>Subscription</h2>
         <p className="settings-subtitle">Manage your plan and billing</p>
       </div>
+      {confirmStatus === 'confirming' && (
+        <div className="submit-success">Confirming your upgrade — this can take a few seconds...</div>
+      )}
+      {confirmStatus === 'success' && (
+        <div className="submit-success">Your upgrade is confirmed. Welcome to {currentPlan}!</div>
+      )}
+      {confirmStatus === 'timeout' && (
+        <div className="submit-error">
+          Payment may still be processing. If your plan doesn't update in a few minutes, contact support with your order details.
+        </div>
+      )}
+      {confirmStatus === 'cancelled' && (
+        <div className="submit-error">Checkout was cancelled, you haven't been charged.</div>
+      )}
+      {error && <div className="submit-error">{error}</div>}
 
       <div className="current-plan-banner">
         <div>
@@ -91,6 +151,7 @@ const { user } = useAuth()
                 onClick={() => handleUpgrade(plan.name)}
                 variant={plan.popular ? 'primary' : 'outline'}
                 size="large"
+                disabled={confirmStatus === 'confirming'}
               />
             )}
             {currentPlan === plan.name && (

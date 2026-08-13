@@ -309,7 +309,7 @@ function AboutPage() {
               icon: <MdOutlinePayments />,
               problem: 'Payment Opacity',
               before: 'Hidden agency fees materialise at the last minute. You never know the true cost.',
-              after: 'Rent, commission, and the 2% platform fee are broken down before you confirm a single payment.',
+              after: 'Rent and commission are broken down before you place an order.',
             },
             {
               icon: <TbHomeSearch />,
@@ -321,13 +321,13 @@ function AboutPage() {
               icon: <BsPersonCheck />,
               problem: 'Wasted Viewings',
               before: 'You waste weekends viewing properties that don\'t match what was described.',
-              after: 'Detailed listings with 3–10 photos, full specs, and a 3-day reservation to inspect before you pay.',
+              after: 'Detailed listings with 1–5 photos/videos, full specs, and a 3-day reservation to inspect before you pay.',
             },
             {
               icon: <TbBuildingEstate />,
               problem: 'One-Sided Market',
               before: 'Agents push listings. Seekers have no structured way to signal what they need.',
-              after: 'Property Requests let seekers post exactly what they\'re looking for — verified agents come to them.',
+              after: 'Property Requests let seekers post exactly what they\'re looking for, verified agents can then come to them.',
             },
           ].map(({ icon, problem, before, after }) => (
             <div className="problem-card card" key={problem}>

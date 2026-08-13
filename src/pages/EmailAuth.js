@@ -5,6 +5,7 @@ import axios from 'axios'
 import { PrelimFooter, PrelimHeader, OtpInput } from '../exports'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from "../context/AuthProvider"
+import { API_BASE } from '../config/api'
 
 // Cooldown duration in seconds — matches your OTP expiry window
 const resendCoolDown = 60
@@ -21,7 +22,7 @@ function EmailAuth(){
   const navigate = useNavigate()
   
   useEffect(() => {
-    if (countdown <= 0) return
+    // if (countdown <= 0) return
 
     const timer = setInterval(() => {
       setCountdown(prev => {
@@ -40,13 +41,13 @@ function EmailAuth(){
     if (!state?.email) {
       navigate("/login", { replace: true })
     }
-  }, [])
+  }, [navigate, state?.email])
 
   const handleSubmit = async (e, otp) => {
     e.preventDefault()
     
     try{
-      const res = await axios.post("https://newprojectbackend-5axx.onrender.com/auth/email-verify", {email: state?.email, otp})
+      const res = await axios.post(`${API_BASE}/auth/email-verify`, {email: state?.email, otp})
       if(res.data.success){//validation successful
         setAuthFromToken(res.data.token, res.data.user) // Save token and update user state in context
         const nextPath = state?.role === "agent" ? "/kyc" : "/dashboard"
@@ -67,7 +68,7 @@ function EmailAuth(){
     setErrors('')
 
     try {
-      await axios.post('https://newprojectbackend-5axx.onrender.com/auth/resend-otp', {
+      await axios.post(`${API_BASE}/auth/resend-otp`, {
         email: state.email,
       })
 

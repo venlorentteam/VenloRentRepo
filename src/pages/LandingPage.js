@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import './LandingPage.css'
 import { CtaBanner, StatCounter, PrelimFooter, LandingPageHeader } from '../exports'
 import { useAuth } from "../context/AuthProvider"
+
+import coupleImage from '../assets/img/VenloRent-Couple-Hugging.png'
+import coupleImage2 from '../assets/img/VenloRent-Selfie-1.png'
 
 // Icons (react-icons)
 import { RiVerifiedBadgeFill } from 'react-icons/ri'
@@ -33,6 +36,7 @@ function AuthGateModal({ onClose, user }) {
             <path d="M77 90L79 92L83 88" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </div>
+
 
         <h2 className="authgate-title">Sign in to continue</h2>
         <p className="authgate-text">
@@ -126,8 +130,8 @@ function LandingPage() {
     {
       id: 2,
       image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&q=80',
-      category: 'For Sale',
-      price: '85,000,000',
+      category: 'For Rent',
+      price: '850,000',
       title: 'Modern 4-Bedroom Duplex',
       location: 'Lekki Phase 1, Lagos',
       beds: 4, baths: 3, type: 'Duplex',
@@ -173,7 +177,7 @@ function LandingPage() {
     },
     {
       id: 6,
-      image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80',
+      image: 'https://images.unsplash.com/photo-1628144688607-c373d8e3f31b?w=600&q=80',
       category: 'For Rent',
       price: '900,000',
       title: 'Spacious Mini Flat',
@@ -244,6 +248,7 @@ function LandingPage() {
           <div className="hero-house-card hero-card-main">
             <img
               src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=700&q=80"
+              // src={heroImage1}
               alt="Featured property"
               className="hero-house-img"
             />
@@ -255,6 +260,7 @@ function LandingPage() {
           <div className="hero-house-card hero-card-side">
             <img
               src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=400&q=80"
+              //src={heroImage2}
               alt="Property"
               className="hero-house-img"
             />
@@ -296,7 +302,7 @@ function LandingPage() {
         <div className="section-header">
           <span className="section-eyebrow">Simple Process</span>
           <h2 className="section-title">How VenloRent Works</h2>
-          <p className="section-sub">From search to keys — all on one platform</p>
+          <p className="section-sub">From search to keys, all on one platform</p>
         </div>
 
         <div className="how-steps">
@@ -333,6 +339,80 @@ function LandingPage() {
               <p className="how-step-desc">{desc}</p>
             </div>
           ))}
+        </div>
+      </section>
+      
+      {/* Why VenloRent */}
+      <section className="why-section" id="why-venlorent">
+
+        {/* Block 1: Why VenloRent, content left, visual right */}
+        <div className="why-block">
+          <div className="why-content">
+            <span className="section-eyebrow">Why VenloRent?</span>
+            <h2 className="section-title-left">A Better Way to Find Property</h2>
+            <p className="why-text">
+              Finding a home in Nigeria shouldn't involve uncertainty, hidden fees, or fake listings.
+              VenloRent is designed to simplify the entire process by bringing verified agents,
+              transparent listings, secure communication, and structured transactions together
+              in one trusted marketplace.
+            </p>
+          </div>
+          <div className="why-visual">
+            <div className="why-visual-card">
+              {/* <HiOutlineShieldCheck className="why-visual-icon" />
+              <div className="why-visual-stat">
+                <span className="why-stat-number">500+</span>
+                <span className="why-stat-label">Verified Agents</span>
+              </div> */}
+              <img src={coupleImage} alt="Couple celebrating new home" className="why-visual-img" />
+            </div>
+          </div>
+        </div>
+
+        {/* Block 2: Trust Starts Here — visual left, content right */}
+        <div className="why-block">
+          <div className="why-visual">
+            <div className="why-visual-card">
+              <img src={coupleImage2} alt="Couple celebrating new home" className="why-visual-img" />
+            </div>
+          </div>
+          <div className="why-content">
+            <span className="section-eyebrow">Trust Starts Here</span>
+            <h2 className="section-title-left">Every Verified Agent is Accountable</h2>
+            <p className="why-text">
+              Too many people lose money or waste valuable time because they cannot verify who they are dealing with.
+              <br/><br/>
+              VenloRent was created to make every interaction more transparent by giving users access to verified professionals, clear information, and structured communication throughout the property journey.
+            </p>
+          </div>
+        </div>
+
+        {/* Block 3: Built for Everyone — side-by-side audience cards */}
+        <div className="why-audience">
+          <div className="why-audience-header">
+            <span className="section-eyebrow">Built for Everyone</span>
+            <h2 className="section-title">Whether You're Looking or Listing</h2>
+          </div>
+          <div className="audience-grid">
+            <div className="audience-card">
+              <div className="audience-icon"><TbHomeSearch /></div>
+              <h3 className="audience-title">For Property Seekers</h3>
+              <p className="audience-desc">
+                Find apartments, houses, duplexes, and commercial properties that match your needs.
+                Save listings, make your orders, schedule inspections, and complete
+                transactions seamlessly from one place.
+              </p>
+            </div>
+            <div className="audience-card">
+              <div className="audience-icon"><LuBuilding2 /></div>
+              <h3 className="audience-title">For Agents</h3>
+              <p className="audience-desc">
+                Reach serious clients, manage your listings, receive inquiries directly, build
+                credibility through verification, and grow your network whether you are a professional 
+                agent or you are just starting out.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -408,7 +488,7 @@ function LandingPage() {
                 {
                   icon: <RiVerifiedBadgeFill />,
                   title: 'Transparent Pricing',
-                  desc: 'Clear breakdown of rent, commission, and all fees — no hidden charges.',
+                  desc: 'Clear breakdown of rent, commission, and all fees, no hidden charges.',
                 },
                 {
                   icon: <TbHomeSearch />,
@@ -418,7 +498,7 @@ function LandingPage() {
                 {
                   icon: <LuBuilding2 />,
                   title: 'Secure Transactions',
-                  desc: 'Payments processed safely through Flutterwave — held until completion.',
+                  desc: 'Payments processed safely through Flutterwave, held until completion.',
                 },
               ].map(({ icon, title, desc }) => (
                 <div className="feature-item" key={title}>

@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { SearchBar, Modal } from '../exports'
 import { AgentBadge, PremiumBadge } from './Badges'
@@ -10,11 +10,12 @@ import { useNavigate} from 'react-router-dom'
 import defaultAvatar from "../assets/img/avatar.png"
 import { timeAgo } from './Time'
 import './RequestResponsesModal.css'
+import { API_BASE } from '../config/api'
 
 // ====================================================================
 //  LISTING CHIP
 //  Renders the attached property snapshot inside an agent response.
-// ======================================================================
+// ====================================================================
 
 function ListingChip({ snapshot, onOpen }) {
   if (!snapshot?.price) return null
@@ -150,7 +151,7 @@ function AgentResponseItem({ item }) {
         <p className="comment-text rrm-reply-text">{item.text}</p>
         <ListingChip snapshot={item.listingSnapshot} onOpen={openListing} />
         <div className="comment-actions">
-          <span className="comment-time">{item.time}</span>
+          <span className="comment-time">{timeAgo(item.time)}</span>
         </div>
       </div>
     </div>
@@ -179,7 +180,7 @@ function DiscussionItem({ item, isLiked, onToggleLike }) {
         </div>
         <p className="comment-text">{item.comment}</p>
         <div className="comment-actions">
-          <span className="comment-time">{item.time}</span>
+          <span className="comment-time">{timeAgo(item.time)}</span>
           <span className="comment-likes">{item.likeCount} likes</span>
           <button className="comment-reply-btn">Reply</button>
         </div>
@@ -206,7 +207,7 @@ function RequestResponsesModal({
   onAddResponse,
   onAddComment,
   requestId,
-  isExpired           = false,
+  isExpired = false,
   currentUserIsAgent  = false,
 }) {
   const [activeTab, setActiveTab] = useState('agents')
@@ -235,8 +236,8 @@ function RequestResponsesModal({
         const headers = token ? { Authorization: `Bearer ${token}` } : {}
 
         const [resResponses, resComments] = await Promise.all([
-          axios.get(`https://newprojectbackend-5axx.onrender.com/requests/${requestId}/agent-responses`, { headers }),
-          axios.get(`https://newprojectbackend-5axx.onrender.com/requests/${requestId}/discussions`, { headers }),
+          axios.get(`${API_BASE}/requests/${requestId}/agent-responses`, { headers }),
+          axios.get(`${API_BASE}/requests/${requestId}/discussions`, { headers }),
         ])
 
         const mappedResponses = (resResponses.data.items || []).map((r) => ({
@@ -247,7 +248,7 @@ function RequestResponsesModal({
           isPremium: r.author?.plan === "premium",
           text: r.text,
           listingSnapshot: r.listingSnapshot,
-          time: new Date(r.createdAt).toLocaleString(),
+          time: r.createdAt,
         }))
 
         const mappedDiscussion = (resComments.data.items || []).map((d) => ({
@@ -260,7 +261,7 @@ function RequestResponsesModal({
           comment: d.text,
           likeCount: d.likeCount || 0,
           likedByMe: !!d.likedByMe,
-          time: new Date(d.createdAt).toLocaleString(),
+          time: d.createdAt,
         }))
 
         setResponses(mappedResponses)
@@ -285,7 +286,7 @@ function RequestResponsesModal({
       setIsListingLoading(true)
 
       try{
-        const res = await axios.get("https://newprojectbackend-5axx.onrender.com/my-listings", {
+        const res = await axios.get(`${API_BASE}/my-listings`, {
           headers: { Authorization: `Bearer ${token}` }
         })
           
@@ -330,7 +331,7 @@ function RequestResponsesModal({
     if (!token) return
     try {
       await axios.post(
-        `https://newprojectbackend-5axx.onrender.com/discussions/${itemId}/like`,
+        `${API_BASE}/discussions/${itemId}/like`,
         { liked: nextLiked },
         { headers: { Authorization: `Bearer ${token}` } }
       )
@@ -348,7 +349,7 @@ function RequestResponsesModal({
       if (!token) return
       try {
         const res = await axios.post(
-          `https://newprojectbackend-5axx.onrender.com/requests/${requestId}/agent-responses`,
+          `${API_BASE}/requests/${requestId}/agent-responses`,
           {
             text,
             listingSnapshot: selectedListing
@@ -373,7 +374,7 @@ function RequestResponsesModal({
             isPremium: created.author?.plan === "premium",
             text: created.text,
             listingSnapshot: created.listingSnapshot,
-            time: new Date(created.createdAt).toLocaleString(),
+            time: created.createdAt,
           }
           setResponses((prev) => [mapped, ...prev])
           setSelectedListing(null) // clear after posting
@@ -395,7 +396,7 @@ function RequestResponsesModal({
       if (!token) return
       try {
         const res = await axios.post(
-          `https://newprojectbackend-5axx.onrender.com/requests/${requestId}/discussions`,
+          `${API_BASE}/requests/${requestId}/discussions`,
           { text },
           { headers: { Authorization: `Bearer ${token}` } }
         )
@@ -410,7 +411,7 @@ function RequestResponsesModal({
             isPremium: created.author?.plan === "premium",
             comment: created.text,
             likeCount: created.likeCount || 0,
-            time: new Date(created.createdAt).toLocaleString(),
+            time: created.createdAt,
           }
           setDiscussion((prev) => [mapped, ...prev])
         }

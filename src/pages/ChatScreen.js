@@ -4,9 +4,8 @@ import axios from "axios";
 import { ChatBubble, SearchBar, Modal, ReportModal } from "../exports";
 import { FaArrowLeft, FaEllipsisV } from "react-icons/fa";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
+import { API_BASE } from '../config/api'
 import "./ChatScreen.css";
-
-const BASE_URL = "https://newprojectbackend-5axx.onrender.com";
 
 const ChatScreen = ({ chat: propChat, onBack, embedded = false }) => {
   const navigate = useNavigate();
@@ -37,7 +36,7 @@ const ChatScreen = ({ chat: propChat, onBack, embedded = false }) => {
 
       try {
         const res = await axios.get(
-          `${BASE_URL}/conversations/${chat.conversationId}/messages`,
+          `${API_BASE}/conversations/${chat.conversationId}/messages`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
@@ -110,7 +109,7 @@ const ChatScreen = ({ chat: propChat, onBack, embedded = false }) => {
 
     try {
       const res = await axios.post(
-        `${BASE_URL}/conversations/${chat.conversationId}/messages`,
+        `${API_BASE}/conversations/${chat.conversationId}/messages`,
         { text: newMessage },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -176,7 +175,7 @@ const ChatScreen = ({ chat: propChat, onBack, embedded = false }) => {
 
     setIsMenuOpen(false)
     axios.post(
-      `${BASE_URL}/users/${chat.otherUserId}/block`,
+      `${API_BASE}/users/${chat.otherUserId}/block`,
       {},
       { headers: { Authorization: `Bearer ${token}` } }
     )
