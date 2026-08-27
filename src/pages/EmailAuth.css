@@ -144,11 +144,9 @@ a{/*for prelim links*/
     .resend-prompt {
         color: var(--text-color-light2);
     }
-
     .resend-countdown {
         color: var(--text-color-light2);
     }
-
     .resend-btn {
         color: var(--text-color-dark2);
     }

@@ -20,6 +20,7 @@
 .tabbed-nav a.active{
     border-bottom: 2px solid var(--primary-color-light)
 }
+
 @media(prefers-color-scheme: dark){
     .tabbed-nav{
         border-bottom: 1px solid var(--primary-opacity);
