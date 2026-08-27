@@ -2,6 +2,7 @@
 
 // ==== COMPONENTS ====
 export { default as AccountInfoCard } from "./components/AccountInfoCard";
+
 export { default as ChatBubble } from "./components/ChatBubble";
 export { default as ClickButton } from "./components/ClickButton";
 export { default as Comments } from "./components/Comments";
@@ -30,6 +31,7 @@ export { default as SettingsMenu } from "./components/SettingsMenu";
 export { default as SideNav } from "./components/SideNav";
 export { default as SubmitButton } from "./components/SubmitButton";
 export { default as TabbedNav } from "./components/TabbedNav";
+
 export { default as UpgradeWidget } from "./components/UpgradeWidget";
 
 // ==== PAGES ====
@@ -60,6 +62,7 @@ export { default as Login } from "./pages/Login";
 export { default as NoMatch } from "./pages/NoMatch";
 export { default as Notifications } from "./pages/Notifications";
 export { default as NotificationSettings } from "./pages/NotificationSettings";
+export { default as Onboarding } from "./pages/Onboarding";
 export { default as OrderPreview } from "./pages/OrderPreview";
 export { default as Orders } from "./pages/Orders";
 export { default as PasswordRecovery } from "./pages/PasswordRecovery";
@@ -74,6 +77,7 @@ export { default as SubscriptionSettings } from "./pages/SubscriptionSettings";
 export { default as Terms } from "./pages/Terms";
 export { default as User } from "./pages/User";
 export { default as VerificationSettings } from "./pages/VerificationSettings";
+export { default as Waitlist } from "./pages/Waitlist";
 
 // ==== PRELIM ====
 export { default as CtaBanner } from "./components/Prelim/CtaBanner";

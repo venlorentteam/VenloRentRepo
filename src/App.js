@@ -53,6 +53,8 @@ function App() {
         <Route path="/help" element={<Pages.PrelimHelp />} />
         <Route path="/kyc" element={<Pages.ProtectedRoute><Pages.KycFlow /></Pages.ProtectedRoute>} />
         <Route path="/kyc-completed" element={<Pages.ProtectedRoute><Pages.KycCompleted /></Pages.ProtectedRoute>} />
+        <Route path="/waitlist" element={<Pages.Waitlist />} />
+        <Route path="/onboarding" element={<Pages.Onboarding />} />
         <Route path="*" element={<Pages.NoMatch />} />
       </Routes>
     </AuthProvider>
