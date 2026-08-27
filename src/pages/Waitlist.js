@@ -115,7 +115,7 @@ function Waitlist() {
             <div className="waitlist-proof-row">
               <div className="proof-pill">
                 <FiTrendingUp className="proof-icon" />
-                2k+ early signups
+                1k+ early signups
               </div>
               <div className="proof-pill">
                 <FiStar className="proof-icon" />
