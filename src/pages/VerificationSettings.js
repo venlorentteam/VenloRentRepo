@@ -5,13 +5,14 @@ import { FiUpload, FiCheckCircle, FiClock, FiXCircle, FiInfo, FiShield, FiFileTe
 import { MdOutlineLocationOn } from 'react-icons/md'
 import { BsBuildingCheck, BsPersonBadge } from 'react-icons/bs'
 import { useAuth } from "../context/AuthProvider"
+import { API_BASE } from '../config/api'
 
 const statusMap = {
   unsubmitted: 'unverified',
-  submitted:   'pending',
-  in_review:   'pending',
-  verified:    'approved',
-  rejected:    'rejected',
+  submitted: 'pending',
+  in_review: 'pending',
+  verified: 'approved',
+  rejected: 'rejected',
 }
 
 const VerificationSettings = () => {
@@ -95,7 +96,7 @@ const VerificationSettings = () => {
       payload.append('addressProof', documents.businessProof)
 
       const res = await axios.post(
-        'https://newprojectbackend-5axx.onrender.com/auth/kyc/submit-documents',
+        `${API_BASE}/auth/kyc/submit-documents`,
         payload,
         {
           headers: {

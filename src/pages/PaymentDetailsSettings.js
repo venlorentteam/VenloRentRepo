@@ -3,6 +3,7 @@ import axios from 'axios'
 import { ClickButton } from '../exports'
 import { useAuth } from '../context/AuthProvider'
 import { FiCreditCard, FiSave } from 'react-icons/fi'
+import { API_BASE } from '../config/api'
 import '../components/SettingsDetails.css'
 
 const PAYMENT_METHODS = [
@@ -71,7 +72,7 @@ const PaymentDetailsSettings = () => {
       if (!token) return
 
       const res = await axios.patch(
-        'https://newprojectbackend-5axx.onrender.com/payment-details',
+        `${API_BASE}/payment-details`,
         formData,
         { headers: { Authorization: `Bearer ${token}` } }
       )

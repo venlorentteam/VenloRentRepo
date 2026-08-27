@@ -6,6 +6,7 @@ import { AgentBadge, PremiumBadge } from './Badges'
 import RequestResponsesModal from './RequestResponsesModal'
 import './RequestCard.css'
 import { MdIosShare } from "react-icons/md"
+import { API_BASE } from '../config/api'
 
 // === Icons — same libraries as PropertyCard.jsx ==================
 import { FaBookmark, FaRegBookmark, FaRegComment } from 'react-icons/fa'
@@ -56,6 +57,7 @@ function RequestCard({
   const [isReportOpen, setIsReportOpen] = useState(false)
   const [deleteSuccess, setDeleteSuccess] = useState("")
   const [deleteError, setDeleteError] = useState("")
+  //const [error, setError] = useState(null)
   
 
   const currentUserId = (() => {
@@ -77,7 +79,7 @@ function RequestCard({
     if (!token) return
     try {
       await axios.delete(
-        `https://newprojectbackend-5axx.onrender.com/requests/${resolvedRequestId}`,
+        `${API_BASE}/requests/${resolvedRequestId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       )
       closeModal()
@@ -95,7 +97,7 @@ function RequestCard({
   //   if (!token) return
   //   try {
   //     await axios.post(
-  //       `https://newprojectbackend-5axx.onrender.com/requests/${resolvedRequestId}/report`,
+  //       `${API_BASE}/requests/${resolvedRequestId}/report`,
   //       { reason: "Reported by user" },
   //       { headers: { Authorization: `Bearer ${token}` } }
   //     )
@@ -123,12 +125,12 @@ function RequestCard({
     setIsLiking(true)
     try {
       await axios.post(
-        `https://newprojectbackend-5axx.onrender.com/requests/${resolvedRequestId}/like`,
+        `${API_BASE}/requests/${resolvedRequestId}/like`,
         { liked: next },
         { headers: { Authorization: `Bearer ${token}` } }
       )
     } catch (err) {
-      console.error('Failed to update request like:', err)
+      //setError('Failed to update request like')
       // Rollback if API fails
       setIsLiked(!next)
       setLikeCount((prev) => Math.max(0, prev + (next ? -1 : 1)))
@@ -154,11 +156,11 @@ function RequestCard({
     const token = localStorage.getItem("token")
     if (!token) return
     axios.post(
-      `https://newprojectbackend-5axx.onrender.com/requests/${resolvedRequestId}/bookmark`,
+      `${API_BASE}/requests/${resolvedRequestId}/bookmark`,
       { bookmarked: next },
       { headers: { Authorization: `Bearer ${token}` } }
     ).catch((err) => {
-      console.error('Failed to update request bookmark:', err)
+      
     })
   }
 
@@ -394,11 +396,11 @@ function RequestCard({
           // Keep base URL aligned with existing auth endpoints (no /api prefix).
           const token = localStorage.getItem("token")
           axios.post(
-            `https://newprojectbackend-5axx.onrender.com/requests/${resolvedRequestId}/agent-responses`,
+            `${API_BASE}/requests/${resolvedRequestId}/agent-responses`,
             data,
             { headers: { Authorization: `Bearer ${token}` } }
           ).catch((err) => {
-            console.error('Failed to submit agent response:', err)
+            
           })
         }}
         onAddComment={(text) => {
@@ -406,11 +408,11 @@ function RequestCard({
           // Keep base URL aligned with existing auth endpoints (no / api prefix).
           const token = localStorage.getItem("token")
           axios.post(
-            `https://newprojectbackend-5axx.onrender.com/requests/${resolvedRequestId}/discussions`,
+            `${API_BASE}/requests/${resolvedRequestId}/discussions`,
             { text },
             { headers: { Authorization: `Bearer ${token}` } }
           ).catch((err) => {
-            console.error('Failed to submit discussion comment:', err)
+            
           })
         }}
       />

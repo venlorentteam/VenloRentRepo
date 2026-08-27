@@ -1,15 +1,14 @@
 import React, { useState, useEffect, useRef } from "react"
-import { useNavigate, useLocation } from "react-router-dom"  // ← useLocation added
-import axios from "axios"                                      // ← added
+import { useNavigate, useLocation } from "react-router-dom" 
+import axios from "axios"                                   
 import { MessageListItem, SearchBar, ChatScreen, PageSetup, Header } from "../exports"
 import { FaRegBell } from "react-icons/fa"
-import { timeAgo } from "../components/Time"                  // ← added
+import { timeAgo } from "../components/Time"   
+import { API_BASE } from '../config/api'             
 import "./Inbox.css"
 
 // ========================================================
 // Shape mapper — lives outside the component so it's stable.
-// Transforms the raw API conversation into what MessageListItem
-// and ChatScreen expect. Needs the JWT to identify "the other person".
 // ========================================================
 const mapConversations = (convos, token) => {
   let myId = null
@@ -57,7 +56,7 @@ const Inbox = () => {
       const token = localStorage.getItem("token")
       if (!token) { setIsLoading(false); return }
       try {
-        const res = await axios.get("https://newprojectbackend-5axx.onrender.com/conversations", {
+        const res = await axios.get(`${API_BASE}/conversations`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         // Map raw API shape before storing — never store unmapped data
@@ -99,7 +98,7 @@ const Inbox = () => {
     const open = async () => {
       try {
         const res = await axios.post(
-          "https://newprojectbackend-5axx.onrender.com/conversations",
+          `${API_BASE}/conversations`,
           { recipientId: agentId },
           { headers: { Authorization: `Bearer ${token}` } }
         )

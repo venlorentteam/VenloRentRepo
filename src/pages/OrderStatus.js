@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
 import { MdContentCopy, MdOutlineBedroomParent, MdOutlineAccountBalance } from 'react-icons/md'
 import { GrLocation } from 'react-icons/gr'
 import { LuBuilding2 } from 'react-icons/lu'
-import { RiCustomerServiceLine } from 'react-icons/ri'
 import { FiCheckCircle, FiCircle } from 'react-icons/fi'
 import { Loader } from '../exports'
 import { useAuth } from '../context/AuthProvider'
+import { API_BASE } from '../config/api'
 import './OrderPreview.css'
 import './OrderStatus.css'
 
 const PAYMENT_WINDOW_HOURS = 72
-const API_BASE = 'https://newprojectbackend-5axx.onrender.com'
 
 const formatCurrency = (amount, currency = 'NGN') => {
   const value = Number(amount)
@@ -51,6 +50,7 @@ const getStatusMeta = (status, paymentStatus) => {
     }
   }
 
+  // Legacy compatibility only: older orders may still surface these states.
   if (normalized === 'accepted' || normalized === 'approved') {
     return {
       label: 'Approved',
@@ -69,7 +69,16 @@ const getStatusMeta = (status, paymentStatus) => {
     }
   }
 
-  if (normalized === 'cancelled' || normalized === 'canceled') {
+  if (normalized === "expired") {
+    return {
+      label: "Expired",
+      tone: "expired",
+      description: "This order expired because the reservation window elapsed.",
+      step: 0,
+    }
+  }
+
+  if (normalized === 'cancelled') {
     return {
       label: 'Cancelled',
       tone: 'cancelled',
@@ -78,6 +87,7 @@ const getStatusMeta = (status, paymentStatus) => {
     }
   }
 
+  // Legacy compatibility only: older orders may still surface rejected.
   if (normalized === 'rejected') {
     return {
       label: 'Rejected',
@@ -90,7 +100,7 @@ const getStatusMeta = (status, paymentStatus) => {
   return {
     label: normalized ? normalized.charAt(0).toUpperCase() + normalized.slice(1) : 'Pending',
     tone: 'pending',
-    description: 'The order is waiting for review.',
+    description: 'The order is waiting for the buyer to mark payment proof.',
     step: 0,
   }
 }
@@ -104,7 +114,8 @@ const normalizeOrder = (order) => {
   if (!order) return null
 
   const property = order.property || {}
-  const createdAt = order.createdAt || order.created_at || null
+  const createdAt = order.createdAt || null
+  const expiresAt = order.expiresAt || null
   const commission = Number(property.commission ?? order.commission ?? 0) || 0
   const amount = Number(order.amount ?? property.amount ?? 0) || 0
 
@@ -116,11 +127,13 @@ const normalizeOrder = (order) => {
     paymentStatus: order.paymentStatus || '',
     createdAt,
     updatedAt: order.updatedAt || order.updated_at || createdAt,
+    expiresAt,
     amount,
     commission,
     totalPayment: amount + commission,
     currency: order.currency || 'NGN',
     propertyId: property._id || order.propertyId || '',
+    propertyStatus: property.status || '',
     propertyTitle: property.title || 'Listing unavailable',
     propertyDescription: property.description || '',
     propertyImages: resolveMedia(property.media),
@@ -133,6 +146,7 @@ const normalizeOrder = (order) => {
     ownerAvatar: property.owner?.avatar || order.seller?.avatar || '',
     buyerName: order.buyer?.fullName || order.buyer?.username || 'You',
     buyerId: order.buyer?._id || '',
+    sellerPayoutDetails: order.seller?.payoutDetails || null,
   }
 }
 
@@ -153,6 +167,8 @@ const getCurrentUserId = (user) => {
 //  Main Component
 // =====================================
 const OrderStatus = () => {
+  const [now, setNow] = useState(() => Date.now())
+  const hasTriggeredExpiryRefetch = useRef(false)
   const { orderId } = useParams()
   const navigate = useNavigate()
   const location = useLocation()
@@ -166,8 +182,45 @@ const OrderStatus = () => {
   const [actionSuccess, setActionSuccess] = useState('')
   const [isActionBusy, setIsActionBusy] = useState(false)
 
+  // Ticking clock, re-renders every second so the countdown updates live.
   useEffect(() => {
-    let isMounted = true
+    const interval = setInterval(() => setNow(Date.now()), 1000)
+    return () => clearInterval(interval)
+  }, [])
+
+  const fetchOrder = useCallback(async (signal) => {
+    setIsLoading(true)
+    setError('')
+
+    try {
+      const token = localStorage.getItem('token')
+      if (!token) throw new Error('Missing authentication token')
+
+      const res = await axios.get(`${API_BASE}/orders`, {
+        headers: { Authorization: `Bearer ${token}` },
+        signal,
+      })
+
+      if (signal?.aborted) return
+
+      const match = (res.data.items || []).find((item) => String(item._id) === String(orderId))
+      if (!match) throw new Error('Order not found')
+
+      setOrderData(normalizeOrder(match))
+    } catch (err) {
+      if (signal?.aborted) return
+
+      setError(err?.response?.data?.message || err.message || 'Failed to load order status')
+      setOrderData(null)
+    } finally {
+      if (!signal?.aborted) {
+        setIsLoading(false)
+      }
+    }
+  }, [orderId])
+
+  useEffect(() => {
+    const controller = new AbortController()
 
     const initialOrder = location.state?.rawOrder || location.state?.order || null
     const initialId = initialOrder?._id || initialOrder?.id || location.state?.order?.orderId || location.state?.orderId || ''
@@ -176,74 +229,56 @@ const OrderStatus = () => {
       setOrderData(normalizeOrder(initialOrder))
       setIsLoading(false)
       setError('')
-      return () => {
-        isMounted = false
-      }
+    } else {
+      fetchOrder(controller.signal)
     }
 
-    const fetchOrder = async () => {
-      setIsLoading(true)
-      setError('')
-
-      try {
-        const token = localStorage.getItem('token')
-        if (!token) {
-          throw new Error('Missing authentication token')
-        }
-
-        const res = await axios.get(`${API_BASE}/orders`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-
-        const match = (res.data.items || []).find((item) => String(item._id) === String(orderId))
-
-        if (!match) {
-          throw new Error('Order not found')
-        }
-
-        if (isMounted) {
-          setOrderData(normalizeOrder(match))
-        }
-      } catch (err) {
-        if (isMounted) {
-          setError(err?.response?.data?.message || err.message || 'Failed to load order status')
-          setOrderData(null)
-        }
-      } finally {
-        if (isMounted) {
-          setIsLoading(false)
-        }
-      }
-    }
-
-    fetchOrder()
-
-    return () => {
-      isMounted = false
-    }
-  }, [location.state, orderId])
+    return () => controller.abort()
+  }, [location.state, orderId, fetchOrder])
 
   const statusMeta = getStatusMeta(orderData?.status, orderData?.paymentStatus)
   const isWindowRelevant = ['pending', 'accepted', 'approved', 'pending_proof'].includes(normalizeStatus(orderData?.status)) || normalizeStatus(orderData?.paymentStatus) === 'pending_proof'
-  const expiresAt = orderData?.createdAt ? new Date(new Date(orderData.createdAt).getTime() + PAYMENT_WINDOW_HOURS * 60 * 60 * 1000) : null
-  const secondsLeft = expiresAt ? Math.max(0, Math.floor((expiresAt.getTime() - Date.now()) / 1000)) : 0
+  const expiresAt = orderData?.expiresAt
+    ? new Date(orderData.expiresAt)
+    : orderData?.createdAt
+      ? new Date(new Date(orderData.createdAt).getTime() + PAYMENT_WINDOW_HOURS * 60 * 60 * 1000)
+      : null
+  const secondsLeft = expiresAt ? Math.max(0, Math.floor((expiresAt.getTime() - now) / 1000)) : 0
   const hoursLeft = Math.floor(secondsLeft / 3600)
   const minutesLeft = Math.floor((secondsLeft % 3600) / 60)
   const secondsRemain = secondsLeft % 60
   const isExpired = isWindowRelevant && secondsLeft === 0
 
+  useEffect(() => {
+    const controller = new AbortController()
+
+    if (isExpired && !hasTriggeredExpiryRefetch.current) {
+      hasTriggeredExpiryRefetch.current = true
+      fetchOrder(controller.signal)
+    }
+
+    if (!isExpired) {
+      hasTriggeredExpiryRefetch.current = false
+    }
+
+    return () => controller.abort()
+  }, [isExpired, fetchOrder])
+
   const pad = (value) => String(Math.floor(value)).padStart(2, '0')
   const currentUserId = getCurrentUserId(user)
   const isBuyer = !!orderData?.buyerId && String(orderData.buyerId) === String(currentUserId)
   const isSeller = !!orderData?.ownerId && String(orderData.ownerId) === String(currentUserId)
-  const isTerminalOrder = ['completed', 'cancelled', 'rejected'].includes(normalizeStatus(orderData?.status))
+  const isTerminalOrder = ['completed', 'cancelled', 'rejected', 'expired'].includes(normalizeStatus(orderData?.status))
   const canBuyerPay = isBuyer && !isTerminalOrder && normalizeStatus(orderData?.paymentStatus) !== 'paid'
   const canBuyerCancel = isBuyer && !isTerminalOrder
-  const canSellerApprove = isSeller && normalizeStatus(orderData?.status) === 'pending'
+  const canSellerCancel = isSeller && !isTerminalOrder && normalizeStatus(orderData?.propertyStatus) !== 'reserved'
   const canSellerConfirmPayment = isSeller && normalizeStatus(orderData?.paymentStatus) === 'pending_proof' && normalizeStatus(orderData?.status) !== 'completed'
-  const canSellerReject = isSeller && !isTerminalOrder
-  const counterpartyId = isSeller ? orderData?.buyerId : orderData?.ownerId
-  const counterpartyLabel = isSeller ? 'Contact Buyer' : 'Contact Agent'
+  const isCompletedOrder = normalizeStatus(orderData?.status) === 'completed'
+  const isExpiredOrder = normalizeStatus(orderData?.status) === "expired"
+  const isCancelledOrder = ['cancelled', 'rejected'].includes(normalizeStatus(orderData?.status))
+  
+  const sellerPayoutDetails = orderData?.sellerPayoutDetails || null
+  const isBuyerAndHasPaymentDetails = isBuyer && sellerPayoutDetails
 
   const handleCopyOrderNo = () => {
     const value = orderData?.orderNumber || orderData?.orderId
@@ -252,11 +287,6 @@ const OrderStatus = () => {
       setCopied(true)
       setTimeout(() => setCopied(false), 1800)
     })
-  }
-
-  const handleContactAgent = () => {
-    if (!counterpartyId) return
-    navigate(`/inbox?agentId=${counterpartyId}`)
   }
 
   const handleOpenPreview = () => {
@@ -294,8 +324,6 @@ const OrderStatus = () => {
   }
 
   const handleBuyerPayNow = () => {
-    // Buyer-side "Pay Now" marks the order as payment-in-progress so the seller
-    // can confirm it from the shared OrderStatus screen.
     updateOrder({ paymentStatus: 'pending_proof' }, 'Payment marked as pending confirmation.')
   }
 
@@ -303,22 +331,19 @@ const OrderStatus = () => {
     updateOrder({ status: 'cancelled' }, 'Order cancelled.')
   }
 
-  const handleSellerApprove = () => {
-    updateOrder({ status: 'accepted' }, 'Order approved.')
-  }
-
   const handleSellerConfirmPayment = () => {
+    // Seller confirms only after the buyer has marked the payment as proof-pending.
     updateOrder({ paymentStatus: 'paid', status: 'completed' }, 'Payment confirmed and order completed.')
   }
   const onPaymentDetailsClick = () => {
     navigate("/account/payment-details")
   }
-  const handleSellerReject = () => {
-    const nextStatus = normalizeStatus(orderData?.status) === 'accepted' ? 'cancelled' : 'rejected'
-    updateOrder(
-      { status: nextStatus },
-      nextStatus === 'cancelled' ? 'Order cancelled.' : 'Order rejected.'
-    )
+
+  const handleSellerCancel = () => {
+    // Old approval/reject flow retired:
+    // - seller no longer approves or rejects the order
+    // - seller only cancels when the property is no longer available
+    updateOrder({ status: 'cancelled' }, 'Order cancelled.')
   }
 
   if (isLoading) {
@@ -359,10 +384,10 @@ const OrderStatus = () => {
       icon: <FiCircle aria-hidden="true" />,
     },
     {
-      key: 'approved',
-      label: 'Approved',
-      detail: 'The agent reviewed and approved the order.',
-      icon: <FiCheckCircle aria-hidden="true" />,
+      key: 'payment',
+      label: 'Payment',
+      detail: 'The buyer has marked payment and it is awaiting payment confirmation.',
+      icon: <FiCircle aria-hidden="true" />,
     },
     {
       key: 'completed',
@@ -391,6 +416,21 @@ const OrderStatus = () => {
         </span>
       </div>
 
+      {isCompletedOrder && (
+        <div className="submit-success">
+          This order has been completed successfully. The details below are read-only.
+        </div>
+      )}
+      {isCancelledOrder && (
+        <div className="submit-error">
+          This order is no longer active. The details below are read-only.
+        </div>
+      )}
+      {isExpiredOrder && (
+        <div className="submit-error">
+          This order expired when the reservation window elapsed.
+        </div>
+      )}
       {actionSuccess && <div className="submit-success">{actionSuccess}</div>}
       {actionError && <div className="submit-error">{actionError}</div>}
 
@@ -414,7 +454,8 @@ const OrderStatus = () => {
           </div>
           <ul className="op-timer-notes">
             <li>Orders remain reserved for {PAYMENT_WINDOW_HOURS} hours</li>
-            <li>Inspect the property before making payment</li>
+            <li>Inspect the property before making payment.</li>
+            <li>Meeting with the property management in open locations and verifying ownership is advised.</li>
           </ul>
         </div>
       )}
@@ -547,6 +588,11 @@ const OrderStatus = () => {
             const isActive = statusMeta.step === index
             const isBlocked = statusMeta.step < index
 
+            // Active step shows the live status (e.g. "Payment Pending", "Cancelled")
+            // instead of the generic placeholder label.
+            const displayLabel = isActive ? statusMeta.label : step.label
+            const displayDetail = isActive ? statusMeta.description : step.detail
+
             return (
               <div
                 key={step.key}
@@ -556,8 +602,8 @@ const OrderStatus = () => {
                   {isComplete ? <FiCheckCircle aria-hidden="true" /> : step.icon}
                 </div>
                 <div className="os-step-copy">
-                  <h4 className="os-step-label">{step.label}</h4>
-                  <p className="os-step-desc">{step.detail}</p>
+                  <h4 className="os-step-label">{displayLabel}</h4>
+                  <p className="os-step-desc">{displayDetail}</p>
                 </div>
               </div>
             )
@@ -585,48 +631,101 @@ const OrderStatus = () => {
           </button>
         </div>
       }
+      {isBuyerAndHasPaymentDetails && (
       <div className="op-card">
-        {/* <div className="op-meta-agent-row">
-          <button className="op-contact-agent-btn" onClick={handleContactAgent}>
-            <RiCustomerServiceLine aria-hidden="true" />
-            {counterpartyLabel}
-          </button>
-        </div> */}
+        <div className="op-meta-row">
+          <span className="op-meta-label">Payment Details</span>
+          <span className="op-meta-value">Verify with the agent before proceeding</span>
+        </div>
 
-        {isBuyer && (
+        <div className="op-meta-row">
+          <span className="op-meta-label">Bank Name</span>
+          <span className="op-meta-value">
+            {sellerPayoutDetails.bankName || '—'}
+          </span>
+        </div>
+
+        <div className="op-meta-row">
+          <span className="op-meta-label">Account Name</span>
+          <span className="op-meta-value">
+            {sellerPayoutDetails.accountName || '—'}
+          </span>
+        </div>
+
+        <div className="op-meta-row">
+          <span className="op-meta-label">Account Number</span>
+          <span className="op-meta-value">
+            {sellerPayoutDetails.accountNumber || '—'}
+          </span>
+        </div>
+
+        {sellerPayoutDetails.bankCode && (
+          <div className="op-meta-row">
+            <span className="op-meta-label">Bank Code</span>
+            <span className="op-meta-value">
+              {sellerPayoutDetails.bankCode}
+            </span>
+          </div>
+        )}
+
+        <div className="op-meta-row">
+          <span className="op-meta-label">Payout Method</span>
+          <span className="op-meta-value">
+            {sellerPayoutDetails.payoutMethod || '—'}
+          </span>
+        </div>
+      </div>
+    )}
+
+      {!isTerminalOrder && (
+        <div className="op-card">
+          {isBuyer && (
           <div className="op-actions os-actions">
             <button className="op-btn op-btn-cancel" onClick={handleBuyerCancel} disabled={!canBuyerCancel || isActionBusy}>
               Cancel Order
             </button>
             <button className="op-btn op-btn-pay" onClick={handleBuyerPayNow} disabled={!canBuyerPay || isActionBusy}>
-              Pay Now
+              Mark as Paid
             </button>
           </div>
-        )}
+          )}
 
-        {isSeller && (
+          {isSeller && (
           <div className="op-actions os-actions">
-            <button className="op-btn op-btn-cancel" onClick={handleSellerReject} disabled={!canSellerReject || isActionBusy}>
-              {normalizeStatus(orderData?.status) === 'accepted' ? 'Cancel Order' : 'Reject Order'}
+            <button className="op-btn op-btn-cancel" onClick={handleSellerCancel} disabled={!canSellerCancel || isActionBusy}>
+              Cancel Order
             </button>
-            {/* <button className="op-btn op-btn-pay" onClick={handleSellerApprove} disabled={!canSellerApprove || isActionBusy}>
-              Approve Order
-            </button> */}
+            {/* Old seller approval action retired:
+                the seller no longer approves/rejects the order, they only
+                cancel for unavailability or confirm payment after proof. */}
             <button className="op-btn op-btn-pay" onClick={handleSellerConfirmPayment} disabled={!canSellerConfirmPayment || isActionBusy}>
               Confirm Payment
             </button>
           </div>
-        )}
+          )}
+          {isSeller && !canSellerCancel && (
+            <p className="op-window-note">
+              Cancel is only available when the property is no longer reserved for this order.
+            </p>
+          )}
 
-        <div className="op-actions os-actions">
-          <button className="op-btn op-btn-cancel" onClick={handleOpenPreview} disabled={!orderData.propertyId}>
-            Review Listing
-          </button>
-          <button className="op-btn op-btn-pay" onClick={handleContactAgent} disabled={!counterpartyId}>
-            {counterpartyLabel}
-          </button>
+          <div className="op-actions os-actions">
+            <button className="op-btn op-btn-cancel" onClick={handleOpenPreview} disabled={!orderData.propertyId}>
+              Review Listing
+            </button>
+          </div>
         </div>
-      </div>
+      )}
+
+      {isTerminalOrder && (
+        <div className="op-card">
+          <div className="op-actions os-actions">
+            <button className="op-btn op-btn-cancel" onClick={handleOpenPreview} disabled={!orderData.propertyId}>
+              Review Listing
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

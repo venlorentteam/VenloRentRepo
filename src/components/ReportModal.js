@@ -2,6 +2,7 @@
 import React, { useState } from "react"
 import axios from "axios"
 import { Modal } from "../exports"
+import { API_BASE } from '../config/api'
 import "./ReportModal.css"
 
 const PROPERTY_REASONS = [
@@ -45,10 +46,10 @@ function ReportModal({ isOpen, onClose, targetId, targetType = "property" }) {
         : MESSAGE_REASONS
 
   const endpoint = targetType === "property"
-    ? `https://newprojectbackend-5axx.onrender.com/properties/${targetId}/report`
+    ? `${API_BASE}/properties/${targetId}/report`
     : targetType === "request"
-      ? `https://newprojectbackend-5axx.onrender.com/requests/${targetId}/report`
-      : `https://newprojectbackend-5axx.onrender.com/reports`
+      ? `${API_BASE}/requests/${targetId}/report`
+      : `${API_BASE}/reports`
 
   const handleSubmit = async () => {
     if (!selectedReason) {

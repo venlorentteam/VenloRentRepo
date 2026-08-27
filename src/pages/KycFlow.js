@@ -8,6 +8,7 @@ import { BsPersonBadge, BsBuildingCheck } from 'react-icons/bs'
 import { HiOutlineIdentification } from 'react-icons/hi'
 import { IoCheckmarkCircle } from 'react-icons/io5'
 import { RiArrowRightLine, RiArrowLeftLine } from 'react-icons/ri'
+import { API_BASE } from '../config/api'
 
 // Step definitions
 const STEPS = [
@@ -116,7 +117,7 @@ function KycFlow() {
       formData.append('addressProof', documents.businessProof)
 
       const res = await axios.post(
-        'https://newprojectbackend-5axx.onrender.com/auth/kyc/submit-documents',
+        `${API_BASE}/auth/kyc/submit-documents`,
         formData,
         {
           headers: {

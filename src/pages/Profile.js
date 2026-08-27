@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import { BsGearWide } from "react-icons/bs"
+//import { BsGearWide } from "react-icons/bs"
 import { RiMessageLine, RiUserFollowLine, RiUserUnfollowLine } from "react-icons/ri"
 import { FaRegBell } from "react-icons/fa"
 import * as Components from "../exports"
@@ -8,9 +8,8 @@ import { useAuth } from "../context/AuthProvider"
 import { timeAgo } from "../components/Time"
 import defaultAvatar from "../assets/img/avatar.png"
 import axios from "axios"
+import { API_BASE } from "../config/api"
 import "./Profile.css"
-
-const API_BASE = "https://newprojectbackend-5axx.onrender.com"
 
 const mapPropertyToListing = (property) => ({
   id: property._id,
@@ -112,7 +111,7 @@ const Profile = () => {
     setIsFollowing(next)
     axios
       .post(
-        `https://newprojectbackend-5axx.onrender.com/users/${userId}/follow`,
+        `${API_BASE}/users/${userId}/follow`,
         { followed: next },
         { headers: { Authorization: `Bearer ${token}` } }
       )
@@ -203,14 +202,14 @@ const Profile = () => {
             { link: "/notifications", element: <FaRegBell /> }
           ]
         }
-        menuIcon={isOwnProfile ? { element: <BsGearWide />, link: "/account" } : null}
+        //menuIcon={isOwnProfile ? { element: <BsGearWide />, link: "/account" } : null}
       />
       
       <div className="main-content">
         <div className="content">
           {/* Profile Header Card */}
           <Components.AccountInfoCard
-            username={profileData.username}
+            username={profileData.username ? `@${profileData.username}` : ""}
             fullName={profileData.fullName}
             //occupation={profileData.occupation}
             followers={followersCount}
@@ -303,7 +302,7 @@ const Profile = () => {
               <div className="profile-about">
                 <div className="about-section">
                   <h4>About {profileData.fullName}</h4>
-                  <p>{profileData.occupation}</p>
+                  <p>{profileData.bio || "No bio available."}</p>
                   <p>Joined {timeAgo(profileData.createdAt)}</p>
                 </div>
               </div>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import { API_BASE } from '../config/api'
 import "./CreateRequest.css";
 import { FaRegEdit } from "react-icons/fa"
 import { FaNairaSign, FaAngleRight } from "react-icons/fa6"
@@ -94,8 +95,8 @@ function CreateRequest() {
           },
           budget: form.budget.trim(),
         }
-        const res = await axios.post(
-          "https://newprojectbackend-5axx.onrender.com/create-request",
+        await axios.post(
+          `${API_BASE}/create-request`,
           payload,
           { headers: { Authorization: `Bearer ${token}` } }
         )

@@ -472,6 +472,158 @@
   max-width: 200px;
   margin: 0 auto;
 }
+/* ============================================================
+   WHY VENLORENT
+   ============================================================ */
+.why-section {
+  padding: 2rem 1.5rem;
+  width: min(1400px, 100%);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.why-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  align-items: center;
+  padding: 2rem;
+}
+/* .why-content{
+  padding: 2rem;
+
+} */
+.section-title-left {
+  font-size: clamp(1.5rem, 3.5vw, 2.1rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-primary, #111827);
+  margin: 0 0 1rem;
+}
+.why-text {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--text-secondary, #6b7280);
+  max-width: 480px;
+}
+.why-visual { 
+  display: flex; 
+  justify-content: center; 
+}
+.why-visual-card {
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 4/3;
+  background: linear-gradient(135deg, var(--primary-opacity), rgba(16,185,129,0.02));
+  border: 1px solid rgba(16,185,129,0.15);
+  border-radius: var(--radius-xl, 16px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  justify-content: center;
+  gap: 1rem;
+  box-shadow: 0 10px 40px rgba(16,185,129,0.08);
+}
+
+.why-visual-img{
+  width: 100%;
+  /* object-fit: cover; */
+}
+.why-stat-label {
+  font-size: var(--font-sm, 0.875rem);
+  color: var(--text-secondary, #6b7280);
+  font-weight: 600;
+}
+
+.why-audience { 
+  padding: 3rem 0 1rem; 
+}
+.why-audience-header { 
+  text-align: center; margin-bottom: 3rem; 
+}
+.audience-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+.audience-card {
+  background: var(--box-bg-color-light, #fff);
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: var(--radius-xl, 16px);
+  padding: 2.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.audience-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.1);
+}
+.audience-card-alt {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-color-dark));
+  color: #fff;
+  border: none;
+}
+.audience-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-lg, 12px);
+  background: var(--primary-opacity, rgba(16,185,129,0.1));
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+.audience-card-alt .audience-icon {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+}
+.audience-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin: 0 0 0.75rem;
+  color: var(--text-primary, #111827);
+}
+.audience-card-alt .audience-title { 
+  color: #fff; 
+}
+.audience-desc {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--text-secondary, #6b7280);
+  margin: 0;
+}
+.audience-card-alt .audience-desc { 
+  color: rgba(255,255,255,0.9); 
+}
+@media (prefers-color-scheme: dark) {
+  .audience-card { 
+    background: var(--box-bg-dark, #1e293b); 
+    border-color: var(--border-dark, #374151); 
+  }
+  .audience-title { 
+    color: var(--text-primary-dark, #f1f5f9); 
+  }
+    .why-checklist-card { 
+    background: var(--box-bg-dark, #1e293b); 
+    border-color: var(--border-dark, #374151); 
+  }
+  .why-checklist li { 
+    color: var(--text-primary-dark, #f1f5f9); 
+  }
+  .section-title-left { 
+    color: var(--text-primary-dark, #f1f5f9); 
+  }
+  .why-text { 
+    color: var(--text-secondary-dark, #94a3b8); 
+  }
+}
+
+@media (max-width: 900px) {
+  .why-block { grid-template-columns: 1fr; gap: 2rem; padding: 2rem 0; }
+  .audience-grid { grid-template-columns: 1fr; }
+  .why-section { padding: 3.5rem 1.25rem; }
+}
 @media (prefers-color-scheme: dark) {
   .how-step-title { color: var(--text-primary-dark, #f1f5f9); }
   .how-step-desc { color: var(--text-secondary-dark, #94a3b8); }

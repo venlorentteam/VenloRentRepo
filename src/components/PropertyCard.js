@@ -16,6 +16,7 @@ import { BsThreeDots } from 'react-icons/bs'
 import { GrLocation } from 'react-icons/gr'
 import { MdIosShare} from 'react-icons/md'
 import { LuBuilding2 } from 'react-icons/lu'
+import { API_BASE } from '../config/api'
 
 // Helper to determine if a media item is a video based on its MIME type.
 const isVideo = (mimeType = "") => mimeType.startsWith("video/")
@@ -96,7 +97,7 @@ function PropertyCard({
     setLikeCount((prev) => Math.max(0, prev + (next ? 1 : -1)))
     setIsLiking(true)
     try {
-      await axios.post(`https://newprojectbackend-5axx.onrender.com/properties/${resolvedPropertyId}/like`,
+      await axios.post(`${API_BASE}/properties/${resolvedPropertyId}/like`,
         { liked: next },
         { headers: { Authorization: `Bearer ${token}` } }
       )
@@ -131,7 +132,7 @@ function PropertyCard({
     const token = localStorage.getItem("token")
     if (!token) return
     axios.post(
-      `https://newprojectbackend-5axx.onrender.com/properties/${resolvedPropertyId}/bookmark`,
+      `${API_BASE}/properties/${resolvedPropertyId}/bookmark`,
       { bookmarked: next },
       { headers: { Authorization: `Bearer ${token}` } }
     ).catch((err) => {
@@ -147,7 +148,7 @@ function PropertyCard({
     if (!confirmed) return
     try {
       await axios.delete(
-        `https://newprojectbackend-5axx.onrender.com/properties/${resolvedPropertyId}`,
+        `${API_BASE}/properties/${resolvedPropertyId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       )
       closeModal()
@@ -166,7 +167,7 @@ function PropertyCard({
   //   if (!token) return
   //   try {
   //     await axios.post(
-  //       `https://newprojectbackend-5axx.onrender.com/properties/${resolvedPropertyId}/report`,
+  //       `l/properties/${resolvedPropertyId}/report`,
   //       { reason: "Reported by user" },
   //       { headers: { Authorization: `Bearer ${token}` } }
   //     )

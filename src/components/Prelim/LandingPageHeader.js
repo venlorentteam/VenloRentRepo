@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import './LandingPageHeader.css'
 import { useAuth } from "../../context/AuthProvider"
-
+import logo from '../../assets/img/venlorent-logo.png'
 const LandingPageHeader = (
     {   openGateModal,
         navigation = [
@@ -21,9 +21,9 @@ const LandingPageHeader = (
         {/* == NAV ================================= */}
         <nav className="landing-nav">
             <div className="landing-nav-inner">
-                <Link to="/" className="landing-nav-logo">
-                <span className="landing-logo-dot" />
-                VenloRent
+                <Link to="/">
+                    {/* <span className="landing-logo-dot" /> */}
+                    <img src={logo} alt="VenloRent" className="landing-nav-logo" />
                 </Link>
                 <div className="landing-nav-links">
                 {(navigation) && navigation.map((item) => (

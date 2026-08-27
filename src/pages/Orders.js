@@ -5,6 +5,7 @@ import { RiMessageLine } from 'react-icons/ri'
 import { FaRegBell } from 'react-icons/fa'
 import axios from 'axios'
 import { useAuth } from "../context/AuthProvider"
+import { API_BASE } from '../config/api'
 
 function Orders() {
   const { user } = useAuth()
@@ -24,7 +25,7 @@ function Orders() {
       }
 
       try {
-        const res = await axios.get("https://newprojectbackend-5axx.onrender.com/orders", {
+        const res = await axios.get(`${API_BASE}/orders`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         setOrders(res.data.items || [])
