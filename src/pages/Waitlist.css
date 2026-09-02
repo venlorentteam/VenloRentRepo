@@ -1,0 +1,640 @@
+.waitlist-page {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(16, 185, 129, 0.18), transparent 32%),
+    radial-gradient(circle at bottom right, rgba(59, 130, 246, 0.1), transparent 28%),
+    var(--bg-color);
+  color: var(--text-primary);
+  overflow-x: hidden;
+}
+
+.waitlist-topbar,
+.waitlist-shell,
+.waitlist-values {
+  width: min(1180px, calc(100% - 24px));
+  margin: 0 auto;
+}
+
+.waitlist-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0 0.5rem;
+}
+
+.waitlist-brand {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.waitlist-brand-logo {
+  display: block;
+  width: 84px;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.waitlist-logo {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--text-primary);
+}
+
+.waitlist-login-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: color var(--transition-fast);
+}
+
+.waitlist-login-link:hover {
+  color: var(--primary-color);
+}
+
+.waitlist-shell {
+  padding: 1rem 0 2rem;
+}
+
+.waitlist-hero {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 1.5rem;
+  align-items: center;
+  padding: 1rem 0 2rem;
+}
+
+.waitlist-hero-copy {
+  animation: fadeUp 0.5s ease both;
+}
+
+.waitlist-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.14);
+  color: var(--primary-color);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.waitlist-headline {
+  margin-top: 1rem;
+  font-size: clamp(2.3rem, 4vw, 4.2rem);
+  line-height: 0.98;
+  letter-spacing: -0.06em;
+  font-weight: 800;
+  max-width: 580px;
+}
+
+.waitlist-subheadline {
+  margin-top: 1rem;
+  max-width: 560px;
+  font-size: 1.02rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.waitlist-proof-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.4rem;
+}
+
+.proof-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  color: var(--text-primary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+}
+
+.proof-icon {
+  color: var(--primary-color);
+  font-size: 0.95rem;
+}
+
+.waitlist-form {
+  margin-top: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 1.5rem;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.06);
+  backdrop-filter: blur(18px);
+}
+
+.waitlist-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.waitlist-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.waitlist-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.optional-tag {
+  font-weight: 500;
+  color: var(--text-tertiary);
+}
+
+.waitlist-input {
+  width: 100%;
+  border: 1px solid rgba(148, 163, 184, 0.38);
+  border-radius: 0.95rem;
+  background: rgba(248, 250, 252, 0.9);
+  padding: 0.9rem 1rem;
+  font-size: 0.96rem;
+  color: var(--text-primary);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+
+.waitlist-input::placeholder {
+  color: var(--text-tertiary);
+}
+
+.waitlist-input:focus {
+  outline: none;
+  border-color: rgba(16, 185, 129, 0.66);
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.12);
+  background: white;
+}
+
+.waitlist-input.input-error {
+  border-color: rgba(239, 68, 68, 0.8);
+}
+
+.waitlist-error {
+  color: var(--danger-color);
+  font-size: 0.73rem;
+  font-weight: 600;
+}
+
+.waitlist-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.waitlist-chip,
+.waitlist-interest-card {
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  background: rgba(255, 255, 255, 0.65);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: transform var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.waitlist-chip {
+  padding: 0.6rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.waitlist-chip:hover,
+.waitlist-interest-card:hover {
+  transform: translateY(-1px);
+  border-color: rgba(16, 185, 129, 0.45);
+}
+
+.waitlist-chip-active {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-color-light) 100%);
+  border-color: transparent;
+  color: white;
+  box-shadow: 0 14px 28px rgba(16, 185, 129, 0.18);
+}
+
+.waitlist-interest-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.waitlist-interest-card {
+  width: 100%;
+  text-align: left;
+  padding: 0.82rem 0.9rem;
+  border-radius: 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.waitlist-interest-active {
+  background: rgba(16, 185, 129, 0.09);
+  border-color: rgba(16, 185, 129, 0.35);
+  color: var(--primary-color);
+}
+
+.waitlist-submit-error {
+  padding: 0.8rem 0.9rem;
+  border-radius: 0.9rem;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.22);
+  color: var(--danger-color);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.waitlist-fineprint {
+  font-size: 0.72rem;
+  line-height: 1.4;
+  color: var(--text-tertiary);
+  text-align: center;
+}
+
+.waitlist-success {
+  margin-top: 1.4rem;
+  padding: 1.25rem;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 1.5rem;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.06);
+  animation: fadeUp 0.4s ease both;
+}
+
+.waitlist-success-icon {
+  font-size: 2.5rem;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.waitlist-success h2 {
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  margin-bottom: 0.4rem;
+}
+
+.waitlist-success p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.waitlist-share-prompt {
+  margin-top: 1rem !important;
+  font-weight: 700;
+  color: var(--text-primary) !important;
+}
+
+.waitlist-copy-btn {
+  margin-top: 0.8rem;
+  border: none;
+  border-radius: 0.9rem;
+  padding: 0.8rem 1.2rem;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-color-light) 100%);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.waitlist-copy-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(16, 185, 129, 0.22);
+}
+
+.waitlist-visual {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 500px;
+  animation: float 5s ease-in-out infinite;
+}
+
+.visual-glow {
+  position: absolute;
+  inset: 8% 6% 14%;
+  border-radius: 2rem;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.14), rgba(59, 130, 246, 0.08));
+  filter: blur(12px);
+}
+
+.visual-card {
+  position: relative;
+  width: min(92%, 420px);
+  padding: 1rem;
+  border-radius: 1.7rem;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 28px 60px rgba(15, 23, 42, 0.08);
+}
+
+.mini-header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.mini-dot {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background: rgba(148, 163, 184, 0.8);
+}
+
+.mini-dot:first-child { background: #ef4444; }
+.mini-dot:nth-child(2) { background: #fbbf24; }
+.mini-dot:nth-child(3) { background: #34d399; }
+
+.mini-property {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 0.9rem;
+  align-items: center;
+  padding: 0.7rem;
+  background: rgba(248, 250, 252, 0.85);
+  border-radius: 1.15rem;
+}
+
+.mini-property-visual {
+  height: 110px;
+  border-radius: 1rem;
+  background:
+    linear-gradient(180deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.05)),
+    linear-gradient(135deg, #d1fae5 0%, #a7f3d0 40%, #dbeafe 100%);
+  box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.16);
+}
+
+.mini-tag {
+  color: var(--primary-color);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.mini-property-copy h3 {
+  margin-top: 0.15rem;
+  font-size: 1.15rem;
+  line-height: 1.2;
+}
+
+.mini-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+  font-size: 0.73rem;
+  color: var(--text-secondary);
+  font-weight: 700;
+}
+
+.mini-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+
+.mini-list-item {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.75rem 0.8rem;
+  border-radius: 0.9rem;
+  background: rgba(248, 250, 252, 0.85);
+  color: var(--text-primary);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.mini-bullet {
+  width: 0.66rem;
+  height: 0.66rem;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.mini-bullet.green { background: #34d399; }
+.mini-bullet.gold { background: #fbbf24; }
+.mini-bullet.blue { background: #60a5fa; }
+
+.floating-pill {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  color: var(--text-primary);
+  font-size: 0.76rem;
+  font-weight: 700;
+  box-shadow: 0 18px 34px rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(10px);
+}
+
+.pill-top {
+  top: 60px;
+  right: 20px;
+}
+
+.pill-bottom {
+  bottom: 22px;
+  left: 20px;
+}
+
+.waitlist-values {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  padding-bottom: 2.5rem;
+}
+
+.waitlist-value-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.8rem;
+  padding: 1.25rem;
+  background: rgba(255, 255, 255, 0.68);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 1.2rem;
+  box-shadow: 0 16px 30px rgba(15, 23, 42, 0.04);
+}
+
+.waitlist-value-icon {
+  font-size: 1.5rem;
+  color: var(--primary-color);
+}
+
+.waitlist-value-card h3 {
+  font-size: 1.04rem;
+}
+
+.waitlist-value-card p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  font-size: 0.88rem;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@media (min-width: 768px) {
+  .waitlist-shell {
+    padding-top: 1.5rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .waitlist-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .waitlist-visual {
+    order: -1;
+    min-height: 420px;
+  }
+
+  .waitlist-values {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .waitlist-topbar {
+    padding-top: 0.85rem;
+  }
+
+  .waitlist-form {
+    padding: 0.8rem;
+  }
+
+  .waitlist-form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .waitlist-headline {
+    max-width: 100%;
+  }
+
+  .waitlist-proof-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .proof-pill {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .waitlist-visual {
+    min-height: 360px;
+  }
+
+  .floating-pill {
+    font-size: 0.68rem;
+    padding: 0.6rem 0.7rem;
+  }
+
+  .pill-top {
+    top: 30px;
+    right: 4px;
+  }
+
+  .pill-bottom {
+    left: 8px;
+    bottom: 10px;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .waitlist-form,
+  .visual-card,
+  .waitlist-success,
+  .waitlist-value-card,
+  .floating-pill,
+  .proof-pill,
+  .waitlist-chip,
+  .waitlist-interest-card {
+    background: rgba(15, 23, 42, 0.85);
+    border-color: rgba(148, 163, 184, 0.15);
+    color: var(--text-primary-dark);
+  }
+
+  .waitlist-chip,
+  .waitlist-interest-card,
+  .mini-list-item,
+  .mini-property {
+    background: rgba(30, 41, 59, 0.9);
+  }
+
+  .waitlist-input {
+    background: rgba(15, 23, 42, 0.9);
+    border-color: rgba(148, 163, 184, 0.18);
+    color: var(--text-primary-dark);
+  }
+
+  .waitlist-login-link,
+  .waitlist-subheadline,
+  .waitlist-success p,
+  .waitlist-value-card p,
+  .mini-meta,
+  .waitlist-fineprint {
+    color: var(--text-secondary-dark);
+  }
+
+  .waitlist-logo,
+  .waitlist-label,
+  .waitlist-success h2,
+  .mini-property-copy h3,
+  .waitlist-headline,
+  .waitlist-value-card h3,
+  .mini-list-item,
+  .proof-pill {
+    color: var(--text-primary-dark);
+  }
+
+  .waitlist-eyebrow {
+    background: rgba(16, 185, 129, 0.12);
+  }
+}
