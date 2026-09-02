@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import './LandingPageHeader.css'
 import { useAuth } from "../../context/AuthProvider"
-import logo from '../../assets/img/venlorent-logo.png'
+import logo from '../../assets/img/venlorent-light.png'
 const LandingPageHeader = (
     {   openGateModal,
         navigation = [

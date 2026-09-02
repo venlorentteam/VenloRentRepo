@@ -4,7 +4,7 @@ import './LandingPage.css'
 import { CtaBanner, StatCounter, PrelimFooter, LandingPageHeader } from '../exports'
 import { useAuth } from "../context/AuthProvider"
 
-import coupleImage from '../assets/img/VenloRent-Couple-Hugging.png'
+import coupleImage from '../assets/img/Venlorent-art-2.png'
 import coupleImage2 from '../assets/img/VenloRent-Selfie-1.png'
 
 // Icons (react-icons)
@@ -133,7 +133,7 @@ function LandingPage() {
       category: 'For Rent',
       price: '850,000',
       title: 'Modern 4-Bedroom Duplex',
-      location: 'Lekki Phase 1, Lagos',
+      location: 'Benin, Edo',
       beds: 4, baths: 3, type: 'Duplex',
       agentAvatar: 'https://i.pravatar.cc/100?img=25',
       agentName: 'Ade Properties',
@@ -181,7 +181,7 @@ function LandingPage() {
       category: 'For Rent',
       price: '900,000',
       title: 'Spacious Mini Flat',
-      location: 'Wuse 2, Abuja',
+      location: 'Awka, Anambra',
       beds: 2, baths: 1, type: 'Mini Flat',
       agentAvatar: 'https://i.pravatar.cc/100?img=60',
       agentName: 'Nnamdi Homes',
@@ -219,7 +219,8 @@ function LandingPage() {
             <span className="hero-heading-accent">Home in Nigeria</span>
           </h1>
           <p className="hero-sub">
-            VenloRent connects you with verified real estate agents for rent, sale, and shortlet properties transparently, securely, all in one place.
+            Discover properties for rent, sale, and shortlet from verified agents, landlords, property owners, and caretakers. VenloRent brings everything together in one secure, transparent platform.
+            {/* VenloRent connects you with verified real estate agents, property owners, landlords, and caretakers, making it easy to find properties for rent, sale, or shortlet, all in one secure and transparent platform. */}
           </p>
 
           {/* Search Bar */}
@@ -254,7 +255,7 @@ function LandingPage() {
             />
             <div className="hero-card-info">
               <div className="hero-card-price">₦1,200,000<small>/yr</small></div>
-              <div className="hero-card-loc"><GrLocation /> Maitama, Abuja</div>
+              <div className="hero-card-loc"><GrLocation /> Yaba, Lagos</div>
             </div>
           </div>
           <div className="hero-house-card hero-card-side">
@@ -285,7 +286,7 @@ function LandingPage() {
       </section>
 
       {/* Stats */}
-      <section className="stats-section">
+      {/* <section className="stats-section">
         <div className="stats-inner">
           <StatCounter value="500+" label="Verified Agents" />
           <div className="stats-divider" aria-hidden="true" />
@@ -295,7 +296,17 @@ function LandingPage() {
           <div className="stats-divider" aria-hidden="true" />
           <StatCounter value="100+" label="Deals Closed" />
         </div>
-      </section>
+      </section> */}
+
+      <CtaBanner 
+        title='Have a property to rent?'
+        subtitle='Showcase your property to renters actively searching for apartments, homes, and other rental spaces on VenloRent.'
+        buttons = {[
+          {
+            href: "/register", name:"Join as an agent", style: "white"
+          }
+        ]}
+      />
 
       {/* How it works */}
       <section className="how-section" id="how">
