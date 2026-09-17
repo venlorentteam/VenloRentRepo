@@ -50,8 +50,15 @@ function EmailAuth(){
       const res = await axios.post(`${API_BASE}/auth/email-verify`, {email: state?.email, otp})
       if(res.data.success){//validation successful
         setAuthFromToken(res.data.token, res.data.user) // Save token and update user state in context
-        const nextPath = state?.role === "agent" ? "/kyc" : "/dashboard"
-        navigate(nextPath, {replace: true})
+        //const nextPath = state?.role === "agent" ? "/kyc" : "/dashboard"
+        navigate("/onboarding", {
+          replace: true,
+          state: { 
+            email: res.data.user.email,
+            role: res.data.user.role,
+            source: "email-verification",
+          },
+        })
       }
     }
     catch(err){

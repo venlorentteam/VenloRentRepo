@@ -1,70 +1,67 @@
 .onboarding-page {
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  background:
-    radial-gradient(circle at top left, rgba(16, 185, 129, 0.12), transparent 20%),
-    linear-gradient(180deg, #f8fffb 0%, #f4fbf7 100%);
+  background: var(--bg-color);
 }
 
 .onboarding-shell {
   width: 100%;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 2rem clamp(1rem, 3vw, 2.5rem) 2.5rem;
+  padding: 0;
 }
 
 .onboarding-brand-wrap {
   display: flex;
   justify-content: flex-start;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.75rem;
 }
 
 .onboarding-brand-logo {
   display: block;
-  width: 92px;
-  max-width: 100%;
-  height: auto;
+  width: 50px;
+  height: 50px;
   object-fit: contain;
-  filter: drop-shadow(0 8px 18px rgba(16, 185, 129, 0.12));
+  padding: 10px;
+  border: 1px solid var(--primary-color);
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
 }
 
 .onboarding-layout {
+  /* Match Register's fluid, edge-to-edge split layout instead of placing two
+     individual cards inside a constrained grid. */
   display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  width: min(100%, 1200px);
-  min-height: calc(100vh - 100px);
-  margin: 0 auto;
+  width: 100%;
+  min-height: 100vh;
 }
 
 .onboarding-visual-panel {
+  /* The left panel owns the illustration and its background, like
+     .register-hero. It intentionally has no gap or floating-card frame. */
+  flex: 1;
   display: flex;
-  align-items: stretch;
+  align-items: center;
   justify-content: center;
-  width: 100%;
+  padding: var(--spacing-2xl);
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    rgba(16, 185, 129, 0.08) 0%,
+    rgba(6, 182, 212, 0.06) 100%
+  );
 }
 
 .onboarding-visual-card {
   position: relative;
   width: 100%;
-  min-height: 320px;
-  border-radius: 2rem;
+  max-width: 620px;
+  height: min(76vh, 720px);
   overflow: hidden;
-  border: 1px solid rgba(148, 163, 184, 0.18);
-  box-shadow: 0 30px 80px rgba(15, 23, 42, 0.12);
-  background: #fff;
 }
 
 .onboarding-visual-image {
   display: block;
   width: 100%;
   height: 100%;
-  min-height: 320px;
   object-fit: cover;
 }
 
@@ -94,15 +91,22 @@
 }
 
 .onboarding-card {
-  width: min(100%, 820px);
-  margin: 0 auto;
-  background: rgba(255, 255, 255, 0.82);
-  border: 1px solid rgba(148, 163, 184, 0.18);
-  border-radius: 1.9rem;
-  padding: clamp(1.2rem, 2vw, 2rem);
-  box-shadow: 0 30px 60px rgba(15, 23, 42, 0.06);
-  backdrop-filter: blur(18px);
+  /* This is the full right-side form section, analogous to
+     .register-form-section; its children are constrained, not the section. */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--spacing-2xl);
+  background: var(--bg-color);
   animation: fadeUp 0.45s ease both;
+}
+
+.onboarding-card > * {
+  width: 100%;
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .onboarding-top {
@@ -144,7 +148,7 @@
 .onboarding-title {
   font-size: clamp(1.7rem, 4vw, 2.4rem);
   line-height: 1.05;
-  letter-spacing: -0.06em;
+  letter-spacing: -0.025em;
   font-weight: 800;
   color: var(--text-primary);
   margin-bottom: 0.4rem;
@@ -201,7 +205,7 @@
 
 .onboarding-role-label {
   font-size: 0.96rem;
-  font-weight: 700;
+  font-weight: 500;
   color: var(--text-primary);
 }
 
@@ -209,6 +213,7 @@
   font-size: 0.74rem;
   color: var(--text-secondary);
   margin-top: 0.15rem;
+  font-weight: normal;
 }
 
 .onboarding-field {
@@ -364,16 +369,11 @@
   }
 
   .onboarding-shell {
-    padding: 1rem 0.85rem 1.2rem;
+    padding: 0;
   }
 
   .onboarding-card {
-    padding: 1rem 0.85rem 1.1rem;
-  }
-
-  .onboarding-visual-card,
-  .onboarding-visual-image {
-    min-height: 220px;
+    padding: var(--spacing-lg) var(--spacing-md);
   }
 
   .onboarding-role-card {
@@ -388,6 +388,17 @@
   .onboarding-back-btn {
     justify-content: center;
     padding-top: 0.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .onboarding-visual-panel {
+    display: none;
+  }
+
+  .onboarding-card {
+    min-height: 100vh;
+    padding: var(--spacing-xl) var(--spacing-lg);
   }
 }
 
