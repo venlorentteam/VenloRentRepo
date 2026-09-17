@@ -52,7 +52,7 @@ function Register() {
           error = "Password is required"
         } else if (value.length < 6) {
           error = "Password must be at least 6 characters"
-        }else if (!/^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$/.test(value)){
+        }else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>_\-+=~`[\]\\/;'])[^\s]{6,}$/u.test(value)){
           error = "Password must contain letters, numbers and special character"
         }
         if (formData.confirmPassword.trim()) {
