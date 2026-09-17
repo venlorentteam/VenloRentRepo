@@ -1,38 +1,35 @@
 import React, { useState, useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import './Onboarding.css'
 import { ClickButton } from '../exports'
-import venlorentLogo from '../assets/img/venlorent.png'
-import { FiHome, FiBriefcase, FiCompass, FiMapPin, FiCheckCircle, FiArrowLeft } from 'react-icons/fi'
+import venlorentLogo from '../assets/img/venlorent-light.png'
+import { FiHome, FiCompass, FiMapPin, FiCheckCircle, FiArrowLeft } from 'react-icons/fi'
 import { MdVerifiedUser } from 'react-icons/md'
+import { useAuth } from "../context/AuthProvider"
+import { API_BASE } from '../config/api'
+import axios from 'axios'
 
-const ONBOARDING_ILLUSTRATION = "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80"
+import onboardingIllustration from '../assets/img/Venlorent-iii.png'
 
-const ROLES = [
-  { id: "seeker", label: "I'm looking for a place", icon: FiHome, description: "Browse verified listings and message agents." },
-  { id: "agent", label: "I list properties", icon: FiBriefcase, description: "Post listings once your account is verified." },
+// This is a search preference, not an account role. Account roles are set at
+// registration and enforced by the authenticated user returned by the backend.
+const SEARCH_INTENTS = [
+  { id: "searching", label: "I'm looking for a place", icon: FiHome, description: "Browse verified listings and message agents." },
   { id: "exploring", label: "Just exploring", icon: FiCompass, description: "See how VenloRent works before deciding." },
 ]
 
-const CITIES = ["Lagos", "Abuja", "Port Harcourt"]
+const CITIES = ["Lagos", "Abuja", "Port Harcourt", "Awka", "Ibadan", "Enugu", "Asaba", "Uyo", "Kaduna"]
 const CATEGORIES = ["Rent", "Sale", "Shortlet"]
-const HOUSE_TYPES = ["Studio", "1 Bedroom", "2 Bedroom", "3 Bedroom", "4+ Bedroom", "Duplex", "Bungalow", "Penthouse"]
+const HOUSE_TYPES = ["Self-Contained", "1 Bedroom", "2 Bedroom", "3 Bedroom", "4+ Bedroom", "Duplex", "Bungalow", "Apartment", "Shop", "Office", "Conference Room"]
 const MOVE_IN_OPTIONS = ["As soon as possible", "Within a month", "Just browsing for now"]
-
-// TODO: walter, remember to replace with a real API call once the backend is ready, e.g.
-// return axios.post('/api/users/onboarding', payload)
-async function submitOnboarding(payload) {
-  localStorage.setItem("venlorent_onboarding", JSON.stringify(payload))
-  localStorage.setItem("venlorent_onboarding_complete", "true")
-  return Promise.resolve({ success: true })
-}
 
 function Onboarding() {
   const navigate = useNavigate()
   const [stepIndex, setStepIndex] = useState(0)
+  const [error, setError] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState({
-    role: "",
+    searchIntent: "",
     locations: [],
     otherLocation: "",
     category: "",
@@ -40,17 +37,48 @@ function Onboarding() {
     moveIn: "",
   })
 
-  // Agents get one extra step (a verification heads-up) before the flow completes
+  const { state: navigationState } = useLocation()
+  const { user, updateUser } = useAuth()
+
+  const accountRole = user?.role ?? navigationState?.role ?? "regular"
+  const isAgentAccount = accountRole === "agent"
+
+  const submitOnboarding = async (payload) => {
+    setError(null)
+
+    try {
+      const token = localStorage.getItem("token")
+
+      const res = await axios.patch(
+        `${API_BASE}/users/onboarding`,
+        payload,
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+
+      if (!res.data?.success || !res.data?.user) {
+        throw new Error(res.data?.message || "Could not save your preferences.")
+      }
+
+      updateUser(res.data.user)
+      return true
+    } catch (err) {
+      setError(err.response?.data?.message || err.message || "Could not save your preferences.")
+      return false
+    }
+  }
+
+  // Registration determines the flow. Regular users choose a search intent;
+  // agents go directly to listing questions and the KYC explainer.
   const steps = useMemo(() => {
-    const flow = ["role", "locations", "preferences"]
-    if (formData.role === "agent") flow.push("verify")
+    const flow = isAgentAccount
+      ? ["locations", "preferences", "verify"]
+      : ["intent", "locations", "preferences"]
     flow.push("complete")
     return flow
-  }, [formData.role])
+  }, [isAgentAccount])
 
   const currentStep = steps[stepIndex]
   const isLastDataStep = stepIndex === steps.length - 2
-
   const toggleLocation = (city) => {
     setFormData((prev) => ({
       ...prev,
@@ -71,12 +99,16 @@ function Onboarding() {
 
   const canProceed = () => {
     switch (currentStep) {
-      case "role":
-        return !!formData.role
+      case "intent":
+        return !!formData.searchIntent
       case "locations":
         return formData.locations.length > 0 || formData.otherLocation.trim() !== ""
       case "preferences":
-        return !!formData.category && formData.houseTypes.length > 0
+        return Boolean(
+          formData.category &&
+          formData.houseTypes.length > 0 &&
+          (isAgentAccount || formData.searchIntent === "exploring" || formData.moveIn)
+        )
       default:
         return true
     }
@@ -87,28 +119,55 @@ function Onboarding() {
 
     if (isLastDataStep) {
       setIsSubmitting(true)
-      await submitOnboarding(formData)
+
+      const saved = await submitOnboarding({
+        onboarding: {
+          searchIntent: formData.searchIntent,
+          locations: formData.locations,
+          otherLocation: formData.otherLocation.trim(),
+          category: formData.category,
+          houseTypes: formData.houseTypes,
+          moveIn: formData.moveIn,
+          skipped: false,
+        },
+      })
+
       setIsSubmitting(false)
+
+      if (!saved) return
     }
-    setStepIndex((i) => Math.min(i + 1, steps.length - 1))
+
+    setStepIndex((index) => Math.min(index + 1, steps.length - 1))
   }
 
+  // Steps are derived from the authenticated account role, so decrementing the
+  // current index reliably returns to the preceding step in either flow.
   const handleBack = () => {
-    setStepIndex((i) => Math.max(i - 1, 0))
+    setStepIndex((index) => Math.max(index - 1, 0))
   }
 
   const handleSkip = async () => {
-    await submitOnboarding({ skipped: true })
-    navigate("/dashboard")
+    setIsSubmitting(true)
+
+    const saved = await submitOnboarding({
+      onboarding: { skipped: true },
+    })
+
+    setIsSubmitting(false)
+
+    if (!saved) return
+
+    navigate(
+      isAgentAccount ? "/kyc" : "/dashboard",
+      { replace: true }
+    )
   }
 
   const handleFinish = () => {
-    navigate("/dashboard")
-  }
-
-  const handleStartVerification = () => {
-    // Matches the "kyc" entry in SettingsMenu -> /account/kyc
-    navigate("/account/kyc")
+    navigate(
+      isAgentAccount ? "/kyc" : "/dashboard",
+      { replace: true }
+    )
   }
 
   const dataSteps = steps.filter((s) => s !== "complete")
@@ -117,20 +176,20 @@ function Onboarding() {
   return (
     <div className="onboarding-page">
       <div className="onboarding-shell">
-        <div className="onboarding-brand-wrap">
-          <img src={venlorentLogo} alt="VenloRent logo" className="onboarding-brand-logo" />
-        </div>
-
         <div className="onboarding-layout">
           <aside className="onboarding-visual-panel">
             <div className="onboarding-visual-card">
-              <img src={ONBOARDING_ILLUSTRATION} alt="Modern apartment interior" className="onboarding-visual-image" />
+              <img src={onboardingIllustration} alt="Modern apartment interior" className="onboarding-visual-image" />
               <div className="onboarding-visual-badge onboarding-badge-top">Verified homes</div>
-              <div className="onboarding-visual-badge onboarding-badge-bottom">Trusted by 2k+ people</div>
+              <div className="onboarding-visual-badge onboarding-badge-bottom">Find homes with confidence.</div>
             </div>
           </aside>
 
           <div className="onboarding-card">
+            <div className="onboarding-brand-wrap">
+              <img src={venlorentLogo} alt="VenloRent logo" className="onboarding-brand-logo" />
+            </div>
+
             {/* Progress + Skip */}
             {currentStep !== "complete" && (
               <div className="onboarding-top">
@@ -147,27 +206,32 @@ function Onboarding() {
                 </button>
               </div>
             )}
-
-            {/* STEP: Role */}
-            {currentStep === "role" && (
+            {error && (
+              <div className="submit-error">
+                {error}
+              </div>
+            )}
+            {/* Regular users can personalize their search; agents already chose
+                their account role during registration, so this step is omitted. */}
+            {currentStep === "intent" && (
               <div className="onboarding-step">
                 <h2 className="onboarding-title">What brings you to VenloRent?</h2>
                 <p className="onboarding-subtitle">This helps us tailor what you see first.</p>
 
                 <div className="onboarding-role-list">
-                  {ROLES.map((role) => {
-                    const Icon = role.icon
+                  {SEARCH_INTENTS.map((intent) => {
+                    const Icon = intent.icon
                     return (
                       <button
                         type="button"
-                        key={role.id}
-                        className={`onboarding-role-card ${formData.role === role.id ? "onboarding-role-active" : ""}`}
-                        onClick={() => setFormData((prev) => ({ ...prev, role: role.id }))}
+                        key={intent.id}
+                        className={`onboarding-role-card ${formData.searchIntent === intent.id ? "onboarding-role-active" : ""}`}
+                        onClick={() => setFormData((prev) => ({ ...prev, searchIntent: intent.id }))}
                       >
                         <Icon className="onboarding-role-icon" />
                         <div className="onboarding-role-text">
-                          <span className="onboarding-role-label">{role.label}</span>
-                          <span className="onboarding-role-description">{role.description}</span>
+                          <span className="onboarding-role-label">{intent.label}</span>
+                          <span className="onboarding-role-description">{intent.description}</span>
                         </div>
                       </button>
                     )
@@ -180,9 +244,13 @@ function Onboarding() {
             {currentStep === "locations" && (
               <div className="onboarding-step">
                 <h2 className="onboarding-title">
-                  Where are you {formData.role === "agent" ? "listing" : "searching"}?
+                  {isAgentAccount ? "Where do you list properties?" : "Where are you searching?"}
                 </h2>
-                <p className="onboarding-subtitle">Pick as many cities as apply.</p>
+                <p className="onboarding-subtitle">
+                  {isAgentAccount
+                    ? "Choose every city where you actively serve clients."
+                    : "Pick every city you would consider living in."}
+                </p>
 
                 <div className="onboarding-chip-row">
                   {CITIES.map((city) => (
@@ -200,12 +268,12 @@ function Onboarding() {
 
                 <div className="onboarding-field">
                   <label htmlFor="otherLocation" className="onboarding-label">
-                    Somewhere else? <span className="optional-tag">(optional)</span>
+                    {isAgentAccount ? "Another service area?" : "Somewhere else?"} <span className="optional-tag">(optional)</span>
                   </label>
                   <input
                     id="otherLocation"
                     className="onboarding-input"
-                    placeholder="e.g. Ibadan"
+                    placeholder={isAgentAccount ? "e.g. Benin City" : "e.g. Ibadan"}
                     value={formData.otherLocation}
                     onChange={(e) => setFormData((prev) => ({ ...prev, otherLocation: e.target.value }))}
                   />
@@ -216,11 +284,17 @@ function Onboarding() {
             {/* STEP: Preferences */}
             {currentStep === "preferences" && (
               <div className="onboarding-step">
-                <h2 className="onboarding-title">What kind of property?</h2>
-                <p className="onboarding-subtitle">We'll prioritize this in your feed and search.</p>
+                <h2 className="onboarding-title">
+                  {isAgentAccount ? "What properties do you list?" : "What kind of property are you looking for?"}
+                </h2>
+                <p className="onboarding-subtitle">
+                  {isAgentAccount
+                    ? "This helps us prepare the right listing experience for you."
+                    : "We'll prioritize these properties in your feed and search."}
+                </p>
 
                 <div className="onboarding-field">
-                  <span className="onboarding-label">Category</span>
+                  <span className="onboarding-label">{isAgentAccount ? "Listing category" : "Category"}</span>
                   <div className="onboarding-chip-row">
                     {CATEGORIES.map((cat) => (
                       <button
@@ -236,7 +310,7 @@ function Onboarding() {
                 </div>
 
                 <div className="onboarding-field">
-                  <span className="onboarding-label">House type</span>
+                  <span className="onboarding-label">{isAgentAccount ? "Property types you list" : "House type"}</span>
                   <div className="onboarding-chip-row">
                     {HOUSE_TYPES.map((type) => (
                       <button
@@ -251,23 +325,27 @@ function Onboarding() {
                   </div>
                 </div>
 
-                <div className="onboarding-field">
-                  <span className="onboarding-label">
-                    When are you looking to move? <span className="optional-tag">(optional)</span>
-                  </span>
-                  <div className="onboarding-chip-row">
-                    {MOVE_IN_OPTIONS.map((option) => (
-                      <button
-                        type="button"
-                        key={option}
-                        className={`onboarding-chip ${formData.moveIn === option ? "onboarding-chip-active" : ""}`}
-                        onClick={() => setFormData((prev) => ({ ...prev, moveIn: option }))}
-                      >
-                        {option}
-                      </button>
-                    ))}
+                {/* Active searchers provide timing so their feed can prioritize
+                    more immediate opportunities; explorers are not asked for it. */}
+                {!isAgentAccount && formData.searchIntent === "searching" && (
+                  <div className="onboarding-field">
+                    <span className="onboarding-label">
+                      When are you looking to move?
+                    </span>
+                    <div className="onboarding-chip-row">
+                      {MOVE_IN_OPTIONS.map((option) => (
+                        <button
+                          type="button"
+                          key={option}
+                          className={`onboarding-chip ${formData.moveIn === option ? "onboarding-chip-active" : ""}`}
+                          onClick={() => setFormData((prev) => ({ ...prev, moveIn: option }))}
+                        >
+                          {option}
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             )}
 
@@ -299,22 +377,14 @@ function Onboarding() {
                 <FiCheckCircle className="onboarding-complete-icon" />
                 <h2 className="onboarding-title">You're all set!</h2>
                 <p className="onboarding-subtitle">
-                  {formData.role === "agent"
+                  {isAgentAccount
                     ? "You can start browsing now, and verify your account whenever you're ready to list."
                     : "We've tailored your feed based on what you told us. You can update this anytime in Account settings."}
                 </p>
 
                 <div className="onboarding-complete-actions">
-                  {formData.role === "agent" && (
-                    <ClickButton
-                      text="Verify my account now"
-                      variant="outline"
-                      size="large"
-                      onClick={handleStartVerification}
-                    />
-                  )}
                   <ClickButton
-                    text="Go to Dashboard"
+                    text={isAgentAccount ? "Continue to verification" : "Go to Dashboard"}
                     variant="primary"
                     size="large"
                     onClick={handleFinish}

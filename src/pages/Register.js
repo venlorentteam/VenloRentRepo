@@ -21,6 +21,7 @@ function Register() {
     confirmPassword: "",
     fullname: "",
     username: "",
+    website: "",
     agent: false,
   })
   
@@ -153,6 +154,7 @@ function Register() {
           username: formData.username,
           password: formData.password,
           fullName: formData.fullname,
+          website: formData.website,
           role: formData.agent ? "agent" : "regular",
         }
 
@@ -336,6 +338,25 @@ function Register() {
                   {errors.username && (
                     <span className="error-message">{errors.username}</span>
                   )}
+                </div>
+
+                {/* Website Input */}
+                <div
+                  className="form-group"
+                  aria-hidden="true"
+                  style={{ position: "absolute", left: "-9999px", top: "-9999px", opacity: 0 }}
+                >
+                  <label htmlFor="website">Website</label>
+                  <input
+                    id="website"
+                    type="text"
+                    name="website"
+                    tabIndex="-1"
+                    autoComplete="off"
+                    value={formData.website}
+                    onChange={handleChange}
+                    disabled={isLoading}
+                  />
                 </div>
 
                 {/* == Agent Selection Card ===================================

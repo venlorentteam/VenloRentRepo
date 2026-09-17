@@ -20,7 +20,7 @@ import { TbHomeCheck } from "react-icons/tb"
 const CATEGORY_OPTIONS = [
   { value: "apartment", label: "Apartment" },
   { value: "flat", label: "Flat" },
-  { value: "self-con", label: "Self-Con" },
+  { value: "self-con", label: "Self-Contained" },
   { value: "duplex", label: "Duplex" },
   { value: "shop", label: "Shop" },
   { value: "office", label: "Office" },
