@@ -40,10 +40,12 @@ function CreateRequest() {
     const categoryOptions = [
       { value: 'apartment', label: 'Apartment' },
       { value: 'flat', label: 'Flat' },
-      { value: 'self-con', label: 'Self-Con' },
+      { value: 'self-contained', label: 'Self-Contained' },
       { value: 'duplex', label: 'Duplex' },
       { value: 'shop', label: 'Shop' },
-      {value: 'conference-room', label: 'Conference Room' },
+      { value: 'office', label: 'Office' },
+      { value: 'conference-room', label: 'Conference Room' },
+      { value: 'studio', label: 'Studio' },
   
     ]
 

@@ -18,6 +18,31 @@ const isRequestExpired = (item) =>
   item.status === "expired" ||
   (item.expiresAt && new Date(item.expiresAt) <= Date.now())
 
+// Outside — pure string transform
+const capitalizeWords = (str = "") => str.split("-").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join("-")
+
+  // Interleaves score-ordered listings with chronologically-ordered requests,
+  // without re-sorting either list. One request every `requestFrequency` listings.
+  const weaveFeed = (rankedListings, chronologicalRequests, requestFrequency = 4) => {
+    const merged = []
+    let requestIndex = 0
+
+    rankedListings.forEach((listing, i) => {
+      merged.push(listing)
+      if ((i + 1) % requestFrequency === 0 && requestIndex < chronologicalRequests.length) {
+        merged.push(chronologicalRequests[requestIndex])
+        requestIndex++
+      }
+    })
+
+    // Any leftover requests (more requests than the weave pattern consumed) go at the end.
+    while (requestIndex < chronologicalRequests.length) {
+      merged.push(chronologicalRequests[requestIndex])
+      requestIndex++
+    }
+
+    return merged
+  }
 // ========================================================
 //  MAIN DASHBOARD COMPONENT
 // ========================================================
@@ -72,13 +97,16 @@ function Dashboard() {
   useEffect(() => {
     const fetchFeed = async () => {
       setIsLoading(true)
-      try{
+      try {
         const token = localStorage.getItem("token")
-        const headers = token ? { Authorization: `Bearer ${token}` } : {}
+        const headers = { Authorization: `Bearer ${token}` } 
 
-        const listingRes = await axios.get(`${API_BASE}/properties?status=available`, { headers })
+        // Authenticated access oonly
+        const listingRes = await axios.get(`${API_BASE}/feed`, { headers })
+          //: await axios.get(`${API_BASE}/properties?status=available`, { headers })
+
         const requestRes = await axios.get(`${API_BASE}/requests`, { headers })
-        
+
         const listings = (listingRes.data.items || []).map((p) => ({
           type: "listing",
           id: p._id,
@@ -90,17 +118,15 @@ function Dashboard() {
           isVerified: p.owner?.kycStatus === "verified",
           isPremium: p.owner?.plan === "premium" || p.owner?.plan === "pro",
           time: timeAgo(p.createdAt),
-          // Handle both string media arrays and {url} objects.
           image: (p.media || []).map((m) => typeof m === "string"
-            ? { url: m, mimeType: "image/jpeg" }   // legacy string — assume image
+            ? { url: m, mimeType: "image/jpeg" }
             : { url: m?.url, mimeType: m?.mimeType || "image/jpeg" }
             ).filter((m) => m.url),
-          // Keep numeric price for accurate calculations in PropertyCard.
           price: Number(p.amount),
           commission: Number(p.commission) || 0,
           priceLabel: p.listing_type === "rent" ? "/yr" : p.listing_type === "shortlet" ? "/night" : "",
           location: [p.location?.town, p.location?.state].filter(Boolean).join(", "),
-          category: p.property_type.charAt(0).toUpperCase() + p.property_type.slice(1),
+          category: capitalizeWords(p.property_type), 
           listingType: p.listing_type,
           bedrooms: p.bedrooms || "",
           features: p.features || [],
@@ -109,45 +135,43 @@ function Dashboard() {
           comments: String(p.commentCount || 0),
           bookmarked: p.bookmarkedByMe || false,
           description: p.description,
-        }))
+        })) 
 
-        const requests = (requestRes.data.items || []).map((r) => ({
-          type: "request",
-          id: r._id,
-          createdAt: r.createdAt,
-          requesterId: r.requester?._id || "",
-          // Owner fields — now populated
-          avatar: r.requester?.avatar   || defaultAvatar,
-          username: r.requester?.fullName || r.requester?.username || "",
-          handle: r.requester?.username ? `@${r.requester.username}` : "",
-          isAgent: r.requester?.role === "agent" || r.requester?.kycStatus === "verified",
-          isPremium: r.requester?.plan === "premium" || r.requester?.plan === "pro",
-          time: timeAgo(r.createdAt),
-          description: r.description,
-          category: r.category,
-          location: [r.location?.town, r.location?.state].filter(Boolean).join(", "),
-          budget: r.budget,
-          likes: String(r.likeCount || 0),
-          likedByMe: r.likedByMe || false,
-          responseCount: String(r.responseCount || 0),
-          discussionCount: String(r.discussionCount || 0),
-          // agentResponses and discussionItems are loaded lazily inside RequestResponsesModal when the user taps "See Responses"
-          // they don't need to be in the feed payload
-          agentResponses:  [],
-          discussionItems: [],
-          bookmarked: r.bookmarkedByMe || false,
-          expired: isRequestExpired(r),
-          daysLeft: r.expiresAt ? Math.max(0, Math.ceil((new Date(r.expiresAt) - Date.now()) / 86_400_000)) : null,
-        }))
+        const requests = (requestRes.data.items || [])
+          .map((r) => ({
+            type: "request",
+            id: r._id,
+            createdAt: r.createdAt,
+            requesterId: r.requester?._id || "",
+            avatar: r.requester?.avatar || defaultAvatar,
+            username: r.requester?.fullName || r.requester?.username || "",
+            handle: r.requester?.username ? `@${r.requester.username}` : "",
+            isAgent: r.requester?.role === "agent" || r.requester?.kycStatus === "verified",
+            isPremium: r.requester?.plan === "premium" || r.requester?.plan === "pro",
+            time: timeAgo(r.createdAt),
+            description: r.description,
+            category: r.category,
+            location: [r.location?.town, r.location?.state].filter(Boolean).join(", "),
+            budget: r.budget,
+            likes: String(r.likeCount || 0),
+            likedByMe: r.likedByMe || false,
+            responseCount: String(r.responseCount || 0),
+            discussionCount: String(r.discussionCount || 0),
+            agentResponses: [],
+            discussionItems: [],
+            bookmarked: r.bookmarkedByMe || false,
+            expired: isRequestExpired(r),
+            daysLeft: r.expiresAt ? Math.max(0, Math.ceil((new Date(r.expiresAt) - Date.now()) / 86_400_000)) : null,
+          }))
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // requests still sort by recency — fine, they aren't scored
 
-      const merged = [...listings, ...requests].sort(
-        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-      )
+        // Weave requests into the score-ordered listings without disturbing listing order.
+        const merged = weaveFeed(listings, requests)
 
-      setFeed(merged)  
-      }catch(err){
-      
-      }finally{
+        setFeed(merged)
+      } catch (err) {
+        // (existing empty catch — worth at least logging this)
+      } finally {
         setIsLoading(false)
       }
     }

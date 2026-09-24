@@ -20,7 +20,8 @@ import { TbHomeCheck } from "react-icons/tb"
 const CATEGORY_OPTIONS = [
   { value: "apartment", label: "Apartment" },
   { value: "flat", label: "Flat" },
-  { value: "self-con", label: "Self-Contained" },
+  { value: "studio", label: "Studio" },
+  { value: "self-contained", label: "Self-Contained" },
   { value: "duplex", label: "Duplex" },
   { value: "shop", label: "Shop" },
   { value: "office", label: "Office" },
@@ -28,13 +29,13 @@ const CATEGORY_OPTIONS = [
 ]
 
 const LISTING_TYPE_OPTIONS = [
-  { value: "rent",     label: "For Rent" },
-  { value: "sale",     label: "For Sale" },
+  { value: "rent", label: "For Rent" },
+  { value: "sale", label: "For Sale" },
   { value: "shortlet", label: "Shortlet" },
 ]
 
 const BEDROOM_OPTIONS = [
-  { value: "studio", label: "Studio" },
+  //{ value: "studio", label: "Studio" },
   { value: "1", label: "1 Bed" },
   { value: "2", label: "2 Bed" },
   { value: "3", label: "3 Bed" },
