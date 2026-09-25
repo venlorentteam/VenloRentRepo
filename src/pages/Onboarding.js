@@ -20,8 +20,10 @@ const SEARCH_INTENTS = [
 
 const CITIES = ["Lagos", "Abuja", "Port Harcourt", "Awka", "Ibadan", "Enugu", "Asaba", "Uyo", "Kaduna"]
 const CATEGORIES = ["Rent", "Sale", "Shortlet"]
-const HOUSE_TYPES = ["Self-Contained", "1 Bedroom", "2 Bedroom", "3 Bedroom", "4+ Bedroom", "Duplex", "Bungalow", "Apartment", "Shop", "Office", "Conference Room"]
+//const HOUSE_TYPES = ["Self-Contained", "1 Bedroom", "2 Bedroom", "3 Bedroom", "4+ Bedroom", "Duplex", "Bungalow", "Apartment", "Shop", "Office", "Conference Room"]
+const PROPERTY_TYPE = ["Apartment", "Flat", "Self-Contained", "Duplex", "Shop", "Office", "Conference-Room", "Studio"]
 const MOVE_IN_OPTIONS = ["As soon as possible", "Within a month", "Just browsing for now"]
+const BEDROOM_OPTIONS = ["1", "2", "3", "4+"]
 
 function Onboarding() {
   const navigate = useNavigate()
@@ -33,7 +35,8 @@ function Onboarding() {
     locations: [],
     otherLocation: "",
     category: "",
-    houseTypes: [],
+    propertyTypes: [],   // renamed from houseTypes
+    bedrooms: [],
     moveIn: "",
   })
 
@@ -50,7 +53,7 @@ function Onboarding() {
       const token = localStorage.getItem("token")
 
       const res = await axios.patch(
-        `${API_BASE}/users/onboarding`,
+        `${API_BASE}/onboarding`,
         payload,
         { headers: { Authorization: `Bearer ${token}` } }
       )
@@ -88,12 +91,21 @@ function Onboarding() {
     }))
   }
 
-  const toggleHouseType = (type) => {
+  const togglePropertyType = (type) => {
     setFormData((prev) => ({
       ...prev,
-      houseTypes: prev.houseTypes.includes(type)
-        ? prev.houseTypes.filter((t) => t !== type)
-        : [...prev.houseTypes, type],
+      propertyTypes: prev.propertyTypes.includes(type)
+        ? prev.propertyTypes.filter((t) => t !== type)
+        : [...prev.propertyTypes, type],
+    }))
+  }
+
+  const toggleBedroom = (count) => {
+    setFormData((prev) => ({
+      ...prev,
+      bedrooms: prev.bedrooms.includes(count)
+        ? prev.bedrooms.filter((c) => c !== count)
+        : [...prev.bedrooms, count],
     }))
   }
 
@@ -106,7 +118,7 @@ function Onboarding() {
       case "preferences":
         return Boolean(
           formData.category &&
-          formData.houseTypes.length > 0 &&
+          formData.propertyTypes.length > 0 &&
           (isAgentAccount || formData.searchIntent === "exploring" || formData.moveIn)
         )
       default:
@@ -125,8 +137,9 @@ function Onboarding() {
           searchIntent: formData.searchIntent,
           locations: formData.locations,
           otherLocation: formData.otherLocation.trim(),
-          category: formData.category,
-          houseTypes: formData.houseTypes,
+          category: formData.category.toLowerCase(),
+          propertyTypes: formData.propertyTypes.map((t) => t.toLowerCase()),
+          bedrooms: formData.bedrooms.map((b) => b.toLowerCase()),
           moveIn: formData.moveIn,
           skipped: false,
         },
@@ -312,19 +325,34 @@ function Onboarding() {
                 <div className="onboarding-field">
                   <span className="onboarding-label">{isAgentAccount ? "Property types you list" : "House type"}</span>
                   <div className="onboarding-chip-row">
-                    {HOUSE_TYPES.map((type) => (
+                    {PROPERTY_TYPE.map((type) => (
                       <button
                         type="button"
                         key={type}
-                        className={`onboarding-chip ${formData.houseTypes.includes(type) ? "onboarding-chip-active" : ""}`}
-                        onClick={() => toggleHouseType(type)}
+                        className={`onboarding-chip ${formData.propertyTypes.includes(type) ? "onboarding-chip-active" : ""}`}
+                        onClick={() => togglePropertyType(type)}
                       >
                         {type}
                       </button>
                     ))}
                   </div>
                 </div>
-
+                {!isAgentAccount && (
+                <div className="onboarding-field">
+                  <span className="onboarding-label">Bedrooms</span>
+                  <div className="onboarding-chip-row">
+                    {BEDROOM_OPTIONS.map((count) => (
+                      <button
+                        key={count}
+                        className={`onboarding-chip ${formData.bedrooms.includes(count) ? "onboarding-chip-active" : ""}`}
+                        onClick={() => toggleBedroom(count)}
+                      >
+                        {count}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                )}
                 {/* Active searchers provide timing so their feed can prioritize
                     more immediate opportunities; explorers are not asked for it. */}
                 {!isAgentAccount && formData.searchIntent === "searching" && (

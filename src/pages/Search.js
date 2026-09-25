@@ -36,10 +36,12 @@ const LOCATION_OPTIONS = [
 const PROPERTY_TYPE_OPTIONS = [
   { value: "apartment", label: "Apartment" },
   { value: "flat", label: "Flat" },
-  { value: "self-con", label: "Self-Con" },
+  { value: "self-contained", label: "Self-Contained" },
   { value: "duplex", label: "Duplex" },
   { value: "shop", label: "Shop" },
+  { value: "office", label: "Office" },
   { value: "conference-room", label: "Conference Room" },
+  { value: "studio", label: "Studio" },
 ]
 
 // Listing type chips — must match enum in Property schema exactly
