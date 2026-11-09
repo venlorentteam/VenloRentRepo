@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import axios from 'axios'
 import { PageSetup, Header, IconNav } from '../exports'
 import { RiMessageLine } from 'react-icons/ri'
+import { RiChatSmile2Fill } from "react-icons/ri";
 import { FiTrash2, FiCheck, FiCheckCircle } from 'react-icons/fi'
 import { RiVerifiedBadgeFill } from 'react-icons/ri'
 import { BsHeartFill, BsChat, BsBookmark } from 'react-icons/bs'
@@ -273,7 +274,7 @@ function Notifications() {
           ) : (
             <div className="notifications-empty">
               <div className="empty-icon">
-                {filter === 'unread' ? <FiCheckCircle size={64} /> : <BsChat size={64} />}
+                {filter === 'unread' ? <FiCheckCircle size={64} /> : <RiChatSmile2Fill size={64} />}
               </div>
               <h3>
                 {filter === 'unread' ? "You're all caught up!" : "No notifications yet"}

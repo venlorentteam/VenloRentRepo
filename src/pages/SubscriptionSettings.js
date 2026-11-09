@@ -35,7 +35,7 @@ const SubscriptionSettings = () => {
   const { user, refetchUser } = useAuth()
   const currentPlan = user.plan.charAt(0).toUpperCase() + user.plan.slice(1)
 
-  const [plans, setPlans] = useState(null)      // null = still loading
+  const [plans, setPlans] = useState(null)  // null = still loading
   const [plansError, setPlansError] = useState('')
   const [error, setError] = useState('')
   const [confirmStatus, setConfirmStatus] = useState(null)

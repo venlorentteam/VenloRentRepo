@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom"
 import axios from "axios"                                   
 import { MessageListItem, SearchBar, ChatScreen, PageSetup, Header } from "../exports"
 import { FaRegBell } from "react-icons/fa"
+import { MdChat } from "react-icons/md"
 import { timeAgo } from "../components/Time"   
 import { API_BASE } from '../config/api'             
 import "./Inbox.css"
@@ -211,7 +212,7 @@ const Inbox = () => {
                   />
                 ) : (
                   <div className="inbox-empty-state">
-                    <div className="empty-icon">💬</div>
+                    <div className="empty-icon"><MdChat /></div>
                     <h3>Your Messages</h3>
                     <p>Select a conversation to start chatting</p>
                   </div>

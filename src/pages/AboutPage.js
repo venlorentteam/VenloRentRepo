@@ -454,7 +454,7 @@ function AboutPage() {
       </section>
 
       {/* MEET THE TEAM */}
-      <section className="team-section" id="team">
+      {/* <section className="team-section" id="team">
         <div className="section-header">
           <span className="section-eyebrow">The People</span>
           <h2 className="section-title">Meet the team behind VenloRent</h2>
@@ -467,7 +467,7 @@ function AboutPage() {
             <TeamCard key={member.name} {...member} />
           ))}
         </div>
-      </section>
+      </section> */}
 
       {/* KYC TRUST CALLOUT */}
       <section className="kyc-section">
