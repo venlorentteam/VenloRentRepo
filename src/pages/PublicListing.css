@@ -1,0 +1,28 @@
+.public-listing-page { min-height: 100vh; background: var(--bg-color); color: var(--text-primary); font-family: var(--font-family, 'Inter', sans-serif); }
+.public-listing-shell { width: min(1180px, 100%); margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+.public-listing-back { color: var(--primary-color); text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: .4rem; margin-bottom: 1.5rem; }
+.public-listing-card { background: var(--box-bg); border: 1px solid var(--border-color); border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-lg); }
+.public-listing-gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .5rem; background: var(--bg-secondary); }
+.public-listing-media { width: 100%; height: 300px; object-fit: cover; display: block; }
+.public-listing-placeholder { min-height: 300px; display: grid; place-items: center; font-size: 3rem; color: var(--text-tertiary); }
+.public-listing-body { padding: clamp(1.25rem, 4vw, 3rem); }
+.public-listing-heading { display: flex; justify-content: space-between; gap: 1.5rem; }
+.public-listing-heading h1 { margin: .25rem 0; font-size: clamp(1.7rem, 4vw, 3rem); line-height: 1.1; letter-spacing: -.03em; color: var(--text-primary); }
+.public-listing-heading strong { color: var(--primary-color); font-size: 1.45rem; white-space: nowrap; }
+.public-listing-heading small { color: var(--text-secondary); font-size: .8rem; font-weight: 500; }
+.public-listing-eyebrow { color: var(--primary-color); font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
+.public-listing-location { display: flex; align-items: center; gap: .35rem; color: var(--text-secondary); }
+.public-listing-facts { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1.5rem 0; }
+.public-listing-facts span { padding: .45rem .7rem; border-radius: var(--radius-full); background: var(--primary-color-lightest); color: var(--primary-color-accent); font-size: .9rem; }
+.public-listing-description { color: var(--text-secondary); line-height: 1.7; white-space: pre-line; }
+.public-listing-features { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: .6rem; list-style: none; padding: 0; color: var(--text-primary); }
+.public-listing-features li { display: flex; align-items: center; gap: .4rem; }
+.public-listing-features svg { color: var(--primary-color); }
+.public-listing-agent { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--border-color); }
+.public-listing-agent div { display: grid; gap: .25rem; }
+.public-listing-agent span { color: var(--text-secondary); font-size: .85rem; }
+.public-listing-agent button { border: 0; border-radius: var(--radius-full); background: linear-gradient(135deg, var(--primary-color), var(--primary-color-dark)); color: #fff; padding: .8rem 1.2rem; font-weight: 700; cursor: pointer; box-shadow: var(--shadow-md); }
+.public-listing-state { min-height: 60vh; display: grid; place-content: center; justify-items: center; gap: .75rem; text-align: center; padding: 2rem; background: var(--bg-color); color: var(--text-primary); }
+.public-listing-state a { color: var(--primary-color); font-weight: 600; }
+@media (prefers-color-scheme: dark) { .public-listing-facts span { background: var(--box-bg-hover-dark); color: var(--text-primary-dark); } }
+@media (max-width: 640px) { .public-listing-shell { padding-inline: 1rem; } .public-listing-heading, .public-listing-agent { flex-direction: column; align-items: flex-start; } .public-listing-agent button { width: 100%; } }

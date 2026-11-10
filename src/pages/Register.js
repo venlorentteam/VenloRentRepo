@@ -23,6 +23,7 @@ function Register() {
     username: "",
     website: "",
     agent: false,
+    acceptedTerms: false,
   })
   
   const handleChange = (e) => {
@@ -138,6 +139,7 @@ function Register() {
   // Check if form has any errors or empty required fields
   const hasErrors =
     Object.values(errors).some((err) => err) ||
+    !formData.acceptedTerms ||
     ["email", "password", "confirmPassword", "fullname", "username"].some(
       (key) => !formData[key].trim()
     )
@@ -156,6 +158,7 @@ function Register() {
           fullName: formData.fullname,
           website: formData.website,
           role: formData.agent ? "agent" : "regular",
+          acceptedTerms: formData.acceptedTerms,
         }
 
         const res = await axios.post(`${API_BASE}/auth/register`, payload)
@@ -401,12 +404,23 @@ function Register() {
 
                 {/* Terms Agreement */}
                 <div className="terms-agreement">
-                  <p className="terms-text">
-                    By signing up, you agree to VenloRent's{' '}
-                    <Link to="/terms" className="terms-link">User Agreement</Link>
-                    {' '}and{' '}
-                    <Link to="/privacy-policy" className="terms-link">Privacy Policy</Link>.
-                  </p>
+                  <label className="terms-checkbox" htmlFor="acceptedTerms">
+                    <input
+                      className="reg-checkbox"
+                      id="acceptedTerms"
+                      type="checkbox"
+                      name="acceptedTerms"
+                      checked={formData.acceptedTerms}
+                      onChange={handleChange}
+                      disabled={isLoading}
+                    />
+                    <span className="terms-text">
+                      I am at least 18 years old and agree to VenloRent's{' '}
+                      <Link to="/terms" className="terms-link" target="_blank" rel="noopener noreferrer">User Agreement</Link>
+                      {' '}and{' '}
+                      <Link to="/privacy-policy" className="terms-link" target="_blank" rel="noopener noreferrer">Privacy Policy</Link>.
+                    </span>
+                  </label>
                 </div>
 
                 {/* Submit Error */}

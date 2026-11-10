@@ -44,7 +44,6 @@ export { default as ActiveOrders } from "./pages/ActiveOrders";
 export { default as AllOrders } from "./pages/AllOrders";
 export { default as Bookmarks } from "./pages/Bookmarks";
 export { default as ChatScreen } from "./pages/ChatScreen";
-export { default as ConfirmOrder } from "./pages/ConfirmOrder";
 export { default as Create } from "./pages/Create";
 export { default as CreateList } from "./pages/CreateList";
 export { default as CreateRequest } from "./pages/CreateRequest";
@@ -72,6 +71,7 @@ export { default as PasswordReset } from "./pages/PasswordReset";
 export { default as PrelimHelp } from "./pages/PrelimHelp";
 export { default as PaymentDetailsSettings } from "./pages/PaymentDetailsSettings";
 export { default as PrivacyPolicy } from "./pages/PrivacyPolicy";
+export { default as PublicListing } from "./pages/PublicListing";
 export { default as Profile } from "./pages/Profile";
 export { default as Register } from "./pages/Register";
 export { default as Search } from "./pages/Search";
@@ -91,3 +91,6 @@ export { default as StatCounter } from "./components/Prelim/StatCounter";
 
 // ==== CONTEXT ====
 export { default as AuthProvider } from "./context/AuthProvider";
+
+// ==== HOOKS ====
+export { default as usePageTitle } from "./hooks/usePageTitle";
